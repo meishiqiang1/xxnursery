@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,6 @@
     <meta name="keyword" content="幼儿园，招聘，招聘网，新星，首页">
     <link rel="shortcut icon" href="/img/favicon.png">
     <title>新星幼儿园-招聘网 详细招聘信息</title>
-
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -16,7 +16,6 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/style-responsive.css" rel="stylesheet"/>
 </head>
-
 <body class="mega-nav">
 <section id="container">
     <!--头部 导航栏-->
@@ -36,49 +35,28 @@
                 <div class="navbar-collapse collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <li><a th:href="'/index'" target="_blank">首页</a></li>
-                        <li class="active"><a th:href="'/job_detail'" target="_blank"><span lass="active_job_zhiwei">职位</span></a></li>
+                        <li class="active"><a th:href="'/job_detail'" target="_blank"><span
+                                lass="active_job_zhiwei">职位</span></a></li>
                         <li><a th:href="'/discover'" target="_blank">发现</a></li>
                         <li><a th:href="'/information'" target="_blank">咨询</a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm">
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
                         <li><a th:href="'/login.html'">用户！请登录</a></li>
                         <li><a th:href="'/register.html'">快捷注册</a></li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
+                        <span th:text="${param.number}" hidden></span>
+                        <li><a th:href="'/consumer/resume/'">简历</a></li>
+                        <li>
+                            <a th:href="'/consumer/personal/'">
+                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
+                                <th:block sec:authentication="name"></th:block>
+                            </a>
+                        </li>
+                        <li><a th:href="'/logout'">退出</a></li>
+                    </ul>
                 </div>
             </div>
-            <th:block th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('number')}">
-                <span th:text="${cookie.getValue()}" hidden></span>
-                <div class="container">
-                    <div class="navbar-header">
-                        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                                data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand hidden-sm" th:href="'/index?number='+${cookie.getValue()}">新星幼儿园</a>
-                    </div>
-                    <div class="navbar-collapse collapse" role="navigation">
-                        <ul class="nav navbar-nav">
-                            <li><a href="/index" th:href="'/index?number='+${cookie.getValue()}">首页</a></li>
-                            <li class="active"><a href="/job_detail" th:href="'/job_detail?number='+${cookie.getValue()}">职位</a></li>
-                            <li><a href="/discover" th:href="'/discover?number='+${cookie.getValue()}">发现</a></li>
-                            <li><a href="/information" th:href="'/information?number='+${cookie.getValue()}">咨询</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right hidden-sm">
-                            <span th:text="${param.number}" hidden></span>
-                            <li><a href="/consumer/resume/" th:href="'/consumer/resume/'+${cookie.getValue()}">简历</a></li>
-                            <li><a href="/consumer/personal/1" th:href="'/logout/'+${cookie.getValue()}">退出</a></li>
-                            <li>
-                                <a href="/consumer/personal/1"  th:href="'/consumer/personal/'+${cookie.getValue()}">
-                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i><span></span>&nbsp;&nbsp;:个人中心
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </th:block>
         </div>
 
     </header>
@@ -93,15 +71,22 @@
                         <h2 style="margin: 0;">
                             <th:block th:text="*{recruittablename}">招聘标题！！！！</th:block>&nbsp;&nbsp;
                             <strong style="color: #b88d0c">
-                                <th:block th:text="*{pay}"></th:block>月
+                                <th:block th:text="*{pay}"></th:block>
+                                月
                             </strong>
                         </h2>
-                        <button>投递简历</button><!--投递简历-->
+                        <button sec:authorize="isAnonymous()" data-toggle="modal" data-target="#loginModal">投递简历
+                        </button><!--投递简历-->
+                        <button sec:authorize="isAuthenticated()">投递简历</button><!--投递简历-->
                     </div>
                     <div style="height: 10px"></div>
                     <p><span>地点</span>&nbsp;：&nbsp;<span th:text="*{place}"></span></p>
-                    <p><span>学历</span>&nbsp;：&nbsp;<span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}">学历</span></p>
-                    <p><span>工作经验</span>&nbsp;：&nbsp;<span th:text="*{requireExperience=='0' ? '不限' : requireExperience=='1' ?  '在校生' : requireExperience=='2'? '应届生' : requireExperience=='3'? '1年以内' :requireExperience=='4'? '1-3年' : requireExperience=='5'? '3-5年' : requireExperience=='6'? '5-10年' : '10年以上'}">学历</span></p>
+                    <p><span>学历</span>&nbsp;：&nbsp;<span
+                            th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}">学历</span>
+                    </p>
+                    <p><span>工作经验</span>&nbsp;：&nbsp;<span
+                            th:text="*{requireExperience=='0' ? '不限' : requireExperience=='1' ?  '在校生' : requireExperience=='2'? '应届生' : requireExperience=='3'? '1年以内' :requireExperience=='4'? '1-3年' : requireExperience=='5'? '3-5年' : requireExperience=='6'? '5-10年' : '10年以上'}">学历</span>
+                    </p>
                     <div class="flex">
                         <ol class="zhiwei_type">
                             <li th:each="type:*{types}" th:text="${type}"></li>
@@ -141,8 +126,80 @@
         </div>
     </section>
 </section>
+<!--登录模态框-->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="模态框"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    快捷 登录
+                </h4>
+            </div>
+            <div class="modal-body">
+                <strong>您还没有登录，请先登录后操作！！</strong>
+                <hr/>
+                <div>
+                    <form class="form-horizontal" method="post" action="/login">
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="用户名"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="password" name="password"
+                                       placeholder="密码" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember-me"> 记住我
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <th:block th:if="${param.error != null}">
+                            <div class="alert  alert-danger alert-dismissible " role="alert" id="loginWarn">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <strong>错误信息!</strong> 用户名或者密码错误，请重新登录!!
+                            </div>
+                        </th:block>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">登录</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<!--判断错误信息-->
+
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/assets/bootstrap-AMapPositionPicker/js/bootstrap.AMapPositionPicker.min.js"></script>
+<th:block th:if="${param.error != null}">
+    <script>
+        $(function () {
+            if (confirm("用户名获取密码错误,请重新登录!!")) {
+                $('#loginModal').modal('show');
+            }
+        })
+
+    </script>
+</th:block>
 </body>
 </html>

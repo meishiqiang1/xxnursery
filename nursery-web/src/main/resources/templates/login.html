@@ -18,12 +18,14 @@
 </head>
 <body class="login-body">
 <div class="container">
-    <form class="form-signin" id="loginForm" method="post">
+    <form class="form-signin" id="loginForm" method="post" action="/login">
         <h2 class="form-signin-heading">立即登入</h2>
         <div class="login-wrap">
-            <input type="text" hidden="hidden" name="liushui">
+            <!--<input type="text" hidden="hidden" name="liushui">
             <input type="text" class="form-control" name="yhu" placeholder="手机号/邮箱" required autofocus>
-            <input type="password" class="form-control" name="pass" placeholder="密码" required>
+            <input type="password" class="form-control" name="pass" placeholder="密码" required>-->
+            <input type="text" class="form-control" placeholder="用户名" name="username" autofocus>
+            <input type="password" class="form-control" placeholder="密码" name="password">
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> 记住我
                 <span class="pull-right">

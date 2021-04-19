@@ -10,12 +10,12 @@ import java.util.Map;
 /**
  * 用户注册api
  */
-@Api(value = "/consumerRegister",description = "用户注册")
+@Api(value = "/consumer",description = "用户注册")
 public interface ConsumerRegisterApi {
 
 
     @ApiOperation("创建用户")
-    ResponseResult register(RegisterBO registerBO);
+    ResponseResult  registerConsumer(RegisterBO registerBO);
 
     @ApiOperation("注册成功,向邮箱发布信息")
     void sendRegisterinfo();

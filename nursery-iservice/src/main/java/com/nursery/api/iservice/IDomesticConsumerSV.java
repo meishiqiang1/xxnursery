@@ -1,7 +1,9 @@
 package com.nursery.api.iservice;
 
 import com.nursery.beans.DomesticConsumerDO;
+import com.nursery.beans.RoleDO;
 import com.nursery.beans.bo.ConsumerBO;
+import com.nursery.common.model.response.ResponseResult;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,7 +21,7 @@ public interface IDomesticConsumerSV {
     //更新密码
     boolean updatePassword(String consumerID, String password);
     //注册用户
-    void insertConsumer(DomesticConsumerDO domesticConsumerDO) throws Exception;
+    ResponseResult insertConsumer(DomesticConsumerDO domesticConsumerDO) throws Exception;
     //查询当前月份新增用户，
     List<DomesticConsumerDO> selectByMonth(String date);
     //查询当前季度份新增用户，
@@ -44,4 +46,11 @@ public interface IDomesticConsumerSV {
     DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId) throws SQLException;
     //根据id获取简历id
     String selectResumeIdByConsumerID(String consumerId);
+    //登录流程1
+    DomesticConsumerDO findByUsername(String username);
+    //登录流程2
+    List<RoleDO> findRolesByUsername(String id);
+    //更具用户名查询用户id
+    String selectConsumerIdByConsumerName(String name);
+
 }

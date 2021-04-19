@@ -80,4 +80,11 @@ public interface NurseryRecruitmentMapper {
      * @return 影响行数
      */
     int updateRecruitSetAudit(RecruitmentDO recruitmentDO) throws SQLException;
+
+    /**
+     * 判断是否审核和过期
+     * @return
+     */
+    List<RecruitmentDO> selectRecruitByAuditStateAndCutoffDOs() throws SQLException;
+
 }

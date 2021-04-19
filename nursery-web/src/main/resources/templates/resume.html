@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,10 @@
     <title>个人简历</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
-    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/style-responsive.css" rel="stylesheet" />
-<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">-->
+    <link href="/css/style-responsive.css" rel="stylesheet"/>
+    <!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">-->
     <link rel="stylesheet" href="/assets/bootstrap-fileinput/css/fileinput.css"/><!--fileinput文件上传-->
 </head>
 <body>
@@ -21,37 +22,41 @@
         <!--导航栏-->
         <!--导航栏-->
         <div class="navbar navbar-inverse navbar-fixed-top">
-            <th:block th:each="cookie :${#httpServletRequest.getCookies()}" th:if="${cookie.getName().equals('number')}">
-                <span th:text="${cookie.getValue()}" hidden></span>
-                <div class="container">
-                    <div class="navbar-header">
-                        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                                data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand hidden-sm" th:href="'/index?number='+${cookie.getValue()}">新星幼儿园</a>
-                    </div>
-                    <div class="navbar-collapse collapse" role="navigation">
-                        <ul class="nav navbar-nav">
-                            <li><a href="/index" th:href="'/index?number='+${cookie.getValue()}">首页</a></li>
-                            <li><a href="/job_detail" th:href="'/job_detail?number='+${cookie.getValue()}">职位</a></li>
-                            <li><a href="/discover" th:href="'/discover?number='+${cookie.getValue()}">发现</a></li>
-                            <li><a href="/information" th:href="'/information?number='+${cookie.getValue()}">咨询</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right hidden-sm">
-                            <span th:text="${param.number}" hidden></span>
-                            <li class="active"><a href="/consumer/resume/" th:href="'/consumer/resume/'+${cookie.getValue()}">简历</a></li>
-                            <li><a href="/consumer/personal/1" th:href="'/logout/'+${cookie.getValue()}">退出</a></li>
-                            <li><a href="/consumer/personal/1"
-                                   th:href="'/consumer/personal/'+${cookie.getValue()}">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i><span></span>&nbsp;&nbsp;:个人中心
-                            </a></li>
-                        </ul>
-                    </div>
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-sm" th:href="'/index'">新星幼儿园</a>
                 </div>
+                <div class="navbar-collapse collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/index" th:href="'/index'">首页</a></li>
+                        <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
+                        <li><a href="/discover" th:href="'/discover'">发现</a></li>
+                        <li><a href="/information" th:href="'/information'">咨询</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
+                        <li><a th:href="'/login.html'">用户！请登录</a></li>
+                        <li><a th:href="'/register.html'">快捷注册</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
+                        <span th:text="${param.number}" hidden></span>
+                        <li><a th:href="'/consumer/resume/'">简历</a></li>
+                        <li>
+                            <a th:href="'/consumer/personal/'">
+                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
+                                <th:block sec:authentication="name"></th:block>
+                            </a>
+                        </li>
+                        <li><a th:href="'/logout'">退出</a></li>
+                    </ul>
+                </div>
+            </div>
             </th:block>
         </div>
         <div style="height: 100px"></div>
@@ -89,7 +94,8 @@
 
                                     <button class="btn btn-success btn-resume" type="button" data-toggle="modal"
                                             data-target="#kv-explorer-mp">
-                                        <i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新</button>
+                                        <i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新
+                                    </button>
                                 </div>
                             </div>
                             <div class="resume_set">
@@ -103,7 +109,7 @@
                         <div class="resume_no_login">
                             <form enctype="multipart/form-data">
                                 <div class="file-loading">
-                                    <input id="kv-explorer"  name="resumeFile" type="file" multiple>
+                                    <input id="kv-explorer" name="resumeFile" type="file" multiple>
                                 </div>
                             </form>
                         </div>
@@ -133,7 +139,7 @@
                             <div class="resume_no_login">
                                 <form enctype="multipart/form-data">
                                     <div class="file-loading">
-                                        <input id="kv-explorer"  name="resumeFile" type="file" multiple>
+                                        <input id="kv-explorer" name="resumeFile" type="file" multiple>
                                     </div>
                                 </form>
                             </div>
@@ -163,7 +169,7 @@
 <script src="/js/jquery.scrollTo.min.js"></script>
 <script src="/js/jquery.nicescroll.js" type="text/javascript"></script>
 <script src="/assets/jquery-knob/js/jquery.knob.js"></script>
-<script src="/js/respond.min.js" ></script>
+<script src="/js/respond.min.js"></script>
 <script src="/js/common-scripts.js"></script>
 <script src="/assets/bootstrap-fileinput/js/fileinput.js" type="text/javascript"></script><!--上传文件::插件-->
 <script>
@@ -178,7 +184,7 @@
         $("#kv-explorer").fileinput({
             language: 'zh', //设置语言
             textEncoding: "UTF-8",//文本编码
-            uploadUrl: "/consumer/resume/upload/"+param, //上传的地址
+            uploadUrl: "/consumer/resume/upload/" + param, //上传的地址
             allowedFileExtensions: ["doc", "docx"], //接收的文件后缀
             browseClass: "btn btn-primary", //按钮样式
             enctype: 'multipart/form-data',//类型
@@ -188,7 +194,7 @@
         }).on('fileuploaded', function (event, data, previewId, index) {
             console.log("上传之后调用该方法");
             if (data.response.success == 1) {
-                if(confirm(data.response.message)+",是否刷新"){
+                if (confirm(data.response.message) + ",是否刷新") {
                     window.location.reload();
                 }
             }

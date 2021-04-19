@@ -36,7 +36,5 @@ function hotJob(hotId, hotname) {
 
 $("#btn_search").click(function () {
     var search_content = $("#input_search_content").val();
-    var type = "0";
-    var sign = "search:" + search_content + "type:" + type;
-    window.location.href = "/search?sign=" + sign;
+    window.location.href = "/search?search=" + search_content;
 })

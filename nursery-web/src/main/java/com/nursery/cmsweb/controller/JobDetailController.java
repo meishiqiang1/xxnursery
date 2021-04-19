@@ -43,7 +43,13 @@ public class JobDetailController extends BaseController implements JobDetailApi 
     @ResponseBody
     public ModelAndView visitJobDetailPage(ModelAndView modelAndView) {
         try {
-            List<RecruitmentDO> recruitmentDOList = nurseryRecruitInfoSV.selectRecruitmentDOs();
+
+            //List<RecruitmentDO> recruitmentDOList = nurseryRecruitInfoSV.selectRecruitmentDOs();
+            /**
+             * 不包含: 过期、未审核
+             * 包含： 人数报名已满
+             */
+            List<RecruitmentDO> recruitmentDOList = nurseryRecruitInfoSV.selectRecruitDOs();
             modelAndView.addObject("recommendData", recruitmentDOList);
             logger.info(JSON.toJSONString(recruitmentDOList));
         } catch (Exception e) {

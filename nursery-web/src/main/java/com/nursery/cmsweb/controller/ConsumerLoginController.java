@@ -1,26 +1,13 @@
 package com.nursery.cmsweb.controller;
 
-import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.api.iweb.ConsumerLoginApi;
-import com.nursery.beans.bo.ConsumerBO;
-import com.nursery.beans.code.ConsumerCode;
-import com.nursery.common.model.response.CommonCode;
-import com.nursery.common.model.response.QueryResponseResult;
-import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
-import com.nursery.utils.CellUtils;
-import com.nursery.utils.CommonUtil;
-import com.nursery.utils.EmailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * Create with IDEA
@@ -42,7 +29,7 @@ public class ConsumerLoginController extends BaseController implements ConsumerL
      * @param accountNum 账号
      * @param channel    1 邮箱 2  手机号
      */
-    @Override
+    /*@Override
     @GetMapping("/login/sendCheckCode")
     public QueryResponseResult sendCheckCode(String accountNum, String channel) {
         if (StringUtils.isEmpty(accountNum) || StringUtils.isEmpty(channel)) {
@@ -75,13 +62,13 @@ public class ConsumerLoginController extends BaseController implements ConsumerL
             return new QueryResponseResult(CommonCode.INVALID_PARAM, null);
         }
         return null;
-    }
+    }*/
 
     /**
      * 登录
      * @param consumerBO 用户参数
      */
-    @RequestMapping(value = {"/login"},method = RequestMethod.POST)
+    /*@RequestMapping(value = {"/login"},method = RequestMethod.POST)
     @ResponseBody
     @Override
     public ResponseResult login(ConsumerBO consumerBO) {
@@ -136,5 +123,5 @@ public class ConsumerLoginController extends BaseController implements ConsumerL
         responseResult.setMessage(url);
         logger.info(liushui+"返回值"+JSON.toJSONString(responseResult));
         return responseResult;
-    }
+    }*/
 }

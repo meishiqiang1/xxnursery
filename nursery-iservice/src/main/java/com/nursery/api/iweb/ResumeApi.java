@@ -17,7 +17,7 @@ public interface ResumeApi {
      * @param param 流水号
      */
     @ApiOperation("访问上传简历")
-    public String visitResume(String param);
+    public String visitResume();
 
     public JSONObject uploadResume(MultipartFile file,String liushui);
 

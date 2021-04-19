@@ -107,21 +107,34 @@
 
     <select id="selectRecruitInfoByParams" resultMap="recruitment" parameterType="com.nursery.beans.DBDataParam">
         select * from  tb_nursery_recruitinfo
-        WHERE 1 = 1
+        WHERE auditState = 'yes'
         <if test="search != null and search != ''">
             AND recruittablename like #{search}
         </if>
         <if test="type != null and type != ''">
-            AND recruitclassify = #{type}
+            AND recruitclassify like #{type}
         </if>
         <if test="placeId != null and placeId != ''">
             AND recruitplace like #{placeId}
+        </if>
+        <if test="edcId != null and edcId != ''">
+            AND recruitrequire_edubg like #{edcId}
+        </if>
+        <if test="conditionId != null and conditionId != ''">
+            AND recruitrequire_experience like #{conditionId}
+        </if>
+        <if test="putTimeId != null and putTimeId != ''">
+            AND recruitstarttime BETWEEN #{stateDate} AND #{endDate}
         </if>
     </select>
 
     <select id="selectRecruitByIsActivate" resultMap="recruitment">
         select *
         from  tb_nursery_recruitinfo where isActivate = #{value};
+    </select>
+    <select id="selectRecruitByAuditStateAndCutoffDOs" resultMap="recruitment">
+        select *
+        from  tb_nursery_recruitinfo where auditState = 'yes' and cutoff = 'no';
     </select>
 
     <insert id="insert" parameterType="com.nursery.beans.RecruitmentDO">

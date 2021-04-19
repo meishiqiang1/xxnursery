@@ -16,10 +16,11 @@ import com.nursery.utils.EmailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +31,7 @@ import java.util.Map;
  * 邮箱接口
  * 获取当前省份
  */
-@RestController
-@RequestMapping("/consumer")
+@Controller
 public class ConsumerRegisterController extends BaseController implements ConsumerRegisterApi {
     private static final Logger logger = LoggerFactory.getLogger(ConsumerRegisterController.class);
     @Autowired
@@ -42,10 +42,10 @@ public class ConsumerRegisterController extends BaseController implements Consum
      * consumer/register
      * @param registerBO
      */
-    @PostMapping("/register")
+    @RequestMapping(value = "/consumer/register2",method = RequestMethod.POST)
+    @ResponseBody
     @Override
-    @SuppressWarnings("all")
-    public ResponseResult register(RegisterBO registerBO) {
+    public ResponseResult registerConsumer(RegisterBO registerBO) {
         ResponseResult responseResult = ResponseResult.SUCCESS();
         String consumerXing = "";
         String consumerAge = "";
@@ -97,7 +97,8 @@ public class ConsumerRegisterController extends BaseController implements Consum
             String nowDay = DateUtils.getNowDate(DateUtils.YYYYMMDDHHMMSS);
             consumerDO.setConsumerJoinDay(nowDay);
             logger.info("consumerid: " + consumerDO.getConsumerID() + "register注册参数：" + JSON.toJSONString(consumerDO));
-            domesticConsumerSV.insertConsumer(consumerDO);
+            ResponseResult responseResult1 = domesticConsumerSV.insertConsumer(consumerDO);
+            return responseResult1;
         } catch (Exception e) {
             responseResult.setCommonCode(ConsumerCode.CONSUMER_REAL_NAME_WRONG);
         }

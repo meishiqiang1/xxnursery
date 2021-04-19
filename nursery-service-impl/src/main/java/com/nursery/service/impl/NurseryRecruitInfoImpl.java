@@ -128,8 +128,8 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
         return 0;
     }
 
-    @Override
-    public List<RecruitmentDO> selectRecruitInfoByParams(String signParam) throws SQLException {
+    /*@Override
+    public List<RecruitmentDO> selectRecruitInfoByParams(DBDataParam signParam) throws SQLException {
         String search = "";
         String type = "";
         String placeId = "";
@@ -164,8 +164,56 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
             dataParam.setPlaceId(place);
         }
         return mapper.selectRecruitInfoByParams(dataParam);
-    }
+    }*/
+    public List<RecruitmentDO> selectRecruitInfoByParams(DBDataParam dataParam) throws SQLException {
+        String search = dataParam.getSearch();
+        String type = dataParam.getType();
+        String placeId = dataParam.getPlaceId();
+        String edcId = dataParam.getEdcId();
+        String conditionId = dataParam.getConditionId();
+        String putTimeId = dataParam.getPutTimeId();
 
+
+        if (!StringUtils.isEmpty(search)) {
+            search = "%" + search + "%";
+            dataParam.setSearch(search);
+        }
+        if (!StringUtils.isEmpty(type) && !"0".equals(type)) {
+            type = "%" + type + "%";
+            dataParam.setType(type);
+        }
+        if (!StringUtils.isEmpty(placeId)) {
+            String place = CommonUtil.getPlace(placeId);
+            if (place.equals("") || place.equals("不限")){
+                place = "";
+            }else {
+                place = "%" + place + "%";
+            }
+            dataParam.setPlaceId(place);
+        }
+
+        if (!StringUtils.isEmpty(edcId)) {
+            String edc = CommonUtil.getEdc(edcId);
+            dataParam.setEdcId(edc);
+        }
+
+        if (!StringUtils.isEmpty(conditionId)) {
+            String condition = CommonUtil.getCondition(conditionId);
+            dataParam.setConditionId(condition);
+        }
+
+        if (!StringUtils.isEmpty(putTimeId)) {
+            String[] putTime = CommonUtil.getPutTime(putTimeId);
+            if (putTime!=null){
+                dataParam.setStateDate(putTime[0]);
+                dataParam.setEndDate(putTime[1]);
+            }else {
+                dataParam.setStateDate("0000-00-00 00:00");
+                dataParam.setEndDate("9999-00-00 00:00");
+            }
+        }
+        return mapper.selectRecruitInfoByParams(dataParam);
+    }
     @Override
     public List<RecruitmentDO> selectRecruitByIsActivate(String is) throws SQLException {
         //判断is
@@ -212,5 +260,10 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
             }
         }
         return responseResult;
+    }
+
+    @Override
+    public List<RecruitmentDO> selectRecruitDOs() throws SQLException{
+        return mapper.selectRecruitByAuditStateAndCutoffDOs();
     }
 }

@@ -14,6 +14,9 @@ import com.nursery.utils.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -38,25 +41,32 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
     private IDomesticConsumerSV consumerSV;
 
     //访问简历页面
-    @RequestMapping(value = "/consumer/resume/{param}", method = RequestMethod.GET)
+    @RequestMapping(value = "/consumer/resume/", method = RequestMethod.GET)
     @Override
-    public String visitResume(@PathVariable(value = "param", required = false) String param) {
+    public String visitResume() {
+        String name = "";//用户名
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            name = authentication.getName();
+        }
         String consumerId = "";
-        if (!StringUtils.isEmpty(param)){
-            ConsumerBO consumerBO = (ConsumerBO) session.getAttribute(param);
+        if (!StringUtils.isEmpty(name)) {
             try {
-                consumerId = consumerBO.getId();
-            }catch (NullPointerException e){
-                logger.error("获取不到用户，null异常");
+                consumerId = consumerSV.selectConsumerIdByConsumerName(name);
+            } catch (NullPointerException e) {
+                logger.error("没有该用户名");
                 return "500";
             }
             try {
                 DomesticConsumerDO consumerDO = consumerSV.selectConsumerResumeByConsumerID(consumerId);
-                request.setAttribute("consumer",consumerDO);
+                request.setAttribute("consumer", consumerDO);
             } catch (SQLException e) {
                 logger.error("数据库查询异常/语句出错");
                 return "500";
             }
+        }else {
+            logger.error("未登录，请先登录后进行操作");
+            return "login";
         }
         return "resume";
     }
@@ -73,7 +83,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
     @RequestMapping(value = {"/consumer/resume/upload/{param}"})
     @ResponseBody
     @Override
-    public JSONObject uploadResume(@RequestParam(value = "resumeFile", required = true) MultipartFile file, @PathVariable(value = "param",required = false) String liushui) {
+    public JSONObject uploadResume(@RequestParam(value = "resumeFile", required = true) MultipartFile file, @PathVariable(value = "param", required = false) String liushui) {
         JSONObject responseResult = new JSONObject();
         String param = liushui;     //流水号
         String consumerId = "";     //用户id
@@ -138,7 +148,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
 
             //更新操作，判断是否
             String consumerResumeId = consumerSV.selectResumeIdByConsumerID(consumerId);
-            if (!StringUtils.isEmpty(consumerResumeId)){
+            if (!StringUtils.isEmpty(consumerResumeId)) {
                 //如果存在就删除简历
                 consumerResumeSV.delectByid(consumerResumeId);
             }

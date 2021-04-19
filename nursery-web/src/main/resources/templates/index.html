@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,82 +88,47 @@
     }
 </style>
 <body class="mega-nav">
-<th:block th:if="${param.error != null}">
-    <script>
-        var loca_path = window.location.href;
-        var pathArr = loca_path.split('?')[0];
-        var pathLen = pathArr.length;
-        var tableId = pathArr.substring((pathLen-1),(pathLen));
-        if (confirm("登录已经失效，请重新登录！！")){
-            window.location.href = '/login';
-        }else {
-            window.location.href = '/index';
-        }
-    </script>
-</th:block>
 <section id="container">
     <!--头部-->
     <header class="">
         <!--导航栏-->
         <div class="navbar navbar-inverse navbar-fixed-top">
-            <th:block th:if="${param.number != null}">
-                <span th:text="${param.number}" hidden></span>
-                <div class="container">
-                    <div class="navbar-header">
-                        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                                data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand hidden-sm" th:href="'/index?number='+${param.number}">新星幼儿园</a>
-                    </div>
-                    <div class="navbar-collapse collapse" role="navigation">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="/index" th:href="'/index?number='+${param.number}">首页</a></li>
-                            <li><a href="/job_detail" th:href="'/job_detail?number='+${param.number}">职位</a></li>
-                            <li><a href="/discover" th:href="'/discover?number='+${param.number}">发现</a></li>
-                            <li><a href="/information" th:href="'/information?number='+${param.number}">咨询</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right hidden-sm">
-                            <span th:text="${param.number}" hidden></span>
-                            <li><a href="/consumer/resume/" th:href="'/consumer/resume/'+${param.number}">简历</a></li>
-                            <li><a href="/consumer/personal/1" th:href="'/logout/'+${param.number}">退出</a></li>
-                            <li><a href="/consumer/personal/1"
-                                   th:href="'/consumer/personal/'+${param.number}">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i><span></span>:个人中心
-                            </a></li>
-                        </ul>
-                    </div>
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                            data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-sm" th:href="'/index'">新星幼儿园</a>
                 </div>
-            </th:block>
-            <th:block th:if="${param.number == null}">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                                data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand hidden-sm" th:href="'/index'">新星幼儿园</a>
-                    </div>
-                    <div class="navbar-collapse collapse" role="navigation">
-                        <ul class="nav navbar-nav">
-                            <li class="active"><a href="/index" th:href="'/index'">首页</a></li>
-                            <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
-                            <li><a href="/discover" th:href="'/discover'">发现</a></li>
-                            <li><a href="/information" th:href="'/information'">咨询</a></li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right hidden-sm">
-                            <li><a th:href="'/login.html'">用户！请登录</a></li>
-                            <li><a th:href="'/register.html'">快捷注册</a></li>
-                        </ul>
-                    </div>
+                <div class="navbar-collapse collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/index" th:href="'/index'">首页</a></li>
+                        <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
+                        <li><a href="/discover" th:href="'/discover'">发现</a></li>
+                        <li><a href="/information" th:href="'/information'">咨询</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
+                        <li><a th:href="'/login.html'">用户！请登录</a></li>
+                        <li><a th:href="'/register.html'">快捷注册</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
+                        <span th:text="${param.number}" hidden></span>
+                        <li><a th:href="'/consumer/resume/'">简历</a></li>
+                        <li>
+                            <a th:href="'/consumer/personal/'">
+                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
+                                <th:block sec:authentication="name"></th:block>
+                            </a>
+                        </li>
+                        <li><a th:href="'/logout'">退出</a></li>
+                    </ul>
                 </div>
-            </th:block>
+            </div>
+
         </div>
         <!--搜索框-->
         <div class="row inner search-inner">
@@ -181,19 +148,18 @@
                 <ol class="breadcrumb new_job_b" style="background-color: rgba(0,0,0,0)">
                     <b>热门职位 : &nbsp;&nbsp;&nbsp;&nbsp;</b>
 
-                    <li><a href="#">美术老师</a></li>
+                    <li><a href="/search?type=美术老师">美术老师</a></li>
 
-                    <li><a href="#">班主任</a></li>
+                    <li><a href="/search?type=班主任">班主任</a></li>
 
-                    <li><a href="#">美术</a></li>
+                    <li><a href="/search?type=美术">美术</a></li>
 
-                    <li><a href="#">音乐</a></li>
+                    <li><a href="/search?type=音乐">音乐</a></li>
 
-                    <li><a href="#">后台管理员 </a></li>
+                    <li><a href="/search?type=后台管理员">后台管理员</a></li>
 
-                    <li><a href="#">数学</a></li>
+                    <li><a href="/search?type=数学">数学</a></li>
 
-                    <li>......</li>
                 </ol>
             </div>
         </div>

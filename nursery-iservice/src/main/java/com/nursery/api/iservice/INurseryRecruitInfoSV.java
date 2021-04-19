@@ -77,7 +77,8 @@ public interface INurseryRecruitInfoSV {
     int deleteRecruitById(String erId);
 
     //搜索框
-    List<RecruitmentDO> selectRecruitInfoByParams(String dataParam) throws SQLException;
+    List<RecruitmentDO> selectRecruitInfoByParams(DBDataParam dataParam) throws SQLException;
+//    List<RecruitmentDO> selectRecruitInfoByParams(string dataParam) throws SQLException;
 
     /**
      * 更具审核结果查询
@@ -90,4 +91,7 @@ public interface INurseryRecruitInfoSV {
      * @param param  id|yes,no
      */
     ResponseResult updateRecruitSetAudit(String param);
+
+    List<RecruitmentDO> selectRecruitDOs() throws SQLException;
+
 }

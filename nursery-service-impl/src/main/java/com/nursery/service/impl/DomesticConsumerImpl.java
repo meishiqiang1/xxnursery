@@ -3,8 +3,11 @@ package com.nursery.service.impl;
 import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.DomesticConsumerResumeDO;
+import com.nursery.beans.RoleDO;
 import com.nursery.beans.bo.ConsumerBO;
 import com.nursery.beans.vo.MailVo;
+import com.nursery.common.model.response.CommonCode;
+import com.nursery.common.model.response.ResponseResult;
 import com.nursery.dao.DomesticConsumerMapper;
 import com.nursery.utils.EmailUtils;
 import com.nursery.utils.POIUtils;
@@ -70,28 +73,35 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     }
 
     @Override
-    public void insertConsumer(DomesticConsumerDO consumerDO) throws Exception {
+    public ResponseResult insertConsumer(DomesticConsumerDO consumerDO) throws Exception {
         //注册前判断
-        DomesticConsumerDO checkDConsumerDo = new DomesticConsumerDO();
         String checkEmail = consumerDO.getConsumerEmail();
         String checkCellPhone = consumerDO.getConsumerCellPhone();
+        String consumerName = consumerDO.getConsumerName();
+        DomesticConsumerDO checkDConsumerDo = new DomesticConsumerDO();
+        ResponseResult success = ResponseResult.SUCCESS();
         if (StringUtils.isNotBlank(checkEmail)){
             checkDConsumerDo.setConsumerEmail(checkEmail);
         }
         if (StringUtils.isNotBlank(checkCellPhone)){
             checkDConsumerDo.setConsumerCellPhone(checkCellPhone);
         }
+        if (StringUtils.isNotBlank(consumerName)){
+            checkDConsumerDo.setConsumerName(consumerName);
+        }
         List<DomesticConsumerDO> resultList = mapper.checkConsumerToRegister(checkDConsumerDo);
         if (!resultList.isEmpty()){
-            throw new SQLException("sql错误");
+            logger.warn("注册用户已经存在，sql错误");
+            success.setCommonCode(CommonCode.CONSUMER_IS_EXIST);
+            return success;
         }
         try {
-            EmailUtils sendEmailUtils = null;
             mapper.insert(consumerDO);
+            EmailUtils sendEmailUtils = null;
             String consumerEmail = consumerDO.getConsumerEmail();
             String consumerCellPhone = consumerDO.getConsumerCellPhone();
-            // 邮件功能
 
+            // 后期邮件功能
             if (StringUtils.isNotBlank(consumerEmail) && EmailUtils.checkEmail(consumerEmail)) {
                 logger.info("发送邮件consumerEmail：" + consumerEmail);
                 sendEmailUtils = new EmailUtils();
@@ -106,13 +116,14 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
                 }
             }
             // 手机号短信
-            if (StringUtils.isNotBlank(consumerCellPhone)&& checkCellphone(consumerCellPhone)) {
-
-            }
-
-        }catch (Exception e){
+            if (StringUtils.isNotBlank(consumerCellPhone)&& checkCellphone(consumerCellPhone)) {}
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            System.out.println(e.getSQLState());
             logger.error("注册错误");
+            success.setCommonCode(CommonCode.FAIL);
         }
+        return success;
     }
 
     //2021-01-21 16:32:53
@@ -241,6 +252,21 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     @Override
     public String selectResumeIdByConsumerID(String consumerId){
         return mapper.selectResumeIdByConsumerID(consumerId);
+    }
+
+    @Override
+    public DomesticConsumerDO findByUsername(String username) {
+        return mapper.selectByUsername(username);
+    }
+
+    @Override
+    public List<RoleDO> findRolesByUsername(String id) {
+        return mapper.selectRolesByname(id);
+    }
+
+    @Override
+    public String selectConsumerIdByConsumerName(String name) {
+        return mapper.selectConsumerIdByConsumerName(name);
     }
 
     //校验手机号
