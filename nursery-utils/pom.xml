@@ -136,5 +136,9 @@
             <artifactId>commons-net</artifactId>
             <version>3.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
     </dependencies>
 </project>

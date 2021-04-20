@@ -6,7 +6,6 @@ import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.api.iweb.ResumeApi;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.DomesticConsumerResumeDO;
-import com.nursery.beans.bo.ConsumerBO;
 import com.nursery.common.model.CommonAttrs;
 import com.nursery.common.model.response.QueryResponseResult;
 import com.nursery.common.web.BaseController;
@@ -23,9 +22,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * 简历上传下载
@@ -52,7 +50,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         String consumerId = "";
         if (!StringUtils.isEmpty(name)) {
             try {
-                consumerId = consumerSV.selectConsumerIdByConsumerName(name);
+                consumerId = consumerSV.selectConsumerIdByConsumerNickName(name);
             } catch (NullPointerException e) {
                 logger.error("没有该用户名");
                 return "500";
@@ -80,13 +78,13 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
      * @param file 简历信息
      * @return 固定返回参数信息
      */
-    @RequestMapping(value = {"/consumer/resume/upload/{param}"})
+    @RequestMapping(value = {"/consumer/resume/upload"})
     @ResponseBody
     @Override
-    public JSONObject uploadResume(@RequestParam(value = "resumeFile", required = true) MultipartFile file, @PathVariable(value = "param", required = false) String liushui) {
+    public JSONObject uploadResume(@RequestParam(value = "resumeFile", required = true) MultipartFile file) {
         JSONObject responseResult = new JSONObject();
-        String param = liushui;     //流水号
         String consumerId = "";     //用户id
+        String consumerName = "";
         String path = "";           //文件的真实路径
         String realFileName = "";   //简历名称
         String suffix = "";         //简历后缀/类型
@@ -95,17 +93,17 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         long size = 0;              //文件大小
         String fileName = "";       //随机生成的文件名称
         File targetFile = null;
-        //从cookie中获取用户id;
-        /*Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            String name = cookie.getName();
-            if ("number".equals(name)) {
-                consumerId = cookie.getValue();
-                break;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        if (!StringUtils.isEmpty(consumerName )) {
+            try {
+                consumerId = consumerSV.selectConsumerIdByConsumerNickName(consumerName);
+            }catch (Exception e){
+
             }
-        }*/
-        ConsumerBO attribute = (ConsumerBO) session.getAttribute(param);
-        consumerId = attribute.getId();
+        }
         try {
             realFileName = file.getOriginalFilename();//获取文件名称
             suffix = realFileName.substring(realFileName.lastIndexOf("."));//获取后缀
@@ -145,7 +143,6 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         sqlFileUrl = request.getContextPath() + "/upload/word/" + fileName;
         //数据库操作
         try {
-
             //更新操作，判断是否
             String consumerResumeId = consumerSV.selectResumeIdByConsumerID(consumerId);
             if (!StringUtils.isEmpty(consumerResumeId)) {
@@ -178,75 +175,33 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         return responseResult;
     }
 
-
-    @PostMapping("/resumeUploadIng")
+    /**
+     * 删除简历
+     * @return
+     */
+    @RequestMapping(value = "/consumer/resume/delete/{resumeId}",method = RequestMethod.GET)
     @Override
-    public QueryResponseResult resumeUpload(String strDocument, MultipartFile file) {
-        HashMap<String, String> returnmap = new HashMap<>();
-        try {
-            if (strDocument != null && strDocument != "") {
-
-            } else if (file != null && !file.isEmpty()) {
-               /* byte[] bytes = file.getBytes();
-                Path path = Paths.get("D:\\1234.doc");
-                Path write = Files.write(path, bytes);
-                returnmap.put("path",write.getFileName().toString());*/
-                String filename = file.getOriginalFilename();
-                int size = (int) file.getSize();
-                System.out.println(filename + "--->>>" + size);
-                String path = "E:/test";
-                File dest = new File(path + "/" + filename);
-                if (!dest.getParentFile().exists()) {
-                    dest.getParentFile().mkdirs();
-                }
-                file.transferTo(dest);//保存文件
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-
+    public String deleteResume(@PathVariable String resumeId) {
+        //1.删除管理信息
+        //如果存在就删除简历
+        consumerResumeSV.delectByid(resumeId);
+        //2. 更改简历上传状态
+        String consumerName = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
         }
-        return null;
-    }
-
-    @GetMapping("/resumeDownIng")
-    @Override
-    public QueryResponseResult resumeDownIng(String urlWord) {
-        File file = new File(urlWord);
-        if (file.exists()) { //判断文件父目录是否存在
-            response.setContentType("application/msword");
-            response.setCharacterEncoding("UTF-8");
-            // response.setContentType("application/force-download");
-
-            response.setHeader("Content-Disposition", "attachment;fileName=" + "f.doc");
-
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null; //文件输入流
-            BufferedInputStream bis = null;
-
-            OutputStream os = null; //输出流
+        if (!StringUtils.isEmpty(consumerName )) {
             try {
-                os = response.getOutputStream();
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                int i = bis.read(buffer);
-                while (i != -1) {
-                    os.write(buffer);
-                    i = bis.read(buffer);
-                }
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            try {
-                bis.close();
-                fis.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                DomesticConsumerDO consumerDO = new DomesticConsumerDO();
+                consumerDO.setConsumerNickname(consumerName);
+                consumerDO.setResumeISNOT(0);
+                consumerSV.updateResumeISNOT(consumerDO);
+            }catch (SQLException e){
+                logger.warn("更新失败"+e.getSQLState());
             }
         }
-        return null;
+        return "redirect:/consumer/resume/";
     }
 
     @Override

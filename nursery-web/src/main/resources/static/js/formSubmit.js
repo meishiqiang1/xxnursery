@@ -39,15 +39,12 @@ var Script = function () {
     }
 
     //注册
-    $("#registForm").submit(function () {
+    $("#btn_reg").click(function () {
         if (checkPassword() && checkVerifyPass()) {
             $.post("/consumer/register2", $("#registForm").serialize(), function (data) {
+                alert(data.message);
                 if (data.message == "操作成功！" || data.code == 10000 || data.success) {
-                    //注册成功
-                    if (confirm(data.message + "!是否，直接登录")) {
-                        //登录成功
-                        alert("跳转登录成功")
-                    }
+                    window.location.href = '/login';
                 }
             });
         }

@@ -114,21 +114,6 @@ public class NurseryIndexController extends BaseController implements NurseryInd
     }
 
     /**
-     * 退出 根据id退出
-     * @param id
-     */
-//    @RequestMapping(value = {"/logout/{param}"},method = RequestMethod.GET)
-//    public String logout(@PathVariable(value = "param",required = true) String id){
-//        try {
-//            session.removeAttribute(id);
-//        }catch (Exception e){
-//            LOGGER.error(e.getMessage());
-//            return "500";
-//        }
-//        return "redirect:/index";
-//    }
-
-    /**
      * 查询轮播图
      * @param classify
      * @return

@@ -2,12 +2,13 @@ package com.nursery.utils;
 
 import com.alibaba.druid.util.StringUtils;
 import com.nursery.common.model.CommonAttrs;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Random;
 import java.util.UUID;
 
 public class CommonUtil {
-
+    public static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public static String getUUID() {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         return uuid;
@@ -150,5 +151,9 @@ public class CommonUtil {
                 return null;
         }
         /*一天以内 三天以内 七天以内 一个月以内 一年以内*/
+    }
+
+    public static String passwordEncode(String consumerPass) {
+        return passwordEncoder.encode(consumerPass);
     }
 }

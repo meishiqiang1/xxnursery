@@ -7,6 +7,7 @@ import com.nursery.api.iweb.ConsumerRegisterApi;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.bo.RegisterBO;
 import com.nursery.beans.code.ConsumerCode;
+import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
 import com.nursery.utils.CellUtils;
@@ -46,30 +47,30 @@ public class ConsumerRegisterController extends BaseController implements Consum
     @ResponseBody
     @Override
     public ResponseResult registerConsumer(RegisterBO registerBO) {
-        ResponseResult responseResult = ResponseResult.SUCCESS();
+        ResponseResult responseResult = new ResponseResult();
         String consumerXing = "";
         String consumerAge = "";
         String consumerURL = "";
         DomesticConsumerDO consumerDO = new DomesticConsumerDO();
+        consumerDO.setConsumerNickname(registerBO.getNickname());
+        consumerDO.setConsumerSex(registerBO.getGender());
+        consumerDO.setConsumerPass(registerBO.getPassword());
+        consumerDO.setConsumerAddress(registerBO.getAddress());
         try {
             String uuid = CommonUtil.getUUID();
             if (uuid != null && uuid.length() == 32) {
                 consumerDO.setConsumerID(uuid);
             } else {
-                System.out.println("获取id错误");
-                responseResult.setCommonCode(ConsumerCode.CONSUMER_FAIL_TO_REGISTER);
+                logger.warn("获取id错误");
+                responseResult.setCommonCode(CommonCode.FAIL);
                 return responseResult;
             }
-            consumerDO.setConsumerNickname(registerBO.getNickname());
-            consumerDO.setConsumerSex(registerBO.getGender());
-            consumerDO.setConsumerPass(registerBO.getPassword());
-            consumerDO.setConsumerAddress(registerBO.getAddress());
+            //校验邮箱；
             String email = registerBO.getEmail();
-
             if (!StringUtils.isEmpty(email) && EmailUtils.verify(email)){
-                //校验邮箱；
                 consumerDO.setConsumerEmail(email);
             }else {
+                logger.warn("邮箱检验不正确");
                 responseResult.setCommonCode(ConsumerCode.CONSUMER_VERIFY_EMAIL_NOT);
                 return responseResult;
             }
@@ -79,12 +80,14 @@ public class ConsumerRegisterController extends BaseController implements Consum
                 consumerDO.setConsumerName(realName);
                 consumerDO.setConsumerXing(consumerXing);
             }else {
+                logger.warn("姓名格式不对");
                 responseResult.setCommonCode(ConsumerCode.CONSUMER_REAL_NAME_WRONG);
                 return responseResult;
             }
+            //获取年龄
             String birthday = registerBO.getBirthday();
             if (!StringUtils.isEmpty(birthday)) {
-                consumerAge = DateUtils.getAge(birthday);//获取年龄
+                consumerAge = DateUtils.getAge(birthday);
                 consumerDO.setConsumerBirthday(birthday);
                 consumerDO.setConsumerAge(consumerAge);
             }

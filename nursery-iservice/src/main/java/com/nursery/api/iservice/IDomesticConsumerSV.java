@@ -42,6 +42,7 @@ public interface IDomesticConsumerSV {
     ConsumerBO findByCellAndPass(String cellPhone, String pass) throws SQLException;
     //更新相关简历内容
     int updateConsumerResume(DomesticConsumerDO consumerDO);
+    int updateResumeISNOT(DomesticConsumerDO consumerDO) throws SQLException;
     //获取简历resume的相关字段
     DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId) throws SQLException;
     //根据id获取简历id
@@ -51,6 +52,6 @@ public interface IDomesticConsumerSV {
     //登录流程2
     List<RoleDO> findRolesByUsername(String id);
     //更具用户名查询用户id
-    String selectConsumerIdByConsumerName(String name);
+    String selectConsumerIdByConsumerNickName(String name);
 
 }

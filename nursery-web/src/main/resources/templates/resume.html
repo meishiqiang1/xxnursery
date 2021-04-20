@@ -84,7 +84,7 @@
                                 <div class="resume_operation_table">
                                     <i class="fa fa-file-word-o"></i>&nbsp;&nbsp;&nbsp;
                                     <b th:text="*{consumerResume.name}">某某莫的简历名称</b>&nbsp;&nbsp;
-                                    <a href="#"><i class="fa fa-trash-o"></i></a>
+                                    <a th:href="'/consumer/resume/delete/'+*{consumerResume.id}"><i class="fa fa-trash-o"></i></a>
                                 </div>
                                 <div>
                                     <a class="btn btn-info btn-resume" th:href="*{consumerResume.url}">
@@ -177,14 +177,11 @@
     $(".knob").knob();
     //fileinput
     $(function () {
-        var pathname = window.location.pathname;
-        var index = pathname.lastIndexOf("/");
-        var param = pathname.substring(index);
         /*上传个人简历 word*/
         $("#kv-explorer").fileinput({
             language: 'zh', //设置语言
             textEncoding: "UTF-8",//文本编码
-            uploadUrl: "/consumer/resume/upload/" + param, //上传的地址
+            uploadUrl: "/consumer/resume/upload/", //上传的地址
             allowedFileExtensions: ["doc", "docx"], //接收的文件后缀
             browseClass: "btn btn-primary", //按钮样式
             enctype: 'multipart/form-data',//类型

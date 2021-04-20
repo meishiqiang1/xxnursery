@@ -35,7 +35,7 @@ public class UserDetailComponent implements UserDetailsService {
                 .collect(Collectors.toList());
         //返回封装userdetails类
         if(domesticConsumerDO !=null){
-            UserDetails userDetails = new User(domesticConsumerDO.getConsumerName(), domesticConsumerDO.getConsumerPass(), collect);
+            UserDetails userDetails = new User(domesticConsumerDO.getConsumerNickname(), domesticConsumerDO.getConsumerPass(), collect);
             return userDetails;
         }else {
             throw  new UsernameNotFoundException("当前用户不存在");

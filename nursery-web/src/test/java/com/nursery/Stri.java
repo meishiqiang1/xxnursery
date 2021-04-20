@@ -14,7 +14,7 @@ public class Stri {
         String s = "sel-business-1";
         System.out.println(s.substring(13, s.length()));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("123456"));
+        System.out.println(passwordEncoder.encode("Msq123456."));
 
     }
 }

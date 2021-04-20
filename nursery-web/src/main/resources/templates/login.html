@@ -20,6 +20,13 @@
 <div class="container">
     <form class="form-signin" id="loginForm" method="post" action="/login">
         <h2 class="form-signin-heading">立即登入</h2>
+        <th:block th:if="${success != null}">
+            <div class="alert  alert-info alert-dismissible " role="alert" id="loginWarn">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>反馈信息!</strong> <th:block th:text="${success}"></th:block>!!
+            </div>
+        </th:block>
         <div class="login-wrap">
             <!--<input type="text" hidden="hidden" name="liushui">
             <input type="text" class="form-control" name="yhu" placeholder="手机号/邮箱" required autofocus>

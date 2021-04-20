@@ -72,7 +72,7 @@ public interface DomesticConsumerMapper {
     //校验用户是否存在 to 注册
     @Select("select * from tb_consumer " +
             "where consumer_email = #{consumerEmail} " +
-            "or consumer_name = #{consumerName}")
+            "or consumer_nickname = #{consumerNickname}")
     @ResultMap("domesticConsumer")
     public  List<DomesticConsumerDO> checkConsumerToRegister(DomesticConsumerDO checkDConsumerDo);
 
@@ -149,6 +149,10 @@ public interface DomesticConsumerMapper {
             "where consumer_id = #{consumerID}")
     public int updateConsumerResume(DomesticConsumerDO consumerDO);
 
+    //更新resume简历相关字段
+    @Update("update tb_consumer set resumeISNOT = #{resumeISNOT} where consumer_nickname = #{consumerNickname}")
+    public int updateResumeISNOT(DomesticConsumerDO consumerDO) throws SQLException;
+
     //查询resume简历相关字段
     @Select("select * from tb_consumer where consumer_id = #{consumerId}")
     @Results(
@@ -163,19 +167,22 @@ public interface DomesticConsumerMapper {
     public String selectResumeIdByConsumerID(String consumerId);
 
     //1. 登录步骤1
-    @Select("select * from tb_consumer where consumer_name = #{username}")
+    @Select("select * from tb_consumer where consumer_nickname = #{username}")
     @ResultMap("domesticConsumer")
     public DomesticConsumerDO selectByUsername(String username);
 
     //2. 登录步骤2
     @Select("SELECT * FROM `tb_role` WHERE ID IN (SELECT a.`ROLEID`  FROM  `tb_middle_consumer_role` a WHERE `CONSUMER` = #{id});")
     @Results({
-            @Result(column = "ID",property = "",id = true),
+            @Result(column = "ID",property = "id",id = true),
             @Result(column = "ROLENAME",property = "name"),
             @Result(column = "ROLEEN",property = "role")
     })
     public List<RoleDO> selectRolesByname(String id);
 
-    @Select("select consumer_id from tb_consumer where consumer_name = #{name}")
-    String selectConsumerIdByConsumerName(String name);
+    @Select("select consumer_id from tb_consumer where consumer_nickname = #{name}")
+    String selectConsumerIdByConsumerNickName(String name);
+
+    @Insert("insert into tb_middle_consumer_role (ROLEID,CONSUMER,ROLEEN) value (#{id},#{consumerId},#{name})")
+    void insertRole(RoleDO roleDO);
 }

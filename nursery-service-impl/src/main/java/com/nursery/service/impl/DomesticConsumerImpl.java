@@ -9,6 +9,7 @@ import com.nursery.beans.vo.MailVo;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.dao.DomesticConsumerMapper;
+import com.nursery.utils.CommonUtil;
 import com.nursery.utils.EmailUtils;
 import com.nursery.utils.POIUtils;
 import org.junit.platform.commons.util.StringUtils;
@@ -78,6 +79,7 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
         String checkEmail = consumerDO.getConsumerEmail();
         String checkCellPhone = consumerDO.getConsumerCellPhone();
         String consumerName = consumerDO.getConsumerName();
+        String nickname = consumerDO.getConsumerNickname();
         DomesticConsumerDO checkDConsumerDo = new DomesticConsumerDO();
         ResponseResult success = ResponseResult.SUCCESS();
         if (StringUtils.isNotBlank(checkEmail)){
@@ -86,8 +88,8 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
         if (StringUtils.isNotBlank(checkCellPhone)){
             checkDConsumerDo.setConsumerCellPhone(checkCellPhone);
         }
-        if (StringUtils.isNotBlank(consumerName)){
-            checkDConsumerDo.setConsumerName(consumerName);
+        if (StringUtils.isNotBlank(nickname)){
+            checkDConsumerDo.setConsumerNickname(nickname);
         }
         List<DomesticConsumerDO> resultList = mapper.checkConsumerToRegister(checkDConsumerDo);
         if (!resultList.isEmpty()){
@@ -96,7 +98,14 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
             return success;
         }
         try {
+            String passwordEncode = CommonUtil.passwordEncode(consumerDO.getConsumerPass());
+            consumerDO.setConsumerPass(passwordEncode);
             mapper.insert(consumerDO);
+            RoleDO roleDO = new RoleDO();
+            roleDO.setId("5f69554ec3bc11e999ff1cb72c0beab7");
+            roleDO.setName("USER");
+            roleDO.setConsumerId(consumerDO.getConsumerID());
+            mapper.insertRole(roleDO);
             EmailUtils sendEmailUtils = null;
             String consumerEmail = consumerDO.getConsumerEmail();
             String consumerCellPhone = consumerDO.getConsumerCellPhone();
@@ -221,8 +230,17 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
 
 
     @Override
+    public int updateResumeISNOT(DomesticConsumerDO consumerDO) throws SQLException {
+        return mapper.updateResumeISNOT(consumerDO);
+    }
+
+
+    @Override
     public DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId) throws SQLException{
         DomesticConsumerDO consumerDO = mapper.selectConsumerResumeByConsumerID(consumerId);
+        if(consumerDO.getResumeISNOT()==0){
+            return consumerDO;
+        }
         DomesticConsumerResumeDO resume = consumerDO.getConsumerResume();
         String url = resume.getUrl();
         String type = resume.getType();
@@ -265,8 +283,8 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     }
 
     @Override
-    public String selectConsumerIdByConsumerName(String name) {
-        return mapper.selectConsumerIdByConsumerName(name);
+    public String selectConsumerIdByConsumerNickName(String name) {
+        return mapper.selectConsumerIdByConsumerNickName(name);
     }
 
     //校验手机号

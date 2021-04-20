@@ -19,13 +19,9 @@ public interface ResumeApi {
     @ApiOperation("访问上传简历")
     public String visitResume();
 
-    public JSONObject uploadResume(MultipartFile file,String liushui);
+    public JSONObject uploadResume(MultipartFile file);
 
-    @ApiOperation("简历上传")
-    QueryResponseResult resumeUpload(String strDocument, MultipartFile file);
-
-    @ApiOperation("简历下载")
-    QueryResponseResult resumeDownIng(String urlWord);
+    public String deleteResume(String resumeId);
 
     @ApiOperation("简历修改")
     QueryResponseResult resumeUpdateUpload();
