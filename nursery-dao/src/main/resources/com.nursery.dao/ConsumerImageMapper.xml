@@ -3,6 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nursery.dao.ConsumerImageMapper">
+    <resultMap id="consumerImage" type="com.nursery.beans.ConsumerImageDO">
+        <id column="image_id" property="imageId"/>
+        <result column="image_64base" property="image64Base"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="image_type" property="imageType" jdbcType="VARCHAR"/>
+        <result column="image_size" property="imageSize" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.nursery.beans.ConsumerImageDO">
+        insert into tb_consumerimage (image_id,image_64base,image_url,image_type,image_size)
+        value (#{imageId},#{image64Base},#{imageUrl},#{imageType},#{imageSize});
+    </insert>
 
     <select id="selectImageUrlByImageId" parameterType="string" resultType="java.lang.String">
         SELECT image_url FROM tb_consumerimage  where image_id = #{imageId}

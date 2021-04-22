@@ -93,6 +93,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         long size = 0;              //文件大小
         String fileName = "";       //随机生成的文件名称
         File targetFile = null;
+        //获取存储的用户信息 UserDetails
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             consumerName = authentication.getName();
@@ -101,7 +102,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
             try {
                 consumerId = consumerSV.selectConsumerIdByConsumerNickName(consumerName);
             }catch (Exception e){
-
+                //定义返回 500 服务器出错
             }
         }
         try {

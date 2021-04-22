@@ -119,7 +119,8 @@ public interface DomesticConsumerMapper {
             })
     public DomesticConsumerDO selectConsumerByConsumerID(String consumerID) throws SQLException;
 
-    @Update("update tb_consumer set consumer_address = #{consumerAddress}," +
+    @Update("update tb_consumer " +
+            "set consumer_address = #{consumerAddress}," +
             "consumer_cellphone = #{consumerCellPhone}," +
             "consumer_email = #{consumerEmail}," +
             "consumer_name = #{consumerName}," +
@@ -129,7 +130,7 @@ public interface DomesticConsumerMapper {
             "consumer_educationBg = #{consumerEducationBg}," +
             "consumer_qianming = #{consumerSignature}," +
             "consumer_status = #{consumerStatus}," +
-            "consumer_birthday = #{consumerBirthday}," +
+            "consumer_birthday = #{consumerBirthday} " +
             "where consumer_id = #{consumerID}")
     public int updateConsumer(DomesticConsumerDO consumerDO);
 
@@ -185,4 +186,7 @@ public interface DomesticConsumerMapper {
 
     @Insert("insert into tb_middle_consumer_role (ROLEID,CONSUMER,ROLEEN) value (#{id},#{consumerId},#{name})")
     void insertRole(RoleDO roleDO);
+
+    @Update("update tb_consumer set consumer_URL = #{consumerURL} where consumer_id = #{consumerID}")
+    int updateConsumerImage(DomesticConsumerDO domesticConsumerDO) throws SQLException;
 }

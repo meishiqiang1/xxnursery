@@ -85,8 +85,8 @@
                             </div>
 
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a th:href="'/consumer/personal/'+${#strings.substring(#httpServletRequest.requestURL,45)}"> <i class="fa fa-user"></i> 个人资料</a></li>
-                                <li class="active"><a th:href="'/consumer/personalEdit/'+${#strings.substring(#httpServletRequest.requestURL,45)}">
+                                <li><a th:href="'/consumer/personal/'"> <i class="fa fa-user"></i> 个人资料</a></li>
+                                <li class="active"><a th:href="'/consumer/personalEdit/'">
                                     <i class="fa fa-edit"></i> 编辑个人资料</a></li>
                             </ul>
                         </section>
@@ -99,17 +99,18 @@
                             </div>
                             <div class="panel-body bio-graph-info">
                                 <div class="panel-heading"> 个人资料信息</div>
-                                <form class="form-horizontal" role="form" th:object="${data.queryResult.object}"
-                                      id="proFrom">
+                                <form class="form-horizontal" role="form"
+                                      method="post" action="/consumer/personal/pullUser/"
+                                      th:object="${data.queryResult.object}" id="proFrom">
                                     <div class="form-group">
                                         <label class="col-lg-2 control-label">自我介绍</label>
                                         <div class="col-lg-10">
-                                        <textarea th:if="*{consumerSignature!=null}" name="consumerSignature"
-                                                  id="consumerSignature" class="form-control" cols="30" rows="10"
-                                                  th:text="*{consumerSignature}"></textarea>
+                                            <textarea th:if="*{consumerSignature!=null}" name="consumerSignature"
+                                                      id="consumerSignature" class="form-control" cols="30" rows="10"
+                                                      th:text="*{consumerSignature}"></textarea>
                                             <textarea th:if="*{consumerSignature==null}" name="consumerSignature"
                                                       id="consumerSignature" class="form-control" cols="30" rows="10"
-                                                      th:text="这家伙很懒！什么都没有留下!!"></textarea>
+                                                      placeholder="这家伙很懒！什么都没有留下!!"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -147,8 +148,7 @@
                                     <div class="form-group">
                                         <label class="col-lg-2 control-label">加入时间</label>
                                         <div class="col-lg-6">
-                                            <input type="text" class="form-control" id="consumerJoinDay"
-                                                   name="consumerJoinDay"
+                                            <input type="text" class="form-control" readonly
                                                    th:value="*{consumerJoinDay}==null?'':*{consumerJoinDay}">
                                         </div>
                                     </div>
@@ -175,35 +175,49 @@
                                                    th:value="*{consumerAge}==null?'':*{consumerAge}">
                                         </div>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">性别</label>
+                                        <div class="col-lg-6">
+                                            <input type="radio" th:checked="*{consumerSex=='1'}" name="consumerSex"
+                                                   value="1"/>男
+                                            <input type="radio" th:checked="*{consumerSex=='0'}" name="consumerSex"
+                                                   value="0"/>女
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">学历</label>
+                                        <div class="col-lg-6">
+                                            <select class="form-control m-bot15"
+                                                    id="consumerEducationBg"
+                                                    name="consumerEducationBg">
+                                                <option th:selected="*{consumerEducationBg == '0'}" value="0">不限
+                                                </option>
+                                                <option th:selected="*{consumerEducationBg == '1'}" value="1">大专
+                                                </option>
+                                                <option th:selected="*{consumerEducationBg == '2'}" value="2">本科
+                                                </option>
+                                                <option th:selected="*{consumerEducationBg == '3'}" value="3">硕士
+                                                </option>
+                                                <option th:selected="*{consumerEducationBg == '4'}" value="4">博士
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <div class="col-lg-offset-2 col-lg-10">
-                                            <button type="button" id="btn_pro" class="btn btn-success">保存</button>
-                                            <button type="button" class="btn btn-default">取消</button>
+                                            <button type="submit" id="btn_pro" class="btn btn-success">保存</button>
+                                            <button type="reset" class="btn btn-default">取消</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </section>
+
                         <section>
                             <div class="panel panel-primary">
-                                <div class="panel-heading"> 设置新密码和头像</div>
+                                <div class="panel-heading"> 设置头像</div>
                                 <div class="panel-body">
                                     <form class="form-horizontal" role="form" th:object="${data.queryResult.object}">
-                                        <div class="form-group">
-                                            <label class="col-lg-2 control-label">当前密码</label>
-                                            <div class="col-lg-6">
-                                                <input type="text" class="form-control"
-                                                       th:value="*{consumerPass}==null?'':*{consumerPass}" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-2 control-label">新密码</label>
-                                            <div class="col-lg-6">
-                                                <input type="text" class="form-control" id="consumerPass"
-                                                       name="consumerPass">
-                                            </div>
-                                        </div>
                                         <div class="form-group last">
                                             <label class="control-label col-md-3">更改头像</label>
                                             <div class="col-md-9">
@@ -231,8 +245,45 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-lg-offset-2 col-lg-10">
+                                                <button type="button" id="btn_img" class="btn btn-info">保存</button>
+                                                <button type="reset" class="btn btn-default">取消</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </section>
+                        <section>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading"> 设置密码</div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal" role="form" th:object="${data.queryResult.object}">
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">旧密码</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" name="consumerPass"
+                                                       placeholder="请输入密码">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">新密码</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" name="consumerPass"
+                                                       placeholder="请输入新密码">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-2 control-label">新密码</label>
+                                            <div class="col-lg-6">
+                                                <input type="text" class="form-control" name="consumerPass"
+                                                       placeholder="请重新输入新密码">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-2 col-lg-10">
                                                 <button type="submit" class="btn btn-info">保存</button>
-                                                <button type="button" class="btn btn-default">取消</button>
+                                                <button type="reset" class="btn btn-default">取消</button>
                                             </div>
                                         </div>
                                     </form>
@@ -268,6 +319,11 @@
 <script type="text/javascript" src="/assets/bootstrap-fileupload/bootstrap-fileupload.js"></script>
 <script src="/js/slidebars.min.js"></script>
 <script src="/js/common-scripts.js"></script>
-
+<script>
+    $("#btn_img").click(function () {
+        var base = $("img[name='consumerURL']").attr("src");
+        $.post("/consumer/personal/pullImage", {base: base});
+    })
+</script>
 </body>
 </html>

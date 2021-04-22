@@ -1,13 +1,9 @@
 package com.nursery.utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 
 //import it.sauronsoftware.base64.Base64;
 
@@ -43,7 +39,7 @@ public class Base64Utils {
      * @throws Exception
      */
     public static byte[] decode(String base64) throws Exception {
-        return "".getBytes(StandardCharsets.UTF_8);
+        return base64.getBytes(StandardCharsets.UTF_8);
 //        return Base64.decode(base64.getBytes());
     }
 
@@ -52,7 +48,6 @@ public class Base64Utils {
      * <p>
      * 二进制数据编码为BASE64字符串
      * </p>
-     *
      * @param bytes
      * @return
      * @throws Exception
@@ -81,10 +76,63 @@ public class Base64Utils {
      * @throws Exception
      */
     public static void decodeToFile(String filePath, String base64) throws Exception {
-        byte[] bytes = decode(base64);
+//        byte[] bytes = decode(base64);
+        byte[] bytes = base64ToByte(base64);
         byteArrayToFile(bytes, filePath);
     }
 
+    //先将base64转成字节数在
+    public static byte[] base64ToByte(String imageBase64) {
+        byte[] b = null;
+        Base64.Decoder decoder = Base64.getDecoder();
+        try {
+            if (imageBase64.indexOf("data:image/jpeg;base64,") != -1) {
+                b = decoder.decode(imageBase64.replaceAll("data:image/jpeg;base64,", ""));
+            } else {
+                if (imageBase64.indexOf("data:image/png;base64,") != -1) {
+                    b = decoder.decode(imageBase64.replaceAll("data:image/png;base64,", ""));
+                } else {
+                    b = decoder.decode(imageBase64.replaceAll("data:image/jpg;base64,", ""));
+                }
+            }
+            for (int i = 0; i < b.length; ++i) {
+                if (b[i] < 0) {// 调整异常数据
+                    b[i] += 256;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return b;
+    }
+
+    /**
+     * {@code 功能描述: 将二进制转换为图片
+     *
+     * @param b        二进制
+     * @param userName 用户名
+     * @author hzj
+     * @since 2019-7-23 17:53:21
+     * @return 图片路径 如果是null 就是保存失败
+     */
+    public static void filePath(String filePath,byte[] b) {
+        try {
+            //做转码,否则存的图片名字会乱码
+//            resourcesPath = URLDecoder.decode(resourcesPath, "UTF-8");
+            //如果文件夹不存在则创建
+            File file = new File(filePath);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            //将二进制在转换为图片
+            OutputStream out = new FileOutputStream(filePath);
+            out.write(b);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 文件转换为二进制数组

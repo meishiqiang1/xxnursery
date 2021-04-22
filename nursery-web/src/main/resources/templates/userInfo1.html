@@ -9,9 +9,9 @@
     <title>个人资料</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
-    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link href="/css/style.css" rel="stylesheet">
-    <link href="/css/style-responsive.css" rel="stylesheet" />
+    <link href="/css/style-responsive.css" rel="stylesheet"/>
 </head>
 <body>
 <section id="container" class="">
@@ -65,7 +65,7 @@
         <section>
             <div class="container">
                 <div class="row position">
-                    <div >
+                    <div>
                         <!--个人 侧标栏-->
                         <aside class="profile-nav col-lg-3">
                             <section class="panel" th:object="${data.queryResult.object}">
@@ -84,8 +84,10 @@
                                 </div>
 
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li class="active"><a th:href="'/consumer/personal/'+${#strings.substring(#httpServletRequest.requestURL,41)}"> <i class="fa fa-user"></i> 个人资料</a></li>
-                                    <li><a th:href="'/consumer/personalEdit/'+${#strings.substring(#httpServletRequest.requestURL,41)}"> <i class="fa fa-edit"></i> 编辑个人资料</a></li>
+                                    <li class="active"><a th:href="'/consumer/personal/'"> <i class="fa fa-user"></i>
+                                        个人资料</a></li>
+                                    <li><a th:href="'/consumer/personalEdit/'"> <i class="fa fa-edit"></i> 编辑个人资料</a>
+                                    </li>
                                 </ul>
                             </section>
                         </aside>
@@ -94,35 +96,47 @@
                         <aside class="profile-info col-lg-9">
                             <section class="panel" th:object="${data.queryResult.object}">
                                 <div class="bio-graph-heading">
-                            <span th:text="*{consumerSignature}==null?'这家伙很懒，什么都没有留下！！！！！！':*{consumerSignature}">
-                            </span>
+                                    <span th:text="*{consumerSignature}==null?'这家伙很懒，什么都没有留下！！！！！！':*{consumerSignature}"></span>
                                 </div>
                                 <div class="panel-body bio-graph-info">
                                     <h1>资料信息</h1>
                                     <div class="row">
                                         <div class="bio-row">
-                                            <p><span>名字 </span>: <span th:if="*{consumerName != null}" th:text="*{consumerName}">梅士强</span></p>
+                                            <p><span>名字 </span>: <span th:if="*{consumerName != null}"
+                                                                       th:text="*{consumerName}">梅士强</span></p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>昵称 </span>: <span th:if="*{consumerNickname != null}" th:text="*{consumerNickname}">梅小二</span></p>
+                                            <p><span>昵称 </span>: <span th:if="*{consumerNickname != null}"
+                                                                       th:text="*{consumerNickname}">梅小二</span></p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>现居地址 </span>: <span th:if="*{consumerAddress != null}" th:text="*{consumerAddress}">河南省郑州市管城回族区南三环道路</span></p>
+                                            <p><span>现居地址 </span>: <span th:if="*{consumerAddress != null}"
+                                                                         th:text="*{consumerAddress}">河南省郑州市管城回族区南三环道路</span>
+                                            </p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>生日</span>: <span th:if="*{consumerBirthday != null}" th:text="*{consumerBirthday}">1997-07-03 04:06</span></p>
+                                            <p><span>生日</span>: <span th:if="*{consumerBirthday != null}"
+                                                                      th:text="*{consumerBirthday}">1997-07-03 04:06</span>
+                                            </p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>邮箱 </span>: <span th:if="*{consumerEmail != null}" th:text="*{consumerEmail}">13243038531@163.com</span></p>
+                                            <p><span>邮箱 </span>: <span th:if="*{consumerEmail != null}"
+                                                                       th:text="*{consumerEmail}">13243038531@163.com</span>
+                                            </p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>手机号 </span>: <span th:if="*{consumerCellPhone != null}" th:text="*{consumerCellPhone}">13243038531</span></p>
+                                            <p><span>手机号 </span>: <span th:if="*{consumerCellPhone != null}"
+                                                                        th:text="*{consumerCellPhone}">13243038531</span>
+                                            </p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>身份 </span>: <span th:if="*{consumerStatus != null}" th:text="*{consumerStatus}">学生</span></p>
+                                            <p><span>身份 </span>: <span th:if="*{consumerStatus != null}"
+                                                                       th:text="*{consumerStatus}">学生</span></p>
                                         </div>
                                         <div class="bio-row">
-                                            <p><span>加入日期 </span>: <span th:if="*{consumerJoinDay != null}" th:text="*{consumerJoinDay}">2021-02-08 16:32:53</span></p>
+                                            <p><span>加入日期 </span>: <span th:if="*{consumerJoinDay != null}"
+                                                                         th:text="*{consumerJoinDay}">2021-02-08 16:32:53</span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +151,9 @@
                                         <div class="panel">
                                             <div class="panel-body">
                                                 <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100" data-displayPrevious=true  data-thickness=".2" value="35" data-fgColor="#e06b7d" data-bgColor="#e8e8e8">
+                                                    <input class="knob" data-width="100" data-height="100"
+                                                           data-displayPrevious=true data-thickness=".2" value="35"
+                                                           data-fgColor="#e06b7d" data-bgColor="#e8e8e8">
                                                 </div>
                                                 <div class="bio-desk">
                                                     <h4 class="red">Envato Website</h4>
@@ -151,7 +167,9 @@
                                         <div class="panel">
                                             <div class="panel-body">
                                                 <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100" data-displayPrevious=true  data-thickness=".2" value="63" data-fgColor="#4CC5CD" data-bgColor="#e8e8e8">
+                                                    <input class="knob" data-width="100" data-height="100"
+                                                           data-displayPrevious=true data-thickness=".2" value="63"
+                                                           data-fgColor="#4CC5CD" data-bgColor="#e8e8e8">
                                                 </div>
                                                 <div class="bio-desk">
                                                     <h4 class="terques">ThemeForest CMS </h4>
@@ -165,7 +183,9 @@
                                         <div class="panel">
                                             <div class="panel-body">
                                                 <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100" data-displayPrevious=true  data-thickness=".2" value="75" data-fgColor="#96be4b" data-bgColor="#e8e8e8">
+                                                    <input class="knob" data-width="100" data-height="100"
+                                                           data-displayPrevious=true data-thickness=".2" value="75"
+                                                           data-fgColor="#96be4b" data-bgColor="#e8e8e8">
                                                 </div>
                                                 <div class="bio-desk">
                                                     <h4 class="green">VectorLab Portfolio</h4>
@@ -179,7 +199,9 @@
                                         <div class="panel">
                                             <div class="panel-body">
                                                 <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100" data-displayPrevious=true  data-thickness=".2" value="50" data-fgColor="#cba4db" data-bgColor="#e8e8e8">
+                                                    <input class="knob" data-width="100" data-height="100"
+                                                           data-displayPrevious=true data-thickness=".2" value="50"
+                                                           data-fgColor="#cba4db" data-bgColor="#e8e8e8">
                                                 </div>
                                                 <div class="bio-desk">
                                                     <h4 class="purple">Adobe Muse Template</h4>
@@ -259,7 +281,7 @@
 <script src="/js/jquery.scrollTo.min.js"></script>
 <script src="/js/jquery.nicescroll.js" type="text/javascript"></script>
 <script src="/assets/jquery-knob/js/jquery.knob.js"></script>
-<script src="/js/respond.min.js" ></script>
+<script src="/js/respond.min.js"></script>
 <script src="/js/common-scripts.js"></script>
 
 <script>

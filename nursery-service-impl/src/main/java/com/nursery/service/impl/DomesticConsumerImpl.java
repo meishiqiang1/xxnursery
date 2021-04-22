@@ -37,7 +37,7 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
 
     @Autowired
     @SuppressWarnings("all")
-    DomesticConsumerMapper mapper;
+    private DomesticConsumerMapper mapper;
 
     @Override
     public DomesticConsumerDO findByconsumerID(String consumerID) throws Exception {

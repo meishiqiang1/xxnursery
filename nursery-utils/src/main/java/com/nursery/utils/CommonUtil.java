@@ -156,4 +156,10 @@ public class CommonUtil {
     public static String passwordEncode(String consumerPass) {
         return passwordEncoder.encode(consumerPass);
     }
+
+    public static String getImgSuffix(String suffix) {
+        if (suffix.equals("jpeg")) return "jpg";
+        if (suffix.equals("png")) return suffix;
+        return suffix;
+    }
 }

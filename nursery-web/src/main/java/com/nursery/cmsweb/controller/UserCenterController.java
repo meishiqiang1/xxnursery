@@ -1,19 +1,21 @@
 package com.nursery.cmsweb.controller;
 
-import com.alibaba.druid.util.StringUtils;
 import com.nursery.api.iservice.IDomesticConsumerSV;
+import com.nursery.api.iservice.IUserCenterSV;
 import com.nursery.api.iweb.UserCenterApi;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.UserInfo;
-import com.nursery.beans.bo.ConsumerBO;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.QueryResponseResult;
-import com.nursery.common.model.response.QueryResult;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,10 +25,10 @@ import java.util.Map;
 
 /**
  * 个人中心业务
- *  查询个人信息   *
- *  更改密码操作   *
- *  更改用户名
- *  更改出生日期
+ * 查询个人信息   *
+ * 更改密码操作   *
+ * 更改用户名
+ * 更改出生日期
  */
 @Controller
 @RequestMapping("/consumer")
@@ -35,84 +37,104 @@ public class UserCenterController extends BaseController implements UserCenterAp
     private Logger logger = LoggerFactory.getLogger(UserCenterController.class);
 
     @Autowired
-    IDomesticConsumerSV domesticConsumerSV;
+    private IDomesticConsumerSV domesticConsumerSV;
+    @Autowired
+    private IUserCenterSV userCenterSV;
 
     //用户中心
-    @RequestMapping(value = "/personal/{param}",method = RequestMethod.GET)
-    public ModelAndView visitUserInfoPage(@PathVariable(value = "param",required = true) String param, ModelAndView modelAndView) {
+    @RequestMapping(value = "/personal", method = RequestMethod.GET)
+    @Override
+    public ModelAndView visitUserInfoPage(ModelAndView modelAndView) {
+        //初始化返回内容
+        modelAndView.setViewName("500");
+        modelAndView.addObject("message", CommonCode.SERVER_ERROR.message());
+        //定义返回值内容
         QueryResponseResult data = new QueryResponseResult(CommonCode.FAIL, null);
-        String liushui = param;
-        String userid = "";
-        if(StringUtils.isEmpty(liushui)){
-            modelAndView.setViewName("404");
+        //定义变量
+        String consumerName = "";
+        //获取用户信息 UserDetails
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        QueryResponseResult queryResponseResult = userCenterSV.getUserCenter(consumerName);
+        if (queryResponseResult.getCode()!=10000){
             return modelAndView;
         }
-        try {
-            ConsumerBO attribute = (ConsumerBO) session.getAttribute(liushui);
-            userid = attribute.getId();
-        }catch (Exception e){
-            modelAndView.setViewName("500");
-            return modelAndView;
-        }
-
-        try {
-            DomesticConsumerDO consumerDO = domesticConsumerSV.selectConsumerByConsumerID(userid);
-            if (consumerDO!=null){
-                QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
-                queryResult.setObject(consumerDO);
-                data.setQueryResult(queryResult);
-            }else {
-
-            }
-        }catch (Exception e){
-            String localizedMessage = e.getLocalizedMessage();
-            System.out.println(localizedMessage);
-        }
-        data.setCommonCode(CommonCode.SUCCESS);
+        data = queryResponseResult;
         modelAndView.addObject("data", data);
         modelAndView.setViewName("userInfo1");
         return modelAndView;
     }
 
     //用户编辑
-    @RequestMapping(value = "/personalEdit/{param}",method = RequestMethod.GET)
-    public ModelAndView visitUserEditByID(@PathVariable(value = "param",required = true) String param, ModelAndView modelAndView) {
+    @RequestMapping(value = "/personalEdit", method = RequestMethod.GET)
+    @Override
+    public ModelAndView visitUserEditByID(ModelAndView modelAndView) {
+        modelAndView.setViewName("500");
+        modelAndView.addObject("message",CommonCode.SERVER_ERROR.message());
         QueryResponseResult data = new QueryResponseResult(CommonCode.FAIL, null);
-        String liushui = param;
-        String userid = "";
-        if(StringUtils.isEmpty(liushui)){
-            modelAndView.setViewName("404");
+        String consumerName = "";
+        //获取用户信息 UserDetails
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        QueryResponseResult queryResponseResult = userCenterSV.getUserCenter(consumerName);
+        if (queryResponseResult.getCode()!=10000){
             return modelAndView;
         }
-        try {
-            ConsumerBO attribute = (ConsumerBO) session.getAttribute(liushui);
-            userid = attribute.getId();
-        }catch (Exception e){
-            modelAndView.setViewName("500");
-            return modelAndView;
-        }
-        try {
-            DomesticConsumerDO consumerDO = domesticConsumerSV.selectConsumerByConsumerID(userid);
-            if (consumerDO!=null){
-                QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
-                queryResult.setObject(consumerDO);
-                data.setQueryResult(queryResult);
-            }else {
-
-            }
-        }catch (Exception e){
-            String localizedMessage = e.getLocalizedMessage();
-            System.out.println(localizedMessage);
-        }
+        data = queryResponseResult;
         data.setCommonCode(CommonCode.SUCCESS);
         modelAndView.addObject("data", data);
         modelAndView.setViewName("userEdit");
         return modelAndView;
     }
 
+    //更新数据
+    @RequestMapping(value = "/personal/pullUser",method = RequestMethod.POST)
+    @Override
+    public String pullUser(DomesticConsumerDO consumerDO) {
+//        ResponseResult responseResult = ResponseResult.SUCCESS();
+        //获取用户信息 UserDetails
+        String consumerName = "";
+        String consumerId = "";
+        ResponseResult responseResult = ResponseResult.FAIL();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        if (StringUtils.isNotBlank(consumerName)){
+            consumerId = domesticConsumerSV.selectConsumerIdByConsumerNickName(consumerName);
+            consumerDO.setConsumerID(consumerId);
+            responseResult =  userCenterSV.pullUser(consumerDO);
+            if (responseResult.getCode()==10000){
+                return "redirect:/consumer/personalEdit/";
+            }
+        }
+        request.setAttribute("message",responseResult.getMessage());
+        return "500";
+    }
+
+    //更新头像
+    @RequestMapping(value = "/personal/pullImage",method = RequestMethod.POST)
+    @Override
+    public void pullImage(@RequestParam(name = "base") String base64) {
+//        ResponseResult responseResult = ResponseResult.SUCCESS();
+        //获取用户信息 UserDetails
+        String consumerName = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        userCenterSV.pullImage(request.getContextPath(),consumerName,base64);
+    }
+
+
 
     /**
      * generalContent
+     * personal/pullUser
      * @param consumerID
      * @return
      */
@@ -146,7 +168,7 @@ public class UserCenterController extends BaseController implements UserCenterAp
                     imageUrl = "默认地址-头像-https://img.bosszhipin.com/boss/avatar/avatar_14.png";
                 }
                 Integer resumeflag = consumerDO.getResumeISNOT();
-                if (consumerDO.getResumeISNOT()==0){//没有简历,,提示上传简历
+                if (consumerDO.getResumeISNOT() == 0) {//没有简历,,提示上传简历
                     //保存到jvm缓存中,   id + 0(RESUMERZORE),
 
                 }
@@ -164,8 +186,9 @@ public class UserCenterController extends BaseController implements UserCenterAp
 
     /**
      * 比对密码正确
-     * @param consumerID    用户id
-     * @param password  密码
+     *
+     * @param consumerID 用户id
+     * @param password   密码
      */
     @PostMapping("/consultingcode")
     @Override
@@ -189,7 +212,7 @@ public class UserCenterController extends BaseController implements UserCenterAp
         //获取标识 PASSWORDSUCCESS从redis中获取
 
         //如果存在则进行密码修改
-        if (domesticConsumerSV.updatePassword(consumerID,password)){
+        if (domesticConsumerSV.updatePassword(consumerID, password)) {
             //1.更新redis和jvm缓存,
 
             //2.返回前端提示信息
@@ -202,16 +225,15 @@ public class UserCenterController extends BaseController implements UserCenterAp
 
     //更改用户名
     @RequestMapping("/changeConsumerName")
-    public void changeConsumerName(){
+    public void changeConsumerName() {
 
     }
 
     //设置出身日期
     @RequestMapping("/setBirthday")
-    public void setBirthday(){
+    public void setBirthday() {
 
     }
-
 
 
 }

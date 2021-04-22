@@ -32,6 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //上传图片
         registry.addResourceHandler("/upload/img/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryimg\\upload\\");
         registry.addResourceHandler("/upload/cover/img/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryimg\\upload\\cover\\");
+        registry.addResourceHandler("/upload/user/image/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryimg\\user\\image\\");
         //上传word文件
         registry.addResourceHandler("/upload/word/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryword\\upload\\");
     }
