@@ -163,10 +163,6 @@ public interface DomesticConsumerMapper {
             })
     public DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId);
 
-    //根据用户id查询简历id
-    @Select("select resume_waijian_id from tb_consumer where consumer_id = #{consumerId}")
-    public String selectResumeIdByConsumerID(String consumerId);
-
     //1. 登录步骤1
     @Select("select * from tb_consumer where consumer_nickname = #{username}")
     @ResultMap("domesticConsumer")
@@ -189,4 +185,12 @@ public interface DomesticConsumerMapper {
 
     @Update("update tb_consumer set consumer_URL = #{consumerURL} where consumer_id = #{consumerID}")
     int updateConsumerImage(DomesticConsumerDO domesticConsumerDO) throws SQLException;
+
+    //根据用户id查询简历id
+    @Select("select resume_waijian_id from tb_consumer where consumer_id = #{consumerId}")
+    public String selectResumeIdByConsumerID(String consumerId);
+
+    //根据用户id查询简历id
+    @Select("select resume_waijian_id from tb_consumer where consumer_nickname = #{name}")
+    String selectResumeIdByConsumerName(String name) throws SQLException;
 }

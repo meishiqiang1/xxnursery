@@ -3,6 +3,7 @@ package com.nursery.api.iservice;
 import com.nursery.beans.DomesticConsumerResumeDO;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * author:MeiShiQiang
@@ -14,4 +15,10 @@ public interface IConsumerResumeSV {
     void insertResume(DomesticConsumerResumeDO consumerResumeDO) throws SQLException;
 
     void delectByid(String consumerResumeId);
+
+    DomesticConsumerResumeDO findResumeDOByConsuemrName(String name) throws SQLException;
+
+    Map<String,String> findResumeURLByConsumerName(String name) throws SQLException;
+
+    boolean findResumeAndConsumerDO(String recruitId, String consumerId) throws SQLException;
 }

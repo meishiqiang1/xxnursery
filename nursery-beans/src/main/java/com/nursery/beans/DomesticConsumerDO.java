@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * 普通用户--应聘者
  */
@@ -41,4 +43,6 @@ public class DomesticConsumerDO {
     @ApiModelProperty("简历:外键id")
     private String resumeId;//简历:外键id
     private DomesticConsumerResumeDO consumerResume;
+    private List<RecruitAndConsumerDO> recruitAndConsumerDOS;
+
 }

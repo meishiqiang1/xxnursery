@@ -18,6 +18,7 @@ import lombok.ToString;
 public class RecruitAndConsumerDO {
     private String consumerId;//应聘者id
     private String recruitId;//招聘信息id
+    private String resumeId;//招聘信息id
     private String consumerName;   //应聘者 (姓名)
     private String consuemrToudiDate;//'应聘者(投递时间)',
     private int consumerAge;//'应聘者(年龄)',
@@ -27,5 +28,6 @@ public class RecruitAndConsumerDO {
     private String recruitClassify;//'招聘类型',
     private String recruitPay;//'薪资',
     private String recruitPlace;//'地点',
+    private String resumePlace;//'简历地址',
 
 }

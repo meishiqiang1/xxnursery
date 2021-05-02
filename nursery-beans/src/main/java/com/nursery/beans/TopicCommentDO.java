@@ -18,7 +18,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopicCommentDO implements Serializable {
-
     private String id;
     private String content;
     private String topicId;
@@ -26,5 +25,7 @@ public class TopicCommentDO implements Serializable {
     private String consumerIId;
     private String consumerName;
     private String consumerIntroduce;
+    private String date;
+    private HotTopicDO hotTopicDO;//多对一的关系
 
 }

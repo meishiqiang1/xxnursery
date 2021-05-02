@@ -75,9 +75,11 @@
                                 月
                             </strong>
                         </h2>
+                        <!--投递简历-->
                         <button sec:authorize="isAnonymous()" data-toggle="modal" data-target="#loginModal">投递简历
-                        </button><!--投递简历-->
-                        <button sec:authorize="isAuthenticated()">投递简历</button><!--投递简历-->
+                        </button>
+                        <button sec:authorize="isAuthenticated()" type="button" id="resume_pull" class=" "
+                                th:onclick="pullResume([[${recruitment.id}]])">投递简历</button>
                     </div>
                     <div style="height: 10px"></div>
                     <p><span>地点</span>&nbsp;：&nbsp;<span th:text="*{place}"></span></p>
@@ -93,10 +95,12 @@
                         </ol>
                         <div class="flex">
                             <p class="zhiwei_type_p">
-                                <i class="fa fa-file"></i>&nbsp;&nbsp;&nbsp;<span><a>查看简历</a></span>
+                                <i class="fa fa-file"></i>&nbsp;&nbsp;&nbsp;<span><button
+                                    class="resume_btn no">查看简历</button></span>
                             </p>
                             <p class="zhiwei_type_p">
-                                <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;&nbsp;<span><a>下载简历</a></span>
+                                <i class="fa fa-file-text-o"></i>&nbsp;&nbsp;&nbsp;<span><button
+                                    class="resume_btn no down">下载简历</button></span>
                             </p>
                         </div>
                     </div>
@@ -186,20 +190,92 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<!--简历模态框-->
+<div class="modal fade" id="myResume" tabindex="-1" role="dialog" aria-labelledby="模态框" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    简历名称
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div id="resumeContent">
+
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!--判断错误信息-->
 
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<script src="/assets/bootstrap-AMapPositionPicker/js/bootstrap.AMapPositionPicker.min.js"></script>
 <th:block th:if="${param.error != null}">
+    <!--如果有error的错误出现，判断后调用-->
     <script>
         $(function () {
-            if (confirm("用户名获取密码错误,请重新登录!!")) {
-                $('#loginModal').modal('show');
+            var error = getQueryVariable("error");
+            if (error.search("用户名或者密码错误")) {
+                if (confirm("用户名或者密码错误,请重新登录!!")) {
+                    $('#loginModal').modal('show');
+                }
             }
         })
 
+        function getQueryVariable(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split("=");
+                if (pair[0] == variable) {
+                    return pair[1];
+                }
+            }
+            return (false);
+        }
     </script>
 </th:block>
+<script>
+    //查看简历
+    $("button[class='resume_btn no']:first-child").click(function (e) {
+        $.get("/consumer/resume/echo/", function (data) {
+            if (data.success) {
+                $("#resumeContent").html(data.bean.htmlContent);
+            } else {
+                $("#resumeContent").html("你还没有上传，请先上传简历！");
+            }
+        });
+        $('#myResume').modal('show');
+    });
+    //下载简历
+    $("button[class='resume_btn no down']:last-child").click(function (e) {
+        $.get("/consumer/resume/down/", function (data) {
+            // alert(data.code +"==》"+ data.resumeUrl);
+            window.location.href = data.resumeUrl;
+        });
+    });
+
+    //投递简历
+    function pullResume(id) {
+        $.get("/consumer/resume/pull/"+id, function (data) {
+            if (data.success) {
+                alert(data.message);
+                $("#resume_pull").text(data.message).removeAttr("class").attr("disabled","disabled");
+            } else {
+                alert(data.message);
+            }
+        });
+    }
+    var consuemrID = "[[${recruitment.id}]]";
+    $.get("/consumer/resume/retrieve/"+consuemrID, function (data) {
+        if (data.success) {
+            $("#resume_pull").attr("disabled","disabled").text(data.message);
+        }
+    });
+</script>
 </body>
 </html>

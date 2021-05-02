@@ -18,4 +18,15 @@ public interface RecruitAndConsumerMapper {
      * @throws SQLException
      */
     List<RecruitAndConsumerDO> selectDomeByRecruitId(String id) throws SQLException;
+
+    /**
+     * 根据y用户id，从中间表中获取招聘信息
+     * @param id 用户id
+     * @throws SQLException
+     */
+    List<RecruitAndConsumerDO> selectDomeByConsumerId(String consumerId)throws SQLException;
+
+    void insertRecruitAndConsumer(RecruitAndConsumerDO recruitAndConsumerDO);
+
+    RecruitAndConsumerDO findResumeAndConsumerDO(String recruitId, String consumerId) throws SQLException;
 }

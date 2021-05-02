@@ -1,10 +1,12 @@
 package com.nursery.api.iweb;
 
 import com.alibaba.fastjson.JSONObject;
-import com.nursery.common.model.response.QueryResponseResult;
+import com.nursery.common.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.sql.SQLException;
 
 /**
  * 简历上传 下载api
@@ -21,6 +23,13 @@ public interface ResumeApi {
      */
     @ApiOperation("访问上传简历/在线观看")
     public String visitResume();
+
+    /**
+     * /consumer/resume/echo/
+     * get
+     */
+    @ApiOperation("简历回显")
+    public ResponseResult resumeEcho();
 
     /**
      * 上传和更新
@@ -46,9 +55,27 @@ public interface ResumeApi {
     @ApiOperation("删除简历")
     public String deleteResume(String resumeId);
 
-    @ApiOperation("简历修改")
-    QueryResponseResult resumeUpdateUpload();
+    /**
+     * /consumer/resume/down/
+     * get
+     */
+    @ApiOperation("简历下载")
+    JSONObject resumeOnlineReading();
 
-    @ApiOperation("简历在线观看")
-    QueryResponseResult resumeOnlineReading();
+    /**
+     * /consumer/resume/pull/
+     * get
+     * @param recruitId 招聘信息id
+     */
+    @ApiOperation("投递简历")
+    public ResponseResult pullResume(String recruitId) throws SQLException;
+
+    /**
+     * /consumer/resume/retrieve
+     * get
+     * @param recruitId 招聘信息id
+     */
+    @ApiOperation("检索是否已经投递")
+    public ResponseResult retrieveResume( String recruitId);
+
 }

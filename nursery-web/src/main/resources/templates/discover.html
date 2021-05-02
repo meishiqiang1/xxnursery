@@ -115,7 +115,6 @@
                         <li><a th:href="'/register.html'">快捷注册</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
-                        <span th:text="${param.number}" hidden></span>
                         <li><a th:href="'/consumer/resume/'">简历</a></li>
                         <li>
                             <a th:href="'/consumer/personal/'">
@@ -168,35 +167,21 @@
                                    class="topic-link">#<span th:text="${topic.tag}">标签内容</span></a>
                                 <div class="faxian-answer">
                                     <div class="like-wrap">
-
-                                        <th:block th:if="${param.number!=null}">
-                                            <!--用户已经登录-->
-                                            <button class="btn btn-primary" type="button" data-toggle="collapse"
-                                                    th:attrappend="data-target=${'#' + topic.id}" aria-expanded="false"
-                                                    th:onclick="answer([[${param.number}]]);">
-                                                回答
-                                            </button>
-                                        </th:block>
-                                        <th:block th:unless="${param.number!=null}">
-                                            <!--用户还未登录-->
-                                            <button class="btn btn-primary" type="button" data-toggle="modal"
-                                                    data-target="#loginModal">
-                                                回答
-                                            </button>
-                                        </th:block>
+                                        <!--用户已经登录-->
+                                        <button sec:authorize="isAuthenticated()" class="btn btn-primary" type="button" data-toggle="collapse"
+                                                th:attrappend="data-target=${'#' + topic.id}" aria-expanded="false">
+                                            回答
+                                        </button>
+                                        <!--用户还未登录-->
+                                        <button sec:authorize="isAnonymous()" class="btn btn-primary" type="button" data-toggle="modal"
+                                                data-target="#loginModal">
+                                            回答
+                                        </button>
                                     </div>
                                     <div class="get-wrap">
-                                        <th:block th:if="${param.number != null}">
-                                            <a class="btn btn-primary"
-                                               th:href="'/discover/wenti/'+${topic.id}+'?number='+${param.number}">
-                                                所有回答
-                                            </a>
-                                        </th:block>
-                                        <th:block th:if="${param.number == null}">
-                                            <a class="btn btn-primary" th:href="'/discover/wenti/'+${topic.id}">
-                                                所有回答
-                                            </a>
-                                        </th:block>
+                                        <a class="btn btn-primary" th:href="'/discover/wenti/'+${topic.id}">
+                                            所有回答
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -360,63 +345,10 @@
 <script src="/js/slidebars.min.js"></script>
 <script src="/js/common-scripts.js"></script>
 <script>
-    var todayDate = new Date();
-    var year = todayDate.getFullYear();
-    var date = todayDate.getDate() + "";
-    if (date.length == 1) {
-        date = "0" + date;
-    }
-    var month = todayDate.getMonth() + 1 + "";
-    if (month.length == 1) {
-        month = "0" + month;
-    }
-    var hour = todayDate.getHours() + "";
-    if (hour.length == 1) {
-        hour = "0" + hour;
-    }
-    var mininutes = todayDate.getMinutes() + "";
-    if (mininutes.length == 1) {
-        mininutes = "0" + mininutes;
-    }
-    var seconds = todayDate.getSeconds() + "";
-    if (seconds.length == 1) {
-        seconds = "0" + seconds;
-    }
-    var ran = Math.round((Math.random()) * 10000);
-    var liushui = "" + year + "" + month + "" + date + "" + hour + "" + mininutes + "" + seconds + "" + ran;
-
-    /**
-     * @param tableId  标题id
-     */
-    function publish(tableId) {
-        var content = $("#" + "input" + tableId).val();
-        window.href.location = "/wenti/" + tableId + '/' + content;
-    }
-
-    /**
-     * 提交登录表单
-     */
-    $("#loginForm").submit(function () {
-        var username = $("#username").val();
-        var password = $("#password").val();
-        var params = "yhu=" + username + "&pass=" + password + "&liushui=" + liushui;
-        $.post("/consumer/login", params, function (data) {
-            var message = data.message;
-            var code = data.code;
-            var success = data.success;
-            if (message == "操作成功！" || code == 10000 || success == true) {
-                window.location.href = message + "?number=" + liushui;
-            } else {
-                $("#loginWarn").removeAttr("hidden")
-            }
-        });
-    });
-
     function publish(id) {
-        var liushui = getQueryVariable("number");//流水id
         var tableId = id;//
         var answer = $("#input" + tableId).val();
-        var params = "param1=" + liushui + "&param2=" + tableId + "&param3=" + answer;
+        var params = "param2=" + tableId + "&param3=" + answer;
         $.post("/discover/answer/", params, function (data) {
             var message = data.message;
             var code = data.code;
@@ -442,7 +374,6 @@
         });
 
     }
-
 
     function getMapBykey(x, data) {
         for (var key in data) {

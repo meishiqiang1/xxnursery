@@ -3,12 +3,15 @@ package com.nursery.service.impl;
 import com.nursery.api.iservice.IUserCenterSV;
 import com.nursery.beans.ConsumerImageDO;
 import com.nursery.beans.DomesticConsumerDO;
+import com.nursery.beans.RecruitAndConsumerDO;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.QueryResponseResult;
 import com.nursery.common.model.response.QueryResult;
 import com.nursery.common.model.response.ResponseResult;
+import com.nursery.dao.CommentMapper;
 import com.nursery.dao.ConsumerImageMapper;
 import com.nursery.dao.DomesticConsumerMapper;
+import com.nursery.dao.RecruitAndConsumerMapper;
 import com.nursery.utils.Base64Utils;
 import com.nursery.utils.CommonUtil;
 import org.slf4j.Logger;
@@ -21,6 +24,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * author:MeiShiQiang
@@ -32,11 +36,23 @@ public class UserCenterImpl implements IUserCenterSV {
 
     @Autowired
     @SuppressWarnings("all")
+    //用户表信息
     private DomesticConsumerMapper mapper;
 
     @Autowired
     @SuppressWarnings("all")
+    //用户头像表信息
     private ConsumerImageMapper consumerImageMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    //招聘与用户的中间表
+    private RecruitAndConsumerMapper recruitAndConsumerMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    //评论信息
+    private CommentMapper commentMapper;
 
     @Transactional
     @Override
@@ -52,6 +68,12 @@ public class UserCenterImpl implements IUserCenterSV {
         try {
             DomesticConsumerDO consumerDO = mapper.selectConsumerByConsumerID(consumerId);
             if (consumerDO != null) {
+                //2021、5、1  增加招聘用户中间类信息
+                List<RecruitAndConsumerDO> recruitmentDOList = recruitAndConsumerMapper.selectDomeByConsumerId(consumerId);
+                consumerDO.setRecruitAndConsumerDOS(recruitmentDOList);
+                //2021、5、2  增加评论类信息
+//                List<TopicCommentDO> commentDOList = commentMapper.selectCommentDOByConsumerId(consumerId);
+//                consumerDO.setTopicCommentDOS(commentDOList);
                 QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
                 queryResult.setObject(consumerDO);
                 data.setQueryResult(queryResult);

@@ -15,10 +15,24 @@
         <result column="RECRUIT_TILTE" property="recruitTitle" jdbcType="VARCHAR"/><!--招聘标题-->
         <result column="RECRUIT_CLASSIFY" property="recruitClassify" jdbcType="VARCHAR"/><!--招聘类型-->
         <result column="RECRUIT_PAY" property="recruitPay" jdbcType="VARCHAR"/><!--薪资-->
-        <result column="RECRUIRECRUIT_PLACET_PAY" property="recruitPlace" jdbcType="VARCHAR"/><!--地点-->
+        <result column="RECRUIT_PLACE" property="recruitPlace" jdbcType="VARCHAR"/><!--地点-->
+        <result column="RESUME_PATH" property="resumePlace" jdbcType="VARCHAR"/><!--地点-->
     </resultMap>
+    <insert id="insertRecruitAndConsumer" parameterType="com.nursery.beans.RecruitAndConsumerDO">
+        insert into tb_middle_consuemr_recruit (CONSUMER_ID,RECRUIT_ID,RESUME_ID,CONSUEMR_NAME,CONSUMER_TOUDIDATE,
+                                                CONSUEMR_AGE,CONSUEMR_RESUME,TOUDI_STATUS,RECRUIT_TILTE,RECRUIT_CLASSIFY,
+                                                RECRUIT_PAY,RECRUIT_PLACE,RESUME_PATH)
+        values (#{consumerId},#{recruitId},#{resumeId},#{consumerName},#{consuemrToudiDate},#{consumerAge},#{consuemrResume},
+            #{toudiStatus},#{recruitTitle},#{recruitClassify},#{recruitPay},#{recruitPlace},#{resumePlace});
+    </insert>
 
     <select id="selectDomeByRecruitId" resultMap="demo1">
         SELECT * FROM tb_middle_consuemr_recruit WHERE recruit_id = #{id};
+    </select>
+    <select id="selectDomeByConsumerId" resultMap="demo1">
+        SELECT * FROM tb_middle_consuemr_recruit WHERE CONSUMER_ID = #{id};
+    </select>
+    <select id="findResumeAndConsumerDO" resultMap="demo1">
+        SELECT * FROM tb_middle_consuemr_recruit WHERE recruit_id = #{param1} and CONSUMER_ID = #{param2};
     </select>
 </mapper>

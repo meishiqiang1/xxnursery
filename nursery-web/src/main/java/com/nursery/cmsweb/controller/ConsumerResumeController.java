@@ -6,8 +6,10 @@ import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.api.iweb.ResumeApi;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.DomesticConsumerResumeDO;
+import com.nursery.beans.code.ConsumerCode;
 import com.nursery.common.model.CommonAttrs;
-import com.nursery.common.model.response.QueryResponseResult;
+import com.nursery.common.model.response.CommonCode;
+import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
 import com.nursery.utils.CommonUtil;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * 简历上传下载
@@ -42,11 +46,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
     @RequestMapping(value = "/consumer/resume/", method = RequestMethod.GET)
     @Override
     public String visitResume() {
-        String name = "";//用户名
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            name = authentication.getName();
-        }
+        String name = getConsumerName();//用户名
         String consumerId = "";
         if (!StringUtils.isEmpty(name)) {
             try {
@@ -68,6 +68,23 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         }
         return "resume";
     }
+
+
+    @RequestMapping(value = "/consumer/resume/echo/", method = RequestMethod.GET)
+    @Override
+    @ResponseBody
+    public ResponseResult resumeEcho(){
+        ResponseResult responseResult = ResponseResult.FAIL();
+        String name = getConsumerName();
+        DomesticConsumerResumeDO consumerResume = getDomesticConsumerResume(name);
+        if (!ObjectUtils.isEmpty(consumerResume)){
+            Map map = JSONObject.parseObject(JSONObject.toJSONString(consumerResume), Map.class);
+            responseResult.setBean(map);
+            responseResult.setCommonCode(CommonCode.SUCCESS);
+        }
+        return responseResult;
+    }
+
 
     /**
      * 上传简历
@@ -205,15 +222,85 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
         return "redirect:/consumer/resume/";
     }
 
+    @RequestMapping(value = "/consumer/resume/down/",method = RequestMethod.GET)
+    @ResponseBody
     @Override
-    public QueryResponseResult resumeUpdateUpload() {
-        return null;
+    public JSONObject resumeOnlineReading() {
+        JSONObject responseResult = new JSONObject();
+        responseResult.put("message",CommonCode.FAIL.message());
+        String name = getConsumerName();
+        try {
+            Map<String, String> resultMap = consumerResumeSV.findResumeURLByConsumerName(name);
+            responseResult.put("code",resultMap.get("code"));
+            if (resultMap.get("code").equals("10000")){
+                responseResult.put("resumeUrl",resultMap.get("url"));
+                responseResult.put("message",CommonCode.SUCCESS.message());
+            }
+        } catch (SQLException throwables) {
+            logger.error("数据库错误"+throwables.getSQLState());
+        }
+        return responseResult;
     }
 
+    @RequestMapping(value = "/consumer/resume/pull/{recruitId}",method = RequestMethod.GET)
+    @ResponseBody
     @Override
-    public QueryResponseResult resumeOnlineReading() {
-        return null;
+    public ResponseResult pullResume(@PathVariable(name = "recruitId") String recruitId) {
+        ResponseResult responseResult = ResponseResult.FAIL();
+        String consumerName = getConsumerName();
+        try {
+            boolean b = consumerSV.insertConsumerAndRercuitDO(recruitId, consumerName);
+            if(b){
+                responseResult.setCommonCode(CommonCode.SUCCESS);
+            }
+        }catch (NullPointerException throwables) {
+            logger.error("服务器错误");
+        }catch (SQLException throwables) {
+            logger.error("服务器错误");
+        }
+        return responseResult;
     }
 
+
+    @RequestMapping(value = "/consumer/resume/retrieve/{recruitId}",method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public ResponseResult retrieveResume(@PathVariable(name = "recruitId") String recruitId) {
+        ResponseResult responseResult = ResponseResult.FAIL();
+        String consumerName = getConsumerName();
+        String consumerId = consumerSV.selectConsumerIdByConsumerNickName(consumerName);
+        try {
+            boolean b = consumerResumeSV.findResumeAndConsumerDO(recruitId, consumerId);
+            //已经投递
+            if(b){
+                responseResult.setCommonCode(ConsumerCode.CONSUMER_AND_RESUME_IS_EXIST);
+            }
+        }catch (NullPointerException throwables) {
+            logger.error("服务器错误");
+        }catch (SQLException throwables) {
+            logger.error("服务器错误");
+        }
+        return responseResult;
+    }
+
+    //获取简历
+    private DomesticConsumerResumeDO getDomesticConsumerResume(String name) {
+        try {
+            return consumerResumeSV.findResumeDOByConsuemrName(name);
+        } catch (SQLException throwables) {
+            logger.warn(CommonCode.SQL_YJ_ISNOT.message());
+            return null;
+        }
+    }
+
+    //获取登录信息
+    private String getConsumerName() {
+        String name = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            name = authentication.getName();
+        }
+        return name;
+    }
 
 }

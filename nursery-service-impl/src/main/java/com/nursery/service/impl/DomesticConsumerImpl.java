@@ -1,15 +1,16 @@
 package com.nursery.service.impl;
 
 import com.nursery.api.iservice.IDomesticConsumerSV;
-import com.nursery.beans.DomesticConsumerDO;
-import com.nursery.beans.DomesticConsumerResumeDO;
-import com.nursery.beans.RoleDO;
+import com.nursery.beans.*;
 import com.nursery.beans.bo.ConsumerBO;
 import com.nursery.beans.vo.MailVo;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.dao.DomesticConsumerMapper;
+import com.nursery.dao.NurseryRecruitmentMapper;
+import com.nursery.dao.RecruitAndConsumerMapper;
 import com.nursery.utils.CommonUtil;
+import com.nursery.utils.DateUtils;
 import com.nursery.utils.EmailUtils;
 import com.nursery.utils.POIUtils;
 import org.junit.platform.commons.util.StringUtils;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,6 +40,14 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     @Autowired
     @SuppressWarnings("all")
     private DomesticConsumerMapper mapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private NurseryRecruitmentMapper nurseryRecruitmentMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private RecruitAndConsumerMapper recruitAndConsumerMapper;
 
     @Override
     public DomesticConsumerDO findByconsumerID(String consumerID) throws Exception {
@@ -82,17 +92,17 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
         String nickname = consumerDO.getConsumerNickname();
         DomesticConsumerDO checkDConsumerDo = new DomesticConsumerDO();
         ResponseResult success = ResponseResult.SUCCESS();
-        if (StringUtils.isNotBlank(checkEmail)){
+        if (StringUtils.isNotBlank(checkEmail)) {
             checkDConsumerDo.setConsumerEmail(checkEmail);
         }
-        if (StringUtils.isNotBlank(checkCellPhone)){
+        if (StringUtils.isNotBlank(checkCellPhone)) {
             checkDConsumerDo.setConsumerCellPhone(checkCellPhone);
         }
-        if (StringUtils.isNotBlank(nickname)){
+        if (StringUtils.isNotBlank(nickname)) {
             checkDConsumerDo.setConsumerNickname(nickname);
         }
         List<DomesticConsumerDO> resultList = mapper.checkConsumerToRegister(checkDConsumerDo);
-        if (!resultList.isEmpty()){
+        if (!resultList.isEmpty()) {
             logger.warn("注册用户已经存在，sql错误");
             success.setCommonCode(CommonCode.CONSUMER_IS_EXIST);
             return success;
@@ -125,8 +135,9 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
                 }
             }
             // 手机号短信
-            if (StringUtils.isNotBlank(consumerCellPhone)&& checkCellphone(consumerCellPhone)) {}
-        }catch (SQLException e){
+            if (StringUtils.isNotBlank(consumerCellPhone) && checkCellphone(consumerCellPhone)) {
+            }
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println(e.getSQLState());
             logger.error("注册错误");
@@ -138,38 +149,38 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     //2021-01-21 16:32:53
     @Override
     public List<DomesticConsumerDO> selectByMonth(String date) {
-        String dateMonth = date.substring(0,7);
-        return mapper.selectByMonth(dateMonth+"%");
+        String dateMonth = date.substring(0, 7);
+        return mapper.selectByMonth(dateMonth + "%");
     }
 
     @Override
     public List<DomesticConsumerDO> selectByQuarter(String date) {
-        String month = date.substring(5,7);
-        String year = date.substring(0,5);
+        String month = date.substring(5, 7);
+        String year = date.substring(0, 5);
         int num = Integer.parseInt(month);
         String startMonth = "";
         String endMonth = "";
-        if (1<=num && num<4){
+        if (1 <= num && num < 4) {
             startMonth = "01";
-            endMonth="04";
-        }else if (4<=num && num<7){
+            endMonth = "04";
+        } else if (4 <= num && num < 7) {
             startMonth = "04";
-            endMonth="07";
-        }else if (7<=num && num<10){
+            endMonth = "07";
+        } else if (7 <= num && num < 10) {
             startMonth = "07";
-            endMonth="10";
-        }else {
+            endMonth = "10";
+        } else {
             startMonth = "10";
-            endMonth="01";
+            endMonth = "01";
         }
-        startMonth = year+startMonth+"%";
-        endMonth = year+endMonth+"%";
-        return mapper.selectByQuarter(startMonth,endMonth);
+        startMonth = year + startMonth + "%";
+        endMonth = year + endMonth + "%";
+        return mapper.selectByQuarter(startMonth, endMonth);
     }
 
     @Override
     public List<DomesticConsumerDO> selectByYear(String date) {
-        return mapper.selectByYear(date.substring(0,4)+"%");
+        return mapper.selectByYear(date.substring(0, 4) + "%");
     }
 
     @Override
@@ -188,17 +199,17 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     }
 
     @Override
-    public void addPassword(String id,String password) throws Exception {
-        mapper.updatePassword(id,password);
+    public void addPassword(String id, String password) throws Exception {
+        mapper.updatePassword(id, password);
     }
 
     @Override
     public ConsumerBO findByMailAndPass(String mail, String pass) throws SQLException {
         ConsumerBO consumerBO = new ConsumerBO();
-        List<DomesticConsumerDO> consumerDOList = mapper.findByMailAndPass(mail,pass);
-        if (consumerDOList!=null && consumerDOList.size()>0){
+        List<DomesticConsumerDO> consumerDOList = mapper.findByMailAndPass(mail, pass);
+        if (consumerDOList != null && consumerDOList.size() > 0) {
             DomesticConsumerDO consumerDO = consumerDOList.get(0);
-            if (consumerDO.getConsumerPass().equals(pass)){
+            if (consumerDO.getConsumerPass().equals(pass)) {
                 consumerBO.setId(consumerDO.getConsumerID());
                 consumerBO.setYhu(consumerDO.getConsumerNickname());
                 consumerBO.setIntroduce("其他技术职业.1年");
@@ -211,10 +222,10 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     @Override
     public ConsumerBO findByCellAndPass(String cellPhone, String pass) throws SQLException {
         ConsumerBO consumerBO = new ConsumerBO();
-        List<DomesticConsumerDO> consumerDOList = mapper.findByCellAndPass(cellPhone,pass);
-        if (consumerDOList!=null && consumerDOList.size()>0){
+        List<DomesticConsumerDO> consumerDOList = mapper.findByCellAndPass(cellPhone, pass);
+        if (consumerDOList != null && consumerDOList.size() > 0) {
             DomesticConsumerDO consumerDO = consumerDOList.get(0);
-            if (consumerDO.getConsumerPass().equals(pass)){
+            if (consumerDO.getConsumerPass().equals(pass)) {
                 consumerBO.setId(consumerDO.getConsumerID());
                 consumerBO.setYhu(consumerDO.getConsumerNickname());
                 return consumerBO;
@@ -236,21 +247,21 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
 
 
     @Override
-    public DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId) throws SQLException{
+    public DomesticConsumerDO selectConsumerResumeByConsumerID(String consumerId) throws SQLException {
         DomesticConsumerDO consumerDO = mapper.selectConsumerResumeByConsumerID(consumerId);
-        if(consumerDO.getResumeISNOT()==0){
+        if (consumerDO.getResumeISNOT() == 0) {
             return consumerDO;
         }
         DomesticConsumerResumeDO resume = consumerDO.getConsumerResume();
         String url = resume.getUrl();
         String type = resume.getType();
-        if (type.equals(".doc")){
+        if (type.equals(".doc")) {
             try {
                 String imgpath = ResourceUtils.getURL("xxnursery/").getPath() + "word/upload/image";
                 String filepath = ResourceUtils.getURL("xxnursery/").getPath() + "word/upload";
                 String imagePath = imgpath.replace('/', '\\').substring(1, imgpath.length());
                 String filePath = filepath.replace('/', '\\').substring(1, filepath.length());
-                filepath = filePath+"\\"+resume.getId()+resume.getType();
+                filepath = filePath + "\\" + resume.getId() + resume.getType();
                 String content = POIUtils.docHtmlContent(filepath, imagePath);
                 resume.setHtmlContent(content);
             } catch (IOException e) {
@@ -268,7 +279,7 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
     }
 
     @Override
-    public String selectResumeIdByConsumerID(String consumerId){
+    public String selectResumeIdByConsumerID(String consumerId) {
         return mapper.selectResumeIdByConsumerID(consumerId);
     }
 
@@ -287,8 +298,41 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
         return mapper.selectConsumerIdByConsumerNickName(name);
     }
 
+    @Transactional
+    @Override
+    public boolean insertConsumerAndRercuitDO(String recruitId, String consumerName) throws SQLException {
+        if (StringUtils.isNotBlank(recruitId) && StringUtils.isNotBlank(consumerName)) {
+            RecruitAndConsumerDO recruitAndConsumerDO = new RecruitAndConsumerDO();
+            String consumerId = mapper.selectConsumerIdByConsumerNickName(consumerName);
+            DomesticConsumerDO domesticConsumerDO = mapper.selectConsumerByConsumerID(consumerId);
+            recruitAndConsumerDO.setConsumerId(consumerId);
+            String age = domesticConsumerDO.getConsumerAge();
+            recruitAndConsumerDO.setConsumerAge(Integer.parseInt(domesticConsumerDO.getConsumerAge()));
+            recruitAndConsumerDO.setConsumerName(consumerName);
+            //现在的转态(在职|离职)-身份(职场人|学生)-学历-工作经验
+            //recruitAndConsumerDO.setConsuemrResume("不确定-不确定-"+domesticConsumerDO.getConsumerEducationBg()+"-不确定");
+            recruitAndConsumerDO.setConsuemrResume("不确定-不确定-不确定-不确定");
+            recruitAndConsumerDO.setToudiStatus("0");
+            DomesticConsumerDO domesticConsumerDO1 = mapper.selectConsumerResumeByConsumerID(consumerId);
+            recruitAndConsumerDO.setResumeId(domesticConsumerDO1.getConsumerResume().getId());
+            recruitAndConsumerDO.setResumePlace(domesticConsumerDO1.getConsumerResume().getUrl());
+            RecruitmentDO recruitmentDO = nurseryRecruitmentMapper.selectRecruitInfoByrecruitid(recruitId);
+            recruitAndConsumerDO.setRecruitId(recruitId);
+            recruitAndConsumerDO.setRecruitPay(recruitmentDO.getPay());
+            recruitAndConsumerDO.setRecruitClassify(recruitmentDO.getClassify());
+            recruitAndConsumerDO.setRecruitPlace(recruitmentDO.getPlace());
+            recruitAndConsumerDO.setRecruitTitle(recruitmentDO.getRecruittablename());
+            //2021-03-15 13:50
+            recruitAndConsumerDO.setConsuemrToudiDate(DateUtils.getNowDate("yyyy-MM-dd HH:mm"));
+            recruitAndConsumerMapper.insertRecruitAndConsumer(recruitAndConsumerDO);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //校验手机号
-    private boolean checkCellphone(String consumerCellPhone){
+    private boolean checkCellphone(String consumerCellPhone) {
         boolean flag = false;
         return true;
     }

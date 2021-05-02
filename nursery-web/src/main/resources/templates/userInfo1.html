@@ -143,10 +143,57 @@
                             </section>
                             <section>
                                 <div class="bio-graph-heading">
-                            <span th:text="*{consumerSignature}==null?'这家伙很懒，什么都没有留下！！！！！！':*{consumerSignature}">
-                            </span>
+                                    <span>招聘/留言信息管理中心 </span>
                                 </div>
+                                <div class="panel-body">
+                                    <ul class="summary-list">
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i class="fa fa-tags text-success"></i>
+                                                19 Sales
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <i class="fa fa-microphone text-danger"></i>
+                                                4 Audio
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--职位信息-->
                                 <div class="row">
+                                    <div class="panel-body">
+                                        <table class="table table-hover p-table">
+                                            <thead>
+                                            <tr>
+                                                <th>职位名称</th>
+                                                <th>类型</th>
+                                                <th>薪资</th>
+                                                <th>招聘地址</th>
+                                                <th>投递状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <th:block th:if="${data.queryResult.object.recruitAndConsumerDOS!=null}"
+                                                      th:each="rc,star:${data.queryResult.object.recruitAndConsumerDOS}">
+                                                <tr>
+                                                    <td><th:block th:text="${rc.recruitTitle}"></th:block></td>
+                                                    <td> <th:block th:text="${rc.recruitClassify}"></th:block></td>
+                                                    <td><th:block th:text="${rc.recruitPay}"></th:block></td>
+                                                    <td><th:block th:text="${rc.recruitPlace}"></th:block></td>
+                                                    <td>
+                                                        <span class="label label-info" th:text="${rc.toudiStatus=='0'?'正在审核':'已通过'}">Completed</span>
+                                                    </td>
+                                                    <td>
+                                                        <a th:href="'/job_detail/'+${rc.recruitId}+'.html'">招聘详情</a>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <div class="col-lg-6">
                                         <div class="panel">
                                             <div class="panel-body">
@@ -163,94 +210,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100"
-                                                           data-displayPrevious=true data-thickness=".2" value="63"
-                                                           data-fgColor="#4CC5CD" data-bgColor="#e8e8e8">
-                                                </div>
-                                                <div class="bio-desk">
-                                                    <h4 class="terques">ThemeForest CMS </h4>
-                                                    <p>Started : 15 July</p>
-                                                    <p>Deadline : 15 August</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100"
-                                                           data-displayPrevious=true data-thickness=".2" value="75"
-                                                           data-fgColor="#96be4b" data-bgColor="#e8e8e8">
-                                                </div>
-                                                <div class="bio-desk">
-                                                    <h4 class="green">VectorLab Portfolio</h4>
-                                                    <p>Started : 15 July</p>
-                                                    <p>Deadline : 15 August</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100"
-                                                           data-displayPrevious=true data-thickness=".2" value="50"
-                                                           data-fgColor="#cba4db" data-bgColor="#e8e8e8">
-                                                </div>
-                                                <div class="bio-desk">
-                                                    <h4 class="purple">Adobe Muse Template</h4>
-                                                    <p>Started : 15 July</p>
-                                                    <p>Deadline : 15 August</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-                            <section class="panel">
-                                <header class="panel-heading summary-head">
-                                    <h4>Day summary</h4>
-                                    <p>12 August 2013</p>
-                                </header>
-                                <div class="panel-body">
-                                    <ul class="summary-list">
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class=" fa fa-shopping-cart text-primary"></i>
-                                                1 Purchase
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-envelope text-info"></i>
-                                                15 Emails
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-picture-o text-muted"></i>
-                                                2 Photo Upload
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-tags text-success"></i>
-                                                19 Sales
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-microphone text-danger"></i>
-                                                4 Audio
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </div>
                             </section>
                         </aside>

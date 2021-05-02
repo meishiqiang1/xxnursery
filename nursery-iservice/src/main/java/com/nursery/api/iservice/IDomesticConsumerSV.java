@@ -53,5 +53,6 @@ public interface IDomesticConsumerSV {
     List<RoleDO> findRolesByUsername(String id);
     //更具用户名查询用户id
     String selectConsumerIdByConsumerNickName(String name);
-
+    //添加中间表
+    boolean insertConsumerAndRercuitDO(String recruitId, String consumerName) throws SQLException;
 }

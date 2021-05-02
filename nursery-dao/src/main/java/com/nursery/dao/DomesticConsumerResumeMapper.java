@@ -32,4 +32,7 @@ public interface DomesticConsumerResumeMapper {
 
     @Delete("DELETE FROM tb_consumer_resume WHERE id = #{consumerResumeId}")
     void delectById(String consumerResumeId);
+
+    @Select("select word_url from tb_consumer_resume where id = #{resumeId}")
+    String selectURLById(String resumeId)throws SQLException;
 }

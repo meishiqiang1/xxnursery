@@ -2,6 +2,7 @@ package com.nursery.cmsweb.controller;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.api.iservice.IHotTopicSV;
 import com.nursery.api.iweb.DiscoverApi;
 import com.nursery.beans.DBDataParam;
@@ -16,8 +17,10 @@ import com.nursery.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,6 +41,8 @@ public class DiscoverController extends BaseController implements DiscoverApi {
     public static final String NOW_DATE_YMDHMS = "yyyy-MM-dd HH:mm:ss";
     @Autowired
     private IHotTopicSV hotTopicSV;
+    @Autowired
+    private IDomesticConsumerSV domesticConsumerSV;
 
     // http://localhost:32226/discover/wenti/2?number=jj
     @RequestMapping(value = "/discover/wenti/{tableId}", method = RequestMethod.GET)
@@ -133,34 +138,34 @@ public class DiscoverController extends BaseController implements DiscoverApi {
         ResponseResult responseResult = ResponseResult.FAIL();
         HashMap<String, String> returnMap = new HashMap<>();
         String id = CommonUtil.getUUID();
-        String liushui = dataParam.getParam1();
+        //String liushui = dataParam.getParam1();
         String tableId = dataParam.getParam2();
         String answer = dataParam.getParam3();//回答的话
-        String yhu = "";
-        if (!StringUtils.isEmpty(liushui)){
+        String consumerName = "";
+        String consumerId = "";
+        String introduce = "";
+        //获取用户信息 UserDetails
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+            consumerId = domesticConsumerSV.selectConsumerIdByConsumerNickName(consumerName);
+        }
+        if (!StringUtils.isEmpty(consumerName)){
             Map<String, String> map = new HashMap<>();
-            ConsumerBO consumerBO = (ConsumerBO) session.getAttribute(liushui);
-            if (!ObjectUtils.isEmpty(consumerBO)){
-                map.put("id",id);
-                map.put("content",answer);
-                map.put("tableId",tableId);
-                map.put("consumer_id",consumerBO.getId());
-                yhu = consumerBO.getYhu();
-                map.put("consumer_name",yhu);
-                map.put("date", DateUtils.getNowDate(NOW_DATE_YMDHMS));
-                String introduce = consumerBO.getIntroduce();
-                if(StringUtils.isEmpty(introduce)){
-                    introduce = CommonUtil.getIntroduce(consumerBO.getId());
-                }
-                map.put("consumer_introduce",introduce);
-                try {
-                    hotTopicSV.insertTopicComment(map);
-                } catch (SQLException throwables) {
-                    logger.error("错误原因: "+throwables.getMessage()+"错误代码: "+throwables.getSQLState()+"");
-                    return responseResult;
-                }
-            }else {
-                responseResult.setCommonCode(CommonCode.SERVER_ERROR);
+            map.put("id",id);
+            map.put("content",answer);
+            map.put("tableId",tableId);
+            map.put("consumer_id",consumerId);
+            map.put("consumer_name",consumerName);
+            map.put("date", DateUtils.getNowDate(NOW_DATE_YMDHMS));
+            if(StringUtils.isEmpty(introduce)){
+                introduce = CommonUtil.getIntroduce(consumerId);
+            }
+            map.put("consumer_introduce",introduce);
+            try {
+                hotTopicSV.insertTopicComment(map);
+            } catch (SQLException throwables) {
+                logger.error("错误原因: "+throwables.getMessage()+"错误代码: "+throwables.getSQLState()+"");
                 return responseResult;
             }
         }else {
@@ -168,7 +173,7 @@ public class DiscoverController extends BaseController implements DiscoverApi {
             return responseResult;
         }
         responseResult.setCommonCode(CommonCode.SUCCESS);
-        returnMap.put("yhu",yhu);
+        returnMap.put("yhu",consumerName);
         responseResult.setBean(returnMap);
         return responseResult;
     }

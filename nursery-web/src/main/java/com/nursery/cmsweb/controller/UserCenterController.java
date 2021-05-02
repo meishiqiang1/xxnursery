@@ -50,13 +50,8 @@ public class UserCenterController extends BaseController implements UserCenterAp
         modelAndView.addObject("message", CommonCode.SERVER_ERROR.message());
         //定义返回值内容
         QueryResponseResult data = new QueryResponseResult(CommonCode.FAIL, null);
-        //定义变量
-        String consumerName = "";
-        //获取用户信息 UserDetails
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            consumerName = authentication.getName();
-        }
+        //获取用户名称
+        String consumerName = getConsumerName();
         QueryResponseResult queryResponseResult = userCenterSV.getUserCenter(consumerName);
         if (queryResponseResult.getCode()!=10000){
             return modelAndView;
@@ -65,6 +60,15 @@ public class UserCenterController extends BaseController implements UserCenterAp
         modelAndView.addObject("data", data);
         modelAndView.setViewName("userInfo1");
         return modelAndView;
+    }
+
+    private String getConsumerName(){
+        String consumerName = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            consumerName = authentication.getName();
+        }
+        return consumerName;
     }
 
     //用户编辑
@@ -95,7 +99,6 @@ public class UserCenterController extends BaseController implements UserCenterAp
     @RequestMapping(value = "/personal/pullUser",method = RequestMethod.POST)
     @Override
     public String pullUser(DomesticConsumerDO consumerDO) {
-//        ResponseResult responseResult = ResponseResult.SUCCESS();
         //获取用户信息 UserDetails
         String consumerName = "";
         String consumerId = "";
@@ -120,7 +123,6 @@ public class UserCenterController extends BaseController implements UserCenterAp
     @RequestMapping(value = "/personal/pullImage",method = RequestMethod.POST)
     @Override
     public void pullImage(@RequestParam(name = "base") String base64) {
-//        ResponseResult responseResult = ResponseResult.SUCCESS();
         //获取用户信息 UserDetails
         String consumerName = "";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -222,18 +224,5 @@ public class UserCenterController extends BaseController implements UserCenterAp
         }
         return responseResult;
     }
-
-    //更改用户名
-    @RequestMapping("/changeConsumerName")
-    public void changeConsumerName() {
-
-    }
-
-    //设置出身日期
-    @RequestMapping("/setBirthday")
-    public void setBirthday() {
-
-    }
-
 
 }
