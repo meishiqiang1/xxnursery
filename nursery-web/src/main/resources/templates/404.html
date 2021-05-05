@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,7 @@
         <i class="icon-404"></i>
         <h1>404</h1>
         <h2>网页未找到</h2>
-        <p class="page-404">出现问题或该页面尚不存在。 <a href="index.html">返回</a>
+        <p class="page-404">出现问题或该页面尚不存在。 <a th:href="${referer_URL}">返回</a>
         </p>
     </section>
 </div>

@@ -8,7 +8,6 @@ import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.QueryResponseResult;
 import com.nursery.common.model.response.QueryResult;
 import com.nursery.common.model.response.ResponseResult;
-import com.nursery.dao.CommentMapper;
 import com.nursery.dao.ConsumerImageMapper;
 import com.nursery.dao.DomesticConsumerMapper;
 import com.nursery.dao.RecruitAndConsumerMapper;
@@ -49,10 +48,7 @@ public class UserCenterImpl implements IUserCenterSV {
     //招聘与用户的中间表
     private RecruitAndConsumerMapper recruitAndConsumerMapper;
 
-    @Autowired
-    @SuppressWarnings("all")
-    //评论信息
-    private CommentMapper commentMapper;
+
 
     @Transactional
     @Override
@@ -71,9 +67,6 @@ public class UserCenterImpl implements IUserCenterSV {
                 //2021、5、1  增加招聘用户中间类信息
                 List<RecruitAndConsumerDO> recruitmentDOList = recruitAndConsumerMapper.selectDomeByConsumerId(consumerId);
                 consumerDO.setRecruitAndConsumerDOS(recruitmentDOList);
-                //2021、5、2  增加评论类信息
-//                List<TopicCommentDO> commentDOList = commentMapper.selectCommentDOByConsumerId(consumerId);
-//                consumerDO.setTopicCommentDOS(commentDOList);
                 QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
                 queryResult.setObject(consumerDO);
                 data.setQueryResult(queryResult);

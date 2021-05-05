@@ -33,5 +33,6 @@ public class HotTopicDO {
     private String author;
     private String introduce;
     private String authorId;
+    private String imgPath;
     private List<TopicCommentDO> commentDOS;
 }

@@ -19,8 +19,10 @@ public enum CommonCode implements ResultCode{
     AUDIT_PASS_RESULT_YES(true,11117,"审核结果通过！"),
     SQL_YJ_ISNOT(false,11118,"数据库语句出错！"),
     CONSUMER_IS_EXIST(false,11119,"用户已经存在！"),
+    NOT_EXIST_RESUME(false,11120,"操作失败，没有上传简历！"),
     SERVER_ERROR(false,99999,"抱歉，系统繁忙，请稍后重试！");
-//    private static ImmutableMap<Integer, CommonCode> codes ;
+
+    //    private static ImmutableMap<Integer, CommonCode> codes ;
     //操作是否成功
     boolean success;
     //操作代码

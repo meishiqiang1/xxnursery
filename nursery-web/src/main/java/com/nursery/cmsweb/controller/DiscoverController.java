@@ -8,7 +8,6 @@ import com.nursery.api.iweb.DiscoverApi;
 import com.nursery.beans.DBDataParam;
 import com.nursery.beans.HotTopicDO;
 import com.nursery.beans.TopicCommentDO;
-import com.nursery.beans.bo.ConsumerBO;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
@@ -21,9 +20,11 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -49,22 +50,8 @@ public class DiscoverController extends BaseController implements DiscoverApi {
     @ResponseBody
     @Override
     public ModelAndView visitWenti(
-            @PathVariable(value = "tableId", required = true) String tableId,
-            @RequestParam(value = "number", required = false) String param,
-            RedirectAttributes attr) {
+            @PathVariable(value = "tableId", required = true) String tableId) {
         ModelAndView modelAndView = new ModelAndView();
-        if (!StringUtils.isEmpty(param)) {
-            attr.addAttribute("error", "参数信息不正确请先登录");
-            modelAndView.setViewName("redirect:/discover/wenti/" + tableId);
-            try {
-                ConsumerBO consumerBO = (ConsumerBO) session.getAttribute(param);
-                if (consumerBO == null) {
-                    return modelAndView;
-                }
-            } catch (Exception e) {
-                return modelAndView;
-            }
-        }
         Map<String, String> returnMap = new HashMap<>();
         returnMap.put("tableid", tableId);
         HotTopicDO topic = null;
@@ -78,6 +65,9 @@ public class DiscoverController extends BaseController implements DiscoverApi {
             returnMap.put("tablename", topic.getTableName());
             returnMap.put("author", topic.getAuthor());
             returnMap.put("authorId", topic.getAuthorId());
+            returnMap.put("imgPath", topic.getImgPath());
+            //2021、5、4
+            returnMap.put("topicId",topic.getId());
             List<TopicCommentDO> commentDOS = topic.getCommentDOS();
             modelAndView.addObject("commentDOS", commentDOS);
         } catch (NullPointerException nullPointerException) {
@@ -91,31 +81,12 @@ public class DiscoverController extends BaseController implements DiscoverApi {
         return modelAndView;
     }
 
-
-    //http://localhost:32226/discover?number=202103221543272312
-    /**
-     * 访问discover页面
-     *
-     * @param param 前端流水号
-     */
     @RequestMapping(value = {"/discover"}, method = RequestMethod.GET)
     @ResponseBody
     @Override
-    public ModelAndView visitDiscover(RedirectAttributes attr, @RequestParam(value = "number", required = false) String param) {
+    public ModelAndView visitDiscover() {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            if (!StringUtils.isEmpty(param)) {
-                attr.addAttribute("error", "参数信息不正确请先登录");
-                modelAndView.setViewName("redirect:/discover");
-                try {
-                    ConsumerBO consumerBO = (ConsumerBO) session.getAttribute(param);
-                    if (consumerBO == null) {
-                        return modelAndView;
-                    }
-                } catch (Exception e) {
-                    return modelAndView;
-                }
-            }
             List<HotTopicDO> topicRandom = hotTopicSV.getTopicRandom();
             modelAndView.addObject("data", topicRandom);
         } catch (SQLException throwables) {
@@ -177,16 +148,5 @@ public class DiscoverController extends BaseController implements DiscoverApi {
         responseResult.setBean(returnMap);
         return responseResult;
     }
-    /*
-        CREATE TABLE `tb_topic` (
-          `id` varchar(32) NOT NULL COMMENT '唯一主键',
-          `t_table` varchar(128) DEFAULT NULL COMMENT '标题',
-          `t_content` varchar(1000) NOT NULL COMMENT '内容',
-          `startdate` varchar(24) NOT NULL COMMENT '开始时间',
-          `t_tag` varchar(24) NOT NULL COMMENT '标签',
-          `t_author` varchar(24) NOT NULL COMMENT '作者',
-          `t_authid` varchar(32) NOT NULL COMMENT '作者id',
-          `t_introduce` varchar(64) DEFAULT NULL COMMENT '作者介绍',
-     */
 
 }

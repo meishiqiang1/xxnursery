@@ -145,22 +145,6 @@
                                 <div class="bio-graph-heading">
                                     <span>招聘/留言信息管理中心 </span>
                                 </div>
-                                <div class="panel-body">
-                                    <ul class="summary-list">
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-tags text-success"></i>
-                                                19 Sales
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:;">
-                                                <i class="fa fa-microphone text-danger"></i>
-                                                4 Audio
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
                                 <!--职位信息-->
                                 <div class="row">
                                     <div class="panel-body">
@@ -194,21 +178,35 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <div class="bio-chart">
-                                                    <input class="knob" data-width="100" data-height="100"
-                                                           data-displayPrevious=true data-thickness=".2" value="35"
-                                                           data-fgColor="#e06b7d" data-bgColor="#e8e8e8">
-                                                </div>
-                                                <div class="bio-desk">
-                                                    <h4 class="red">Envato Website</h4>
-                                                    <p>Started : 15 July</p>
-                                                    <p>Deadline : 15 August</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+                                <!--留言信息-->
+                                <div class="row">
+                                    <div class="panel-body">
+                                        <table class="table table-hover p-table">
+                                            <thead>
+                                            <tr>
+                                                <th>话题类型</th>
+                                                <th>内容</th>
+                                                <th>评论</th>
+                                                <th>时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <th:block th:if="${topicComment!=null}"
+                                                      th:each="tc,star:${topicComment}">
+                                                <tr>
+                                                    <td><th:block th:text="${tc.hotTopicDO.tag}"></th:block></td>
+                                                    <td> <th:block th:text="${tc.hotTopicDO.tableName}"></th:block></td>
+                                                    <td><th:block th:text="${tc.content}"></th:block></td>
+                                                    <td><th:block th:text="${tc.date}"></th:block></td>
+                                                    <td>
+                                                        <a th:href="'/discover/wenti/'+${tc.hotTopicDO.id}">招聘详情</a>
+                                                    </td>
+                                                </tr>
+                                            </th:block>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </section>
@@ -221,18 +219,8 @@
         </section>
     </section>
     <!--正文-->
-
-    <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2013 &copy; FlatLab by VectorLab.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
-    <!--页脚-->
 </section>
+<footer th:replace="footer.html"></footer>
 <!--js文件-->
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>

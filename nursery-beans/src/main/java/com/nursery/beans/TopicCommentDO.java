@@ -23,6 +23,7 @@ public class TopicCommentDO implements Serializable {
     private String topicId;
     private String consumerId;
     private String consumerIId;
+    private String imgPath;
     private String consumerName;
     private String consumerIntroduce;
     private String date;

@@ -59,11 +59,6 @@
         text-shadow: 1px 1px 1px black;
     }
 
-    .site-footer {
-        background: black;
-        padding: 30px 0;
-    }
-
     .new-out {
         width: 388px;
         max-width: 388px;
@@ -321,16 +316,7 @@
     <div class="job-detail-bottom">
 
     </div>
-    <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; 新星幼儿园招聘网站-新乡学院.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
-    <!--页脚-->
+    <footer th:replace="footer.html"></footer>
 </section>
 
 <!-- js placed at the end of the document so the pages load faster -->

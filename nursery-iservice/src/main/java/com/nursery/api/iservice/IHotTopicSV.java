@@ -1,6 +1,7 @@
 package com.nursery.api.iservice;
 
 import com.nursery.beans.HotTopicDO;
+import com.nursery.beans.TopicCommentDO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface IHotTopicSV {
      * @param map
      */
     void insertTopicComment(Map<String, String> map) throws SQLException;
+
+    List<TopicCommentDO> selectCommentDOByConsumerId(String consumerName);
 }

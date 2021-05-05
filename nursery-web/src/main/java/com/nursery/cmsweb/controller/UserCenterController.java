@@ -1,9 +1,11 @@
 package com.nursery.cmsweb.controller;
 
 import com.nursery.api.iservice.IDomesticConsumerSV;
+import com.nursery.api.iservice.IHotTopicSV;
 import com.nursery.api.iservice.IUserCenterSV;
 import com.nursery.api.iweb.UserCenterApi;
 import com.nursery.beans.DomesticConsumerDO;
+import com.nursery.beans.TopicCommentDO;
 import com.nursery.beans.UserInfo;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.QueryResponseResult;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +43,8 @@ public class UserCenterController extends BaseController implements UserCenterAp
     private IDomesticConsumerSV domesticConsumerSV;
     @Autowired
     private IUserCenterSV userCenterSV;
+    @Autowired
+    private IHotTopicSV hotTopicSV;
 
     //用户中心
     @RequestMapping(value = "/personal", method = RequestMethod.GET)
@@ -53,11 +58,13 @@ public class UserCenterController extends BaseController implements UserCenterAp
         //获取用户名称
         String consumerName = getConsumerName();
         QueryResponseResult queryResponseResult = userCenterSV.getUserCenter(consumerName);
+        List<TopicCommentDO> commentDOList =  hotTopicSV.selectCommentDOByConsumerId(consumerName);
         if (queryResponseResult.getCode()!=10000){
             return modelAndView;
         }
         data = queryResponseResult;
         modelAndView.addObject("data", data);
+        modelAndView.addObject("topicComment",commentDOList);
         modelAndView.setViewName("userInfo1");
         return modelAndView;
     }

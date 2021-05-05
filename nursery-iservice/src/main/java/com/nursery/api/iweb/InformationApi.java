@@ -17,16 +17,16 @@ public interface InformationApi {
     ModelAndView visitInformation(ModelAndView modelAndView);
 
     @ApiOperation("访问资讯页面-最新")
-    ModelAndView visitNewInformation(String page, String size, ModelAndView modelAndView);
-
-    @ApiOperation("访问资讯页面-最热")
-    ModelAndView visitHotInformation(String page, String size, ModelAndView modelAndView);
+    ModelAndView visitNewInformation(String page, ModelAndView modelAndView);
 
     @ApiOperation("点击更多-最新")
-    PageInfo<NurseryAnnounceDO> visitNewInformation(String page, String param);
+    PageInfo<NurseryAnnounceDO> visitNewInformation(String page);
+
+    @ApiOperation("访问资讯页面-最热")
+    ModelAndView visitHotInformation(String page,ModelAndView modelAndView);
 
     @ApiOperation("点击更多-最热")
-    PageInfo<NurseryAnnounceDO> visitHotInformation(String page, String param);
+    PageInfo<NurseryAnnounceDO> visitHotInformation(String page);
 
     @ApiOperation("访问资讯页面-推荐")
     ModelAndView visitRecommendInformation(ModelAndView modelAndView);

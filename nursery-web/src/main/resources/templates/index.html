@@ -81,11 +81,6 @@
     .position-block {
         padding: 0 9px;
     }
-
-    .site-footer {
-        background: black;
-        padding: 30px 0;
-    }
 </style>
 <body class="mega-nav">
 <section id="container">
@@ -249,7 +244,7 @@
                                                 <div class="position-thumbnail">
                                                     <div class="row">
                                                         <div class="col-md-5">
-                                                            <a class="title" th:href="*{'/recruit/detail/'+id+'.html'}">
+                                                            <a class="title" th:href="*{'/job_detail/'+id+'.html'}">
                                                                 <p th:text="*{recruittablename}">数学老师</p></a>
                                                             <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                         </div>
@@ -345,16 +340,7 @@
         </section>
     </section>
     <!--正文-->
-    <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; 新星幼儿园招聘网站-新乡学院.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
-    <!--页脚-->
+    <footer th:replace="footer.html"></footer>
 </section>
 
 <!-- js placed at the end of the document so the pages load faster -->

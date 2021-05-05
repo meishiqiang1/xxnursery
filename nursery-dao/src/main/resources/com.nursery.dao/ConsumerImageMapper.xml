@@ -18,4 +18,9 @@
     <select id="selectImageUrlByImageId" parameterType="string" resultType="java.lang.String">
         SELECT image_url FROM tb_consumerimage  where image_id = #{imageId}
     </select>
+    <select id="selectImageUrlByImageId_consumerID" resultType="java.lang.String">
+        SELECT image_url FROM tb_consumerimage WHERE image_id = (SELECT consumer_URL FROM tb_consumer WHERE consumer_id = #{consumerId});
+    </select>
+
+
 </mapper>

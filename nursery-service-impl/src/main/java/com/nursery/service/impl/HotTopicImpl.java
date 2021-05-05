@@ -3,7 +3,9 @@ package com.nursery.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.nursery.api.iservice.IHotTopicSV;
 import com.nursery.beans.HotTopicDO;
+import com.nursery.beans.TopicCommentDO;
 import com.nursery.dao.CommentMapper;
+import com.nursery.dao.DomesticConsumerMapper;
 import com.nursery.dao.HotTopicMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,12 @@ public class HotTopicImpl implements IHotTopicSV {
     @SuppressWarnings("all")
     private CommentMapper commentMapper;
 
+    @Autowired
+    @SuppressWarnings("all")
+    //用户表信息
+    private DomesticConsumerMapper consumerMapper;
+
+
     @Override
     public List<HotTopicDO> getTopicRandom() throws SQLException {
         List<HotTopicDO> topicDOList = hotTopicMapper.selectTopicRandom();
@@ -47,5 +55,17 @@ public class HotTopicImpl implements IHotTopicSV {
     @Override
     public void insertTopicComment(Map<String, String> map) throws SQLException {
         commentMapper.insertTopicComment(map);
+    }
+
+    @Override
+    public List<TopicCommentDO> selectCommentDOByConsumerId(String consumerName) {
+        String consumerId = "";
+        try {
+            consumerId = consumerMapper.selectConsumerIdByConsumerNickName(consumerName);
+        }catch (Exception e){
+            logger.warn(this.getClass().getName()+ "错误信息" + e.getLocalizedMessage());
+        }
+        //2021、5、2  增加评论类信息
+        return commentMapper.selectCommentDOByConsumerId(consumerId);
     }
 }

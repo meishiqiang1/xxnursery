@@ -26,6 +26,7 @@ import java.util.List;
 @RequestMapping("/information")
 public class InformationController extends BaseController implements InformationApi {
     private Logger logger = LoggerFactory.getLogger(InformationController.class);
+    private int SQL_SIZE_LEN_MIN = 4;
     @Autowired
     private INurseryAnnounceSV announceSV;
 
@@ -47,15 +48,15 @@ public class InformationController extends BaseController implements Information
         return modelAndView;
     }
 
+    /*获取公告 最新*/
     @RequestMapping(value = "/zuixin/{page}.html", method = RequestMethod.GET)
     @Override
-    public ModelAndView visitNewInformation(@PathVariable(value = "page", required = true) String page, String size, ModelAndView modelAndView) {
+    public ModelAndView visitNewInformation(@PathVariable(value = "page", required = true) String page,
+                                            ModelAndView modelAndView) {
         int ipage = 0;
-        int isize = 8;
         if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
-        if (!StringUtils.isEmpty(size)) isize = Integer.parseInt(size);
-        PageHelper.startPage(ipage, isize);
-        /*获取公告 最新*/
+        int sqlSize = ipage*SQL_SIZE_LEN_MIN;
+        PageHelper.startPage(1, sqlSize);
         List<NurseryAnnounceDO> announceDOList = null;
         try {
             announceDOList = announceSV.getNewAnnounceDO();
@@ -64,70 +65,66 @@ public class InformationController extends BaseController implements Information
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        if (ipage == 1) modelAndView.setViewName("information");
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/zuixin/{param}/{page}.html", method = RequestMethod.GET)
-    @ResponseBody
-    @Override
-    public PageInfo<NurseryAnnounceDO> visitNewInformation(@PathVariable("page") String page, @PathVariable("param") String param) {
-        int ipage = 0;
-        int isize = 8;
-        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
-        PageHelper.startPage(ipage, isize);
-        List<NurseryAnnounceDO> announceDOList = null;
-        PageInfo<NurseryAnnounceDO> pageInfo = null;
-        try {
-            announceDOList = announceSV.getNewAnnounceDO();
-            pageInfo = new PageInfo<>(announceDOList);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return pageInfo;
-    }
-
-    @RequestMapping(value = "/remen/{param}/{page}.html", method = RequestMethod.GET)
-    @ResponseBody
-    @Override
-    public PageInfo<NurseryAnnounceDO> visitHotInformation(@PathVariable("page") String page, @PathVariable("param") String param) {
-        int ipage = 0;
-        int isize = 8;
-        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
-        PageHelper.startPage(ipage, isize);
-        List<NurseryAnnounceDO> announceDOList = null;
-        PageInfo<NurseryAnnounceDO> pageInfo = null;
-        try {
-            announceDOList = announceSV.getHotAnnounceDO();
-            pageInfo = new PageInfo<>(announceDOList);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return pageInfo;
-    }
-
-    @RequestMapping(value = "/remen/{page}.html", method = RequestMethod.GET)
-    @Override
-    public ModelAndView visitHotInformation(@PathVariable(value = "page", required = true) String page, String size, ModelAndView modelAndView) {
-        int ipage = 0;
-        int isize = 8;
-        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
-        if (!StringUtils.isEmpty(size)) isize = Integer.parseInt(size);
-        PageHelper.startPage(ipage, isize);
-        /*获取公告 最热*/
-        List<NurseryAnnounceDO> announceDOList = null;
-        try {
-            announceDOList = announceSV.getHotAnnounceDO();
-            PageInfo<NurseryAnnounceDO> pageInfo = new PageInfo<>(announceDOList);
-            modelAndView.addObject("pageInfo", pageInfo);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
         modelAndView.setViewName("information");
         return modelAndView;
     }
 
+    @RequestMapping(value = "/zuixinMore/{page}.html", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public PageInfo<NurseryAnnounceDO> visitNewInformation(@PathVariable("page") String page) {
+        int ipage = 0;
+        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
+        PageHelper.startPage(ipage, SQL_SIZE_LEN_MIN);
+        List<NurseryAnnounceDO> announceDOList = null;
+        PageInfo<NurseryAnnounceDO> pageInfo = null;
+        try {
+            announceDOList = announceSV.getNewAnnounceDO();
+            pageInfo = new PageInfo<>(announceDOList);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return pageInfo;
+    }
+
+    /*获取公告 最热*/
+    @RequestMapping(value = "/remen/{page}.html", method = RequestMethod.GET)
+    @Override
+    public ModelAndView visitHotInformation(@PathVariable(value = "page", required = true) String page, ModelAndView modelAndView) {
+        int ipage = 1;
+        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
+        int sqlSize = ipage*SQL_SIZE_LEN_MIN;
+        PageHelper.startPage(1, sqlSize);
+        List<NurseryAnnounceDO> announceDOList = null;
+        try {
+            announceDOList = announceSV.getHotAnnounceDO();
+            PageInfo<NurseryAnnounceDO> pageInfo = new PageInfo<>(announceDOList);
+            modelAndView.addObject("pageInfo", pageInfo);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        modelAndView.setViewName("information");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/remenMore/{page}.html", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public PageInfo<NurseryAnnounceDO> visitHotInformation(@PathVariable("page") String page) {
+        int ipage = 0;
+        if (!StringUtils.isEmpty(page)) ipage = Integer.parseInt(page);
+        PageHelper.startPage(ipage, SQL_SIZE_LEN_MIN);
+        List<NurseryAnnounceDO> announceDOList = null;
+        PageInfo<NurseryAnnounceDO> pageInfo = null;
+        try {
+            announceDOList = announceSV.getHotAnnounceDO();
+            pageInfo = new PageInfo<>(announceDOList);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return pageInfo;
+    }
 
     @RequestMapping(value = "/tuijian.html", method = RequestMethod.GET)
     @Override
@@ -153,7 +150,13 @@ public class InformationController extends BaseController implements Information
             announceDetail = announceSV.getannounceDetailById(id);
         } catch (SQLException throwables) {
             String sqlState = throwables.getSQLState();
-            logger.error("错误sql: "+sqlState);
+            logger.error("错误sql: " + sqlState);
+        }
+        if (announceDetail==null){
+            String referer = request.getHeader("Referer");
+            modelAndView.addObject("referer_URL",referer);
+            modelAndView.setViewName("404");
+            return modelAndView;
         }
         modelAndView.addObject("announceDetail", announceDetail);
         modelAndView.setViewName("informationDetail");

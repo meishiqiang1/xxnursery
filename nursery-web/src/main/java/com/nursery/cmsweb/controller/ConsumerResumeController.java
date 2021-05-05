@@ -255,6 +255,7 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
             }
         }catch (NullPointerException throwables) {
             logger.error("服务器错误");
+            responseResult.setCommonCode(CommonCode.NOT_EXIST_RESUME);
         }catch (SQLException throwables) {
             logger.error("服务器错误");
         }

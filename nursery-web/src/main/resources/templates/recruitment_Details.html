@@ -130,6 +130,7 @@
         </div>
     </section>
 </section>
+<footer th:replace="footer.html"></footer>
 <!--登录模态框-->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="模态框"
      aria-hidden="true">
@@ -210,8 +211,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-<!--判断错误信息-->
-
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <th:block th:if="${param.error != null}">

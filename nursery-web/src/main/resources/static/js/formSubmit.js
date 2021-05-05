@@ -44,7 +44,9 @@ var Script = function () {
             $.post("/consumer/register2", $("#registForm").serialize(), function (data) {
                 alert(data.message);
                 if (data.message == "操作成功！" || data.code == 10000 || data.success) {
-                    window.location.href = '/login';
+                    setTimeout(function(){//两秒后跳转
+                        window.location.href = '/login';
+                    },2000);
                 }
             });
         }
@@ -52,21 +54,6 @@ var Script = function () {
     $("#password").blur(checkPassword);
     $("#verifyPass").blur(checkVerifyPass);
 
-
-    //登录
-    // $("#loginForm").submit(function () {
-    //     var liushui = $("input[name='liushui']").val();
-    //     $.post("/login", $("#loginForm").serialize(), function (data) {
-    //         var message =  data.message;
-    //         var code = data.code;
-    //         var success = data.success;
-    //         if (message=="操作成功！" || code == 10000 || success == true) {
-    //             location.href = '/index?number='+liushui;
-    //         } else {
-    //             alert(data.message);
-    //         }
-    //     });
-    // });
     function getLiushui() {
         var todayDate = new Date();
         var year = todayDate.getFullYear();

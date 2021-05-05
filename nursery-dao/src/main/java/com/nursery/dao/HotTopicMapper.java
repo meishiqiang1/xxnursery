@@ -1,10 +1,7 @@
 package com.nursery.dao;
 
 import com.nursery.beans.HotTopicDO;
-import org.apache.ibatis.annotations.Many;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 
 import java.sql.SQLException;
@@ -24,6 +21,7 @@ public interface HotTopicMapper {
             @Result(column = "t_tag", property = "tag", jdbcType = JdbcType.VARCHAR),
             @Result(column = "t_author", property = "author", jdbcType = JdbcType.VARCHAR),
             @Result(column = "t_authid", property = "authorId", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "t_authid", property = "imgPath", one = @One(select = "com.nursery.dao.ConsumerImageMapper.selectImageUrlByImageId_consumerID")),
             @Result(column = "t_introduce", property = "introduce", jdbcType = JdbcType.VARCHAR),
             @Result(column = "t_introduce", property = "introduce", jdbcType = JdbcType.VARCHAR),
             @Result(column = "startdate", property = "startDate", jdbcType = JdbcType.VARCHAR)
@@ -38,6 +36,7 @@ public interface HotTopicMapper {
             @Result(column="t_tag",property="tag",jdbcType = JdbcType.VARCHAR),
             @Result(column="t_author",property="author",jdbcType = JdbcType.VARCHAR),
             @Result(column="t_authid",property="authorId",jdbcType = JdbcType.VARCHAR),
+            @Result(column = "t_authid", property = "imgPath", one = @One(select = "com.nursery.dao.ConsumerImageMapper.selectImageUrlByImageId_consumerID")),
             @Result(column="t_introduce",property="introduce",jdbcType = JdbcType.VARCHAR),
             @Result(column="t_introduce",property="introduce",jdbcType = JdbcType.VARCHAR),
             @Result(column="startdate",property="startDate",jdbcType = JdbcType.VARCHAR),
@@ -46,4 +45,16 @@ public interface HotTopicMapper {
     @Select("select * from tb_topic where id = #{value}")
     HotTopicDO selectTopic(String value) throws SQLException;
 
+    @Results({
+            @Result(column="id",property="id",id = true,jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_table",property="tableName",jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_content",property="content",jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_tag",property="tag",jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_author",property="author",jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_authid",property="authorId",jdbcType = JdbcType.VARCHAR),
+            @Result(column="t_introduce",property="introduce",jdbcType = JdbcType.VARCHAR),
+            @Result(column="startdate",property="startDate",jdbcType = JdbcType.VARCHAR)
+    })
+    @Select("select * from tb_topic where id = #{value}")
+    HotTopicDO selectTopicById(String value) throws SQLException;
 }

@@ -16,12 +16,6 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/style-responsive.css" rel="stylesheet"/>
 </head>
-<style>
-    .site-footer{
-        background:black;
-        padding:30px 0;
-    }
-</style>
 <body>
 <section id="container" class="">
     <!--头部-->
@@ -73,7 +67,8 @@
                 <div class="row">
                     <!--内容-->
                     <div class="col-lg-9 notice-body-content" th:object="${announceDetail}">
-                        <h1 class="title" th:text="*{title}">公告标题内容！</h1>
+                        <h1 class="title" th:if="*{title==null}">公告标题内容！</h1>
+                        <h1 class="title" th:if="*{title!=null}" th:text="*{title}"></h1>
                         <div class="info">
                             <p class="author" th:text="*{author}">海归直直<em>·</em><span class="time" th:text="*{date_YYYYMMDD}">2021-02-19</span></p>
                             <p class="tags">行业知识</p>
@@ -98,15 +93,7 @@
     </section>
     <!--正文-->
     <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; 新乡学院-计算机与信息工程学院.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-            <p class="text-center">软件工程</p>
-        </div>
-    </footer>
+    <footer th:replace="footer.html"></footer>
     <!--页脚-->
 </section>
 <script src="/js/jquery.js"></script>

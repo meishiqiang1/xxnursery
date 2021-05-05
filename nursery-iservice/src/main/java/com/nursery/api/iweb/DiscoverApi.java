@@ -5,7 +5,6 @@ import com.nursery.common.model.response.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * author:MeiShiQiang
@@ -15,10 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public interface DiscoverApi {
 
     @ApiOperation("访问发现页面")
-    ModelAndView visitDiscover(RedirectAttributes attr, String param);
+    ModelAndView visitDiscover();
 
     @ApiOperation("问题跳转")
-    ModelAndView visitWenti(String tableid, String param, RedirectAttributes attr);
+    ModelAndView visitWenti(String tableid);
 
     @ApiOperation("发表言论")
     public ResponseResult publishDiscoverAnswer(DBDataParam dataParam);

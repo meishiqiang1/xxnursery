@@ -17,4 +17,5 @@ public interface ConsumerImageMapper {
     //保存
     void insert(ConsumerImageDO consumerImageDO) throws SQLException;
 
+    String selectImageUrlByImageId_consumerID(String consumerId)throws SQLException;
 }

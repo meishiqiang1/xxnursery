@@ -16,12 +16,6 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/style-responsive.css" rel="stylesheet"/>
 </head>
-<style>
-    .site-footer {
-        background: black;
-        padding: 30px 0;
-    }
-</style>
 <body>
 <section id="container" class="">
     <!--头部-->
@@ -140,7 +134,7 @@
                                 <div class="notice-bottom">
                                     <h3><a th:text="*{table}" th:href="*{path}">标题</a></h3>
                                     <p class="text-info" th:text="${#strings.abbreviate(data.content,300)}">内容</p>
-                                    <p class="btn-detail"><span th:text="*{author}">作者</span>·<span th:text="*{date}">发布时间</span>
+                                    <p class="btn-detail"><span>发布时间</span>·<span th:text="*{date}">发布时间</span>
                                     </p>
                                 </div>
                             </div>
@@ -166,8 +160,8 @@
                                 </th:block>
                                 <div class="notice-bottom">
                                     <h3><a th:text="*{table}" th:href="*{path}" class="hover">标题</a></h3>
-                                    <p class="text-info" th:text="*{content}">内容</p>
-                                    <p class="btn-detail"><span th:text="*{author}">作者</span>·<span th:text="*{date}">发布时间</span>
+                                    <p class="text-info" th:text="${#strings.abbreviate(data.content,300)}">内容</p>
+                                    <p class="btn-detail"><span>发布时间</span>·<span th:text="*{date}">发布时间</span>
                                     </p>
                                 </div>
                             </div>
@@ -185,15 +179,7 @@
     </section>
     <!--正文-->
     <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; 新乡学院-计算机与信息工程学院.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-            <p class="text-center">软件工程</p>
-        </div>
-    </footer>
+    <footer th:replace="footer.html"></footer>
     <!--页脚-->
 </section>
 <script src="/js/jquery.js"></script>

@@ -90,12 +90,14 @@
             </div>
             <!--faxian-content-->
             <div class="container">
+                <!--显示栏-->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="faxian-item">
                             <div class="faxian-item-header" th:id="*{authorId}">
-                                <img class="header-img"
+                                <img class="header-img" th:unless="*{imgPath!='' && imgPath!=null}"
                                      src="https://img.bosszhipin.com/beijin/upload/avatar/20201223/bcad5b10df6fc6011080e01473e559219e8464193ee4e7857ba3fa53894d1194_s.jpg">
+                                <img class="header-img" th:if="*{imgPath!='' && imgPath!=null}" th:src="*{imgPath}">
                                 <p class="author" th:text="*{author}">作者</p>
                                 <p class="introduce" th:text="*{introduce}">作者介绍</p>
                             </div>
@@ -106,21 +108,29 @@
                         </div>
                     </div>
                 </div>
+                <!--发表栏-->
                 <div class="row">
                     <div class="col-lg-8 col-md-8 col-sm-12">
                         <textarea id="editor" name="editor" rows="5" style="display: none;"></textarea>
-                        <button onclick="getHtml()" class="btn btn-success col-lg-12 col-md-12 col-sm-12">发表</button>
+                        <button class="btn btn-success col-lg-12 col-md-12 col-sm-12"
+                                sec:authorize="isAnonymous()"
+                                data-toggle="modal"
+                                data-target="#loginModal">发表
+                        </button>
+                        <button class="btn btn-success col-lg-12 col-md-12 col-sm-12"
+                                sec:authorize="isAuthenticated()"
+                                onclick="pullComment()">发表
+                        </button>
                     </div>
-
                 </div>
+                <!--留言列表-->
                 <div class="row">
                     <div th:each="comment:${commentDOS}" th:object="${comment}" class="pinglun">
-                        <div class="media">
+                        <div class="media" id="commentItem">
                             <div class="media-left media-middle">
-                                <a href="#">
-                                    <img class="header-img"
-                                         src="https://img.bosszhipin.com/beijin/upload/avatar/20201223/bcad5b10df6fc6011080e01473e559219e8464193ee4e7857ba3fa53894d1194_s.jpg">
-                                </a>
+                                <img class="header-img" th:unless="${comment.imgPath!='' && comment.imgPath!=null}"
+                                     src="https://img.bosszhipin.com/beijin/upload/avatar/20201223/bcad5b10df6fc6011080e01473e559219e8464193ee4e7857ba3fa53894d1194_s.jpg">
+                                <img class="header-img" th:if="${comment.imgPath!='' && comment.imgPath!=null}" th:src="${comment.imgPath}">
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading" th:text="*{consumerName}">人名</h4>
@@ -130,22 +140,73 @@
                     </div>
                 </div>
             </div>
-
             <!--faxian-content-->
         </section>
 
     </section>
     <!--正文-->
     <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2013 &copy; FlatLab by VectorLab.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
+    <footer th:replace="footer.html"></footer>
     <!--页脚-->
+    <!--登录模态框-->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        快捷 登录
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <strong>您还没有登录，请先登录后发表品论哦！！</strong>
+                    <hr/>
+                    <div>
+                        <form class="form-horizontal" method="post" action="/login" id="loginForm">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">手机号/邮箱</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="username" name="username"
+                                           placeholder="手机号/邮箱">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                           placeholder="密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" value="remember-me" name="remember-me"> 记住我
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="alert alert-warning alert-dismissible" role="alert" id="loginWarn"
+                                 hidden="hidden">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                                <strong>错误信息!</strong> 密码或者手机号/邮箱错误!!
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">登录</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
 </section>
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
@@ -175,9 +236,44 @@
         item: ['bold', 'italic', 'color', 'expression', 'undo', 'redo']
     });
 
-    function getHtml() {
-        alert(he.getHtml());
+    function pullComment() {
+        var tableId = "[[${data.topicId}]]";
+        var answer = he.getHtml();
+        var params = "param2=" + tableId + "&param3=" + answer;
+        $.post("/discover/answer/", params, function (data) {
+            var message = data.message;
+            var code = data.code;
+            var success = data.success;
+            var yhu = getMapBykey("yhu", data.bean);
+            if (message == "发表成功！" || code == 10000 || success == true) {
+                //    http://localhost:32226/discover/wenti/2 ?number=202103261535228918
+                var child = "<div class=\"media\">\n" +
+                    "    <div class=\"media-left media-middle\">\n" +
+                    "        <img class=\"header-img\"\n" +
+                    "             src=\"https://img.bosszhipin.com/beijin/upload/avatar/20201223/bcad5b10df6fc6011080e01473e559219e8464193ee4e7857ba3fa53894d1194_s.jpg\">\n" +
+                    "    </div>\n" +
+                    "    <div class=\"media-body\">\n" +
+                    "        <h4 class=\"media-heading\">" + yhu + "</h4>\n" +
+                    "        <th:block>" + answer + "</th:block>\n" +
+                    "    </div>\n" +
+                    "</div>"
+                $("#commentItem").append(child);
+                $("#editor").val("");
+            } else {
+                alert(success + " , " + message)
+            }
+        });
+
     }
+
+    function getMapBykey(x, data) {
+        for (var key in data) {
+            if (key == x) {
+                return data[x];
+            }
+        }
+    }
+
 </script>
 </body>
 </html>

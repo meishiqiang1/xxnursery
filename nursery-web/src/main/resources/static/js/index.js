@@ -15,7 +15,7 @@ function hotJob(hotId, hotname) {
                 '\t<div class="position-thumbnail">\n' +
                 '\t\t<div class="row">\n' +
                 '\t\t\t<div class="col-md-5">\n' +
-                '\t\t\t\t<p>' + RecruitmentDO.recruittablename + '</p>\n' +
+                '\t\t\t\t<a class="title" href="/job_detail/' + RecruitmentDO.id + '.html"><p>' + RecruitmentDO.recruittablename + '</p>\n' +
                 '\t\t\t\t<span>' + requireEduDB + '</span>\n' +
                 '\t\t\t</div>\n' +
                 '\t\t\t<div class="col-md-4 col-md-offset-2">\n' +
