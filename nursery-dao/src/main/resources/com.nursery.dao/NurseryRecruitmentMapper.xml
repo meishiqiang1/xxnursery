@@ -19,7 +19,7 @@
         <result column="companyresume" property="companyresume" jdbcType="VARCHAR"/>
         <result column="jobdesciption" property="jobdesciption" jdbcType="VARCHAR"/>
         <result column="responsibility" property="responsibility" jdbcType="VARCHAR"/><!--职位描述-->
-        <result column="required" property="require" jdbcType="VARCHAR"/><!--职位要求-->
+        <result column="jobrequiredment" property="jobrequirement" jdbcType="VARCHAR"/><!--职位要求-->
         <result column="treatment" property="treatment" jdbcType="VARCHAR"/><!--职位待遇-->
         <result column="applynum" property="applynum" jdbcType="INTEGER"/><!--报名人数-->
         <result column="cutoff" property="cutoff" javaType="string"/><!--报名是否过期（yes,no)-->
@@ -129,12 +129,17 @@
     </select>
 
     <select id="selectRecruitByIsActivate" resultMap="recruitment">
-        select *
-        from  tb_nursery_recruitinfo where isActivate = #{value};
+        select * from  tb_nursery_recruitinfo where isActivate = #{value};
     </select>
     <select id="selectRecruitByAuditStateAndCutoffDOs" resultMap="recruitment">
         select *
         from  tb_nursery_recruitinfo where auditState = 'yes' and cutoff = 'no';
+    </select>
+    <select id="selectRecruitnumbersById" resultType="java.lang.Integer">
+        select recruitnumbers from tb_nursery_recruitinfo where id = #{id};
+    </select>
+    <select id="selectapplynumById" resultType="java.lang.Integer">
+        select applynum from tb_nursery_recruitinfo where id = #{id};
     </select>
 
     <insert id="insert" parameterType="com.nursery.beans.RecruitmentDO">
@@ -151,10 +156,10 @@
         insert into `tb_nursery_recruitinfo`
         (`id`, `recruittablename`, `recruitclassify`, `recruitpay`, `recruitstarttime`, `recruitendtime`,
          `recruitplace`, `recruitrequire_experience`, `recruitrequire_edubg`, `recruitnumbers`, `companyresume`,
-         `jobdesciption`, `responsibility`, `require`, `treatment`, `applynum`, `cutoff`, `enrollFull`, `authorId`)
+         `jobdesciption`, `responsibility`, `jobrequiredment`, `treatment`, `applynum`, `cutoff`, `enrollFull`, `authorId`)
         values (#{id}, #{recruittablename}, #{classify}, #{pay}, #{starttime}, #{endtime}, #{place},
                 #{requireExperience}, #{requireEduDB}, #{manNumbers}, #{companyresume}, #{jobdesciption},
-                #{responsibility}, #{require}, #{treatment}, #{applynum}, #{cutoff}, #{enrollFull}, #{authorId});
+                #{responsibility}, #{jobrequirement}, #{treatment}, #{applynum}, #{cutoff}, #{enrollFull}, #{authorId});
 
 
     </insert>
@@ -163,11 +168,6 @@
         VALUES (#{authorId}, #{id}, #{starttime});
     </insert>
 
-    <delete id="delete" parameterType="string">
-        DELETE
-        from tb_nursery_recruitinfo
-        where id = #{id}
-    </delete>
     <delete id="deleteRecruitById">
         DELETE
         from tb_nursery_recruitinfo
@@ -189,7 +189,7 @@
             <if test="responsibility!=null and responsibility!= ''">responsibility=#{responsibility},</if>
             <if test="treatment!=null and treatment!= ''">treatment=#{treatment},</if>
             <if test="isActivate!=null and isActivate!= ''">isActivate=#{isActivate},</if>
-            <if test="require!=null and require!= ''">required=#{require}</if>
+            <if test="jobrequirement!=null and jobrequirement!= ''">jobrequiredment=#{jobrequirement}</if>
         </trim>
         WHERE id = #{id}
     </update>
@@ -202,6 +202,10 @@
             <if test="auditState!=null and auditState!= ''">auditState=#{auditState}</if>
         </trim>
         WHERE id = #{id}
+    </update>
+
+    <update id="updateNumAdd">
+        update tb_nursery_recruitinfo set applynum = #{param1} where id = #{param2};
     </update>
 
 </mapper>

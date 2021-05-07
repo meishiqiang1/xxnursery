@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public enum RecruitCode implements ResultCode {
 
-    RECRUIT_SQL_Fail(false,23000,"数据库插入失败！"),
+    RECRUIT_SQL_Fail(false,23000,"数据库插入失败！服务器报错！"),
     RECRUIT_SQL_SUCCEED(true,23001,"招聘信息更新成功！"),
     RECRUIT_SQL_FAIL(false,23002,"招聘信息操作数据库错误！"),
     RECRUIT_PARAM_NONE(false,23003,"请传入正确的参数信息！"),
@@ -22,7 +22,10 @@ public enum RecruitCode implements ResultCode {
     RECRUIT_CREDENTIAL_ERROR(false,23007,"账号或密码错误！"),
     RECRUIT_LOGIN_ERROR(false,23008,"登陆过程出现异常请尝试重新操作！"),
     RECRUIT_Date_IS_WRONG(false,23009,"参数时间不正确，请再次确认后请求！"),
-    RECRUIT_GET_ID_ISNULL(false,23010,"获取id失败！服务器异常");
+    RECRUIT_IS_NOT_EXISTS(true,23010,"你还以为发表招聘信息，先去发表吧！"),
+    RECRUIT_GET_ID_ISNULL(false,23011,"获取id失败！服务器异常"),
+    SERVICE_USERID_NOT_EXISTX(false,23013,"服务器异常或登录失效,请重新登录！"),
+    ISACTIVATE_IS_NULL(true,23014,"审核都以完成，没有任务了！");
 
     boolean success;
 

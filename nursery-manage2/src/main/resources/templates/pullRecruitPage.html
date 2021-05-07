@@ -21,7 +21,7 @@
 </head>
 <body>
 <section id="container" class="">
-    <!--头部开始 》》-->
+    <!--头部开始 -->
     <header class="header white-bg">
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
@@ -31,93 +31,6 @@
         <div class="nav notify-row" id="top_menu">
             <!--导航-->
             <ul class="nav top-menu">
-                <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="fa fa-tasks"></i>
-                        <span class="badge bg-success">6</span>
-                    </a>
-                    <ul class="dropdown-menu extended tasks-bar">
-                        <div class="notify-arrow notify-arrow-green"></div>
-                        <li>
-                            <p class="green">You have 6 pending tasks</p>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="task-info">
-                                    <div class="desc">Dashboard v1.3</div>
-                                    <div class="percent">40%</div>
-                                </div>
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                        <span class="sr-only">40% Complete (success)</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="task-info">
-                                    <div class="desc">Database Update</div>
-                                    <div class="percent">60%</div>
-                                </div>
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                        <span class="sr-only">60% Complete (warning)</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="task-info">
-                                    <div class="desc">Iphone Development</div>
-                                    <div class="percent">87%</div>
-                                </div>
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 87%">
-                                        <span class="sr-only">87% Complete</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="task-info">
-                                    <div class="desc">Mobile App</div>
-                                    <div class="percent">33%</div>
-                                </div>
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80"
-                                         aria-valuemin="0" aria-valuemax="100" style="width: 33%">
-                                        <span class="sr-only">33% Complete (danger)</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="task-info">
-                                    <div class="desc">Dashboard v1.3</div>
-                                    <div class="percent">45%</div>
-                                </div>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0"
-                                         aria-valuemax="100" style="width: 45%">
-                                        <span class="sr-only">45% Complete</span>
-                                    </div>
-                                </div>
-
-                            </a>
-                        </li>
-                        <li class="external">
-                            <a href="#">See All Tasks</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- settings end -->
                 <!-- inbox dropdown start-->
                 <li id="header_inbox_bar" class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -324,34 +237,29 @@
             </ul>
         </div>
     </aside>
-    <!--《《 左侧边栏 -->
     <!--正文 》》-->
     <section id="main-content">
         <section class="wrapper">
             <div class="row">
-                <form role="form" id="fabuForm">
+                <form method="post" id="recruitForm">
                     <!-- 封面 -->
                     <div class="col-lg-6">
                         <section class="panel">
                             <header class="panel-heading">
-                                封面内容
+                                招聘详细内容
                             </header>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label for="recruitTitle">招聘标题</label>
-                                    <input type="text" class="form-control" id="recruitTitle" name="recruittablename"
-                                           placeholder="请输入招聘标题">
+                                    <label for="recruittablename">招聘标题</label>
+                                    <input type="text" class="form-control" id="recruittablename" name="recruittablename" placeholder="请输入招聘标题">
                                 </div>
                                 <div class="form-group">
-                                    <label for="workPlace">工作地址</label>
-                                    <input type="text" class="form-control" id="workPlace" name="place"
-                                           placeholder="输入工作的详细地址（到区、镇）">
+                                    <label for="place">工作地址</label>
+                                    <input type="text" class="form-control" id="place" name="place" placeholder="输入工作的详细地址（到区、镇）">
                                 </div>
                                 <div class="form-group">
-                                    <label for="workpay">薪资情况( 5k-6k.13月薪资)</label>
-                                    <input type="text" id="workpay" placeholder="99k-99k.99" data-mask="99k-99k.99"
-                                           class="form-control" name="pay">
-                                    <span class="help-inline">12k-15k.14</span>
+                                    <label for="pay">薪资情况( 5k-6k.13月薪资)</label>
+                                    <input type="text" id="pay" placeholder="99k-99k.99" data-mask="99k-99k.99" class="form-control" name="pay">
                                 </div>
                                 <div class="form-group">
                                     <label for="requireEduDB">学历要求</label>
@@ -366,7 +274,6 @@
                             </div>
                         </section>
                     </div>
-                    <!-- 封面 -->
                     <!-- 职责描述 -->
                     <div class="col-lg-6">
                         <section class="panel">
@@ -380,7 +287,6 @@
                             </div>
                         </section>
                     </div>
-                    <!-- 职责描述 -->
                     <!--职位要求-->
                     <div class="col-lg-6">
                         <section class="panel">
@@ -389,12 +295,11 @@
                             </header>
                             <div class="panel-body">
                                 <div class="panel-body">
-                                    <textarea class="require" id="require" name="require">职位要求。。。。。。</textarea>
+                                    <textarea class="jobrequirement" id="jobrequirement" name="require">职位要求。。。。。。</textarea>
                                 </div>
                             </div>
                         </section>
                     </div>
-                    <!--职位要求-->
                     <!--福利待遇-->
                     <div class="col-lg-6">
                         <section class="panel">
@@ -418,8 +323,7 @@
                             <div class="panel-body row">
                                 <label class="control-label col-md-3" for="requireExperience">工作经验</label>
                                 <div class="col-md-4">
-                                    <select class="form-control m-bot15" id="requireExperience"
-                                            name="requireExperience">
+                                    <select class="form-control m-bot15" id="requireExperience" name="requireExperience">
                                         <option value="0" selected>不限</option>
                                         <option value="1">在校生</option>
                                         <option value="2">应届生</option>
@@ -463,24 +367,14 @@
                             </div>
                         </section>
                         <div class="row">
-                            <button class="btn btn-success btn-lg col-lg-12" id="btn_sub">发布</button>
+                            <button class="btn btn-success btn-lg col-lg-12" type="button" id="btn_sub">发布</button>
                         </div>
                     </div>
                 </form>
             </div>
         </section>
     </section>
-    <!--《《 正文-->
-    <!--页脚》》-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; 新星幼儿园后台管理
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
-    <!--《《页脚-->
+
 </section>
 <script src="/js/jquery.js"></script>
 <script src="/js/jquery.scrollTo.min.js"></script><!--导航栏-下来菜单-->
@@ -520,7 +414,7 @@
                 ['para', ['ul', 'ol', 'paragraph']]
             ]
         });
-        $('.require').summernote({
+        $('.jobrequirement').summernote({
             disableDragAndDrop: true,//禁用拉动状态
             height: 200,
             minHeight: 200,
@@ -550,19 +444,12 @@
         });
         // http://localhost:32227/manage/recruit/pull?erId=1
         $("#btn_sub").click(function () {
-            $.post("/manage/postRecruitment/1", $("#fabuForm").serialize(), function (data) {
-                if (data.success) {
-                    //更新成功
-                    if (confirm(data.message + "!" +
-                        "是否继续发布？")) {
-                        //清空当前form表格
-                        // $("#fabuForm").reset();
-                    } else {
-                        window.history.go(-1);
-                    }
-                } else {
-                    //更新失败
-                    alert(data.message + "");
+            $.post("/manage/postRecruitment", $("#recruitForm").serialize(), function (data) {
+                alert(data.message);
+                if (data.message == "操作成功！" || data.code == 10000 || data.success) {
+                    setTimeout(function(){//两秒后跳转
+                        window.location.href='/manage/recruit/pull';
+                    },2000);
                 }
             });
         });

@@ -217,7 +217,7 @@
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <a class="title" th:href="'/job_detail/'+*{id}+'.html'"><p
-                                                                    th:text="*{recruittablename}">数学老师</p></a>
+                                                                    th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
                                                             <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                         </div>
                                                         <div class="col-md-4 col-md-offset-2">
@@ -245,7 +245,7 @@
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <a class="title" th:href="*{'/job_detail/'+id+'.html'}">
-                                                                <p th:text="*{recruittablename}">数学老师</p></a>
+                                                                <p th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
                                                             <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                         </div>
                                                         <div class="col-md-4 col-md-offset-2">
@@ -306,7 +306,7 @@
                                                         <div class="row">
                                                             <div class="col-md-5">
                                                                 <a class="title" th:href="'/job_detail/'+*{id}+'.html'">
-                                                                    <p th:text="*{recruittablename}">数学老师</p></a>
+                                                                    <p th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
                                                                 <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                             </div>
                                                             <div class="col-md-4 col-md-offset-2">

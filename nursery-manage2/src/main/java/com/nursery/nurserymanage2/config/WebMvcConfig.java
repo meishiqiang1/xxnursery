@@ -31,6 +31,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/upload/img/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryimg\\upload\\");
         registry.addResourceHandler("/upload/cover/img/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryimg\\upload\\cover\\");
+        //上传word文件
+        registry.addResourceHandler("/upload/word/**").addResourceLocations("file:D:\\IdeaProjects\\git\\xxnursery\\xxnurseryword\\upload\\");
     }
 
 }

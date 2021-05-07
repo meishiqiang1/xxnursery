@@ -2,26 +2,36 @@ package com.nursery.nurserymanage2.controller;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.nursery.api.iservice.IConsumerResumeSV;
 import com.nursery.api.iservice.INurseryRecruitInfoSV;
+import com.nursery.api.iservice.INurseryRecruiterManagmentSV;
+import com.nursery.api.iservice.IRecruitAndConsumerSV;
 import com.nursery.api.iwebm.ManageRecruitApi;
+import com.nursery.beans.DomesticConsumerResumeDO;
 import com.nursery.beans.RecruitmentDO;
 import com.nursery.beans.bo.RecruitBO;
 import com.nursery.beans.code.RecruitCode;
+import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
 import com.nursery.nurserymanage2.controller.async.LogAsyncComponent;
 import com.nursery.utils.CommonUtil;
 import com.nursery.utils.DateUtils;
-import com.nursery.utils.RSAUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,38 +50,24 @@ public class ManageRecruitController extends BaseController implements ManageRec
 
     @Autowired
     private LogAsyncComponent logAsyncComponent;
+
+    @Autowired
+    private INurseryRecruiterManagmentSV recruiterManagmentSV;
+
+    @Autowired
+    private IRecruitAndConsumerSV recruitAndConsumerSV;
+
+    @Autowired
+    private IConsumerResumeSV consumerResumeSV;
+
     private String NOWDATE_YYYYMMDDHHMMSS = "yyyy-MM-dd HH:mm:ss";
-    /**
-     * 获取公钥
-     * @return
-     */
-    @PostMapping("/recruit/getPublicKey")
-    @ResponseBody
-    public String getPublicKey() {
-        String publicKey = RSAUtils.getPublicKey();
-        logger.info("获取到公钥: " + publicKey);
-        return publicKey;
-    }
-
-    /**
-     * 模仿前端传来的数据
-     * @return
-     * @throws Exception
-     */
-    @PostMapping("/recruit/getModol")
-    @ResponseBody
-    public String getModol() throws Exception {
-        String publicKey = RSAUtils.getPublicKey();
-        logger.info("获取到公钥: " + publicKey);
-
-        InetAddress ip4 = Inet4Address.getLocalHost();
-        String hostAddress = ip4.getHostAddress();
-        String encrypt = RSAUtils.encrypt("1|" + hostAddress, publicKey);
-        return encrypt;
-    }
+    private String LOGO_CAOZUOTYPE = "audit";
+    private String DOTHING_UPDATE = "2";
+    private String DOTHING_DELETE = "1";
 
     /**
      * 更新招聘内容
+     *
      * @param recruitBO 招聘内容
      * @return 提示信息
      */
@@ -111,7 +107,7 @@ public class ManageRecruitController extends BaseController implements ManageRec
             recruitmentDO.setRequireEduDB(requireEduDB);
             recruitmentDO.setRequireExperience(requireExperience);
             recruitmentDO.setResponsibility(responsibility);
-            recruitmentDO.setRequire(require);
+            recruitmentDO.setJobrequirement(require);
             recruitmentDO.setTreatment(treatment);
             //4.2 更新后重新提交审核
             recruitmentDO.setIsActivate("no");
@@ -134,14 +130,14 @@ public class ManageRecruitController extends BaseController implements ManageRec
 
     /**
      * 发布招聘
+     *
      * @param recruitmentDO
-     * @param erId
      * @return
      */
-    @RequestMapping(value = "/postRecruitment/{erId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/postRecruitment", method = RequestMethod.POST)
     @ResponseBody
     @Override
-    public ResponseResult postRecruitInfo(RecruitmentDO recruitmentDO, @PathVariable("erId")String erId) {
+    public ResponseResult postRecruitInfo(RecruitmentDO recruitmentDO) {
         ResponseResult responseResult = ResponseResult.SUCCESS();
         String id = CommonUtil.getUUID();
         String authorId = recruitmentDO.getAuthorId();  //发布者id
@@ -152,13 +148,6 @@ public class ManageRecruitController extends BaseController implements ManageRec
         String place = recruitmentDO.getPlace();//地点
         String pay = recruitmentDO.getPay();//薪资情况
         String requireEduDB = recruitmentDO.getRequireEduDB();//学历要求
-        int manNumbers = recruitmentDO.getManNumbers();//招聘人数
-        String responsibility = recruitmentDO.getResponsibility();//职责描述
-        String require = recruitmentDO.getRequire();//职位要求
-        String treatment = recruitmentDO.getTreatment();//福利待遇
-        String requireExperience = recruitmentDO.getRequireExperience();//工作经验
-        String classify = recruitmentDO.getClassify();//分类信息
-
         try {
             /*判断参数问题*/
             if (StringUtils.isEmpty(recruittablename) || StringUtils.isEmpty(place)
@@ -167,7 +156,6 @@ public class ManageRecruitController extends BaseController implements ManageRec
                 responseResult.setCommonCode(RecruitCode.RECRUIT_PARAM_NONE);
                 return responseResult;
             }
-            /*判断id 是否为null*/
             if (StringUtils.isEmpty(id)) {
                 logger.warn("获取id为空，服务器异常！！");
                 responseResult.setCommonCode(RecruitCode.RECRUIT_GET_ID_ISNULL);
@@ -181,15 +169,16 @@ public class ManageRecruitController extends BaseController implements ManageRec
                 responseResult.setCommonCode(RecruitCode.RECRUIT_Date_IS_WRONG);
                 return responseResult;
             }
-            recruitmentDO.setCutoff("no");
-            recruitmentDO.setEnrollFull("no");
-            if(StringUtils.isEmpty(authorId)){
-                recruitmentDO.setAuthorId(erId);
+            recruitmentDO.setCutoff("no");//报名是否过期
+            recruitmentDO.setEnrollFull("no");//报名人数已满
+            if (StringUtils.isEmpty(authorId)) {
+                authorId = getUserId();
+                recruitmentDO.setAuthorId(authorId);
             }
             nurseryRecruitInfoSV.insertRecruitInfo(recruitmentDO);
-            logger.info("招聘信息recruitmentDO "+ JSON.toJSONString(recruitmentDO));
-        }catch (Exception e){
-            logger.error("数据插入失败=>错误信息 : "+e.getMessage());
+            logger.info("招聘信息recruitmentDO " + JSON.toJSONString(recruitmentDO));
+        } catch (Exception e) {
+            logger.error("数据插入失败=>错误信息 : " + e.getMessage());
             responseResult.setCommonCode(RecruitCode.RECRUIT_SQL_Fail);
         }
         return responseResult;
@@ -197,60 +186,140 @@ public class ManageRecruitController extends BaseController implements ManageRec
 
     /**
      * 下载简历
+     * http://localhost:32227/manage/recruit/resume/download/1c3b9294497447d786d4cff019bbdc9b
+     *
      * @param consumerId
-     * @param recruitId
      * @return
      */
-    @RequestMapping(value = {"/recruit/resume/download/{consumerId}/{recruitId}"})
+    @RequestMapping(value = {"/recruit/resume/download/{consumerId}"})
+    @ResponseBody
     @Override
-    public ModelAndView downloadResume(String consumerId, String recruitId) {
-        return null;
+    public JSONObject downloadResume(@PathVariable(name = "consumerId") String consumerId) {
+        JSONObject responseResult = new JSONObject();
+        responseResult.put("message", CommonCode.FAIL.message());
+        try {
+            Map<String, String> resultMap = consumerResumeSV.findResumeURLByConsumerId(consumerId);
+            responseResult.put("code", resultMap.get("code"));
+            if (resultMap.get("code").equals("10000")) {
+                responseResult.put("resumeUrl", resultMap.get("url"));
+                responseResult.put("message", CommonCode.SUCCESS.message());
+            } else {
+                responseResult.put("message", "你还没上传，先上传简历！");
+            }
+        } catch (SQLException throwables) {
+            logger.error("数据库错误" + throwables.getSQLState());
+        }
+        return responseResult;
     }
 
     /**
      * 查询简历
+     * /manage/recruit/resume/look/1c3b9294497447d786d4cff019bbdc9b
+     *
      * @param consumerId
-     * @param recruitId
      * @return
      */
-    @RequestMapping(value = {"/recruit/resume/look/{consumerId}/{recruitId}"})
+    @RequestMapping(value = {"/recruit/resume/look/{consumerId}"})
+    @ResponseBody
     @Override
-    public ModelAndView lookResume(String consumerId, String recruitId) {
-        return null;
+    public ResponseResult lookResume(@PathVariable(name = "consumerId") String consumerId) {
+        ResponseResult responseResult = ResponseResult.FAIL();
+        DomesticConsumerResumeDO consumerResume = null;
+        try {
+            consumerResume = consumerResumeSV.findResumeDOByConsuemrId(consumerId);
+        } catch (SQLException throwables) {
+            return responseResult;
+        }
+        if (!ObjectUtils.isEmpty(consumerResume)) {
+            Map map = JSONObject.parseObject(JSONObject.toJSONString(consumerResume), Map.class);
+            responseResult.setBean(map);
+            responseResult.setCommonCode(CommonCode.SUCCESS);
+        }
+        return responseResult;
     }
 
 
     /**
      * 删除招聘信息
-     * @param erId
-     * @param recruitId
+     *
+     * @param recruitId 招聘id
      * @return
      */
-    @RequestMapping(value = "/recruit/delete/{erId}/{recruitId}")
-    public ResponseResult deleteRecruit(@PathVariable(value = "erId",required = true) String erId,@PathVariable(value = "recruitId",required = true) String recruitId){
-        int i = nurseryRecruitInfoSV.deleteRecruitById(erId);
-        return null;
+    @RequestMapping(value = "/recruit/delete/{recruitId}", method = RequestMethod.GET)
+    public String deleteRecruit(@PathVariable(value = "recruitId") String recruitId) {
+        String userId = "";
+        try {
+            userId = getUserId();
+            int i = nurseryRecruitInfoSV.deleteRecruitById(userId, recruitId);
+            if (i > 0) {
+                Map<String, String> resultMap = new HashMap<>();
+                resultMap.put("classify", ManageRecruitController.class.getName() + ".deleteRecruit");
+                resultMap.put("type", LOGO_CAOZUOTYPE);
+                resultMap.put("date", DateUtils.getNowDate(NOWDATE_YYYYMMDDHHMMSS));
+                resultMap.put("id", recruitId);
+                resultMap.put("erId", userId);
+                resultMap.put("dothing", DOTHING_DELETE);
+                logAsyncComponent.logAnnounce(resultMap);
+            }
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage() + throwables.getSQLState());
+        }
+        return "redirect:/manage/recruit/getRecruitManage";
     }
 
     /**
-     * 审核反馈
+     * 管理员-审核反馈
+     *
      * @param param id|yes,no|result
      */
-    @RequestMapping(value = "/recruit/audit/result",method = RequestMethod.GET)
+    @RequestMapping(value = "/recruit/audit/result", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseResult auditRecruit(String param){
+    public ResponseResult auditRecruit(String param) {
+        ResponseResult responseResult = ResponseResult.FAIL();
         String[] params = param.split("\\|");
+        String authorID = null;
+        try {
+            authorID = getUserId();
+        } catch (SQLException throwables) {
+            return responseResult;
+        }
         Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("classify",ManageAnnunceController.class.getName() + ".auditRecruit");
-        resultMap.put("type","audit");
-        resultMap.put("date",DateUtils.getNowDate(NOWDATE_YYYYMMDDHHMMSS));
-        resultMap.put("id",params[0]);
-        resultMap.put("erId","123456");
-        resultMap.put("dothing","2");
-        ResponseResult responseResult = nurseryRecruitInfoSV.updateRecruitSetAudit(param);
-        resultMap.put("resultCode", "0");
+        resultMap.put("classify", ManageRecruitController.class.getName() + ".auditRecruit");
+        resultMap.put("type", LOGO_CAOZUOTYPE);
+        resultMap.put("date", DateUtils.getNowDate(NOWDATE_YYYYMMDDHHMMSS));
+        resultMap.put("id", params[0]);
+        resultMap.put("erId", authorID);
+        resultMap.put("dothing", DOTHING_UPDATE);
+        responseResult = nurseryRecruitInfoSV.updateRecruitSetAudit(param);
         logAsyncComponent.logAnnounce(resultMap);
         return responseResult;
     }
 
+    //recruit/resume/interview/
+    @RequestMapping(value = "/recruit/resume/interview/{consumerId}/{recruitId}", method = RequestMethod.GET)
+    public String interviewRecruit(@PathVariable(value = "consumerId") String consumerId,
+                                   @PathVariable(value = "recruitId") String recruitId) {
+        try {
+            recruitAndConsumerSV.interviewRecruit(consumerId, recruitId);
+            boolean b = nurseryRecruitInfoSV.updateNum(recruitId);
+            if (b){
+                return "redirect:/manage/recruit/getRecruitInfo/"+recruitId;
+            }
+        } catch (SQLException throwables) {
+            logger.error(throwables.getMessage() + throwables.getSQLState());
+        }
+        return "redirect:/manage/recruit/getRecruitInfo/"+recruitId;
+    }
+
+    private String getUserId() throws SQLException {
+        String authorId = "";
+        String authorName = "";
+        //获取用户信息 UserDetails
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            authorName = authentication.getName();
+            authorId = recruiterManagmentSV.getIdByName(authorName);
+        }
+        return authorId;
+    }
 }

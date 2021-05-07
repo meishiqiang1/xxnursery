@@ -79,6 +79,31 @@ public class ConsumerResumeImpl implements IConsumerResumeSV {
     }
 
     @Override
+    public DomesticConsumerResumeDO findResumeDOByConsuemrId(String consumerId)throws SQLException{
+        String resumeId = domesticConsumerMapper.selectResumeIdByConsumerID(consumerId);
+        DomesticConsumerResumeDO resume = resumeMapper.selectConsumerResumeByResumeId(resumeId);
+        String type = resume.getType();
+        if (type.equals(".doc")) {
+            try {
+                String imgpath = ResourceUtils.getURL("xxnursery/").getPath() + "word/upload/image";
+                String filepath = ResourceUtils.getURL("xxnursery/").getPath() + "word/upload";
+                String imagePath = imgpath.replace('/', '\\').substring(1, imgpath.length());
+                String filePath = filepath.replace('/', '\\').substring(1, filepath.length());
+                filepath = filePath + "\\" + resume.getId() + resume.getType();
+                String content = POIUtils.docHtmlContent(filepath, imagePath);
+                resume.setHtmlContent(content);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+        return resume;
+    }
+
+    @Override
     public Map<String, String> findResumeURLByConsumerName(String name) throws SQLException {
         Map<String, String> result = new HashMap<>();
         result.put("code", String.valueOf(CommonCode.FAIL.code()));
@@ -98,5 +123,18 @@ public class ConsumerResumeImpl implements IConsumerResumeSV {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Map<String, String> findResumeURLByConsumerId(String consumerID) throws SQLException {
+        Map<String, String> result = new HashMap<>();
+        result.put("code", String.valueOf(CommonCode.FAIL.code()));
+        String resumeId = domesticConsumerMapper.selectResumeIdByConsumerID(consumerID);
+        String resumeURL = resumeMapper.selectURLById(resumeId);
+        if (!StringUtils.isEmpty(resumeURL)) {
+            result.put("code", String.valueOf(CommonCode.SUCCESS.code()));
+            result.put("url", resumeURL);
+        }
+        return result;
     }
 }

@@ -18,4 +18,11 @@ public interface IRecruitAndConsumerSV {
      * @return
      */
     List<RecruitAndConsumerDO> getDOsByRecruitId(String id) throws SQLException;
+
+    //审核简历
+    int resumePass(String consumerId, String recruitId) throws SQLException;
+
+    int resumeNoPass(String consumerId, String recruitId)throws SQLException;
+
+    void interviewRecruit(String consumerId, String recruitId) throws SQLException;
 }

@@ -15,9 +15,6 @@ public interface NurseryRecruitmentMapper {
     //保存
     public void insert(RecruitmentDO recruitmentDO) throws SQLException;
 
-    //删除
-    public void delete(String id) throws SQLException;
-
     //根据类查询
     public void selectByclassify(String classify) throws SQLException;
 
@@ -56,10 +53,10 @@ public interface NurseryRecruitmentMapper {
 
     /**
      * 根据id删除招聘信息
-     * @param erId 招聘id
+     * @param recuritId 招聘id
      * @return 影响行数
      */
-    int deleteRecruitById(String erId);
+    int deleteRecruitById(String recuritId) throws SQLException;
 
     /**
      * 搜索框
@@ -87,4 +84,9 @@ public interface NurseryRecruitmentMapper {
      */
     List<RecruitmentDO> selectRecruitByAuditStateAndCutoffDOs() throws SQLException;
 
+    void updateNumAdd(String applynum,String id);
+
+    int selectRecruitnumbersById(String id);
+
+    int selectapplynumById(String id);
 }

@@ -10,7 +10,6 @@ import com.nursery.beans.code.ConsumerCode;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.common.web.BaseController;
-import com.nursery.utils.CellUtils;
 import com.nursery.utils.CommonUtil;
 import com.nursery.utils.DateUtils;
 import com.nursery.utils.EmailUtils;
@@ -18,13 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 需要服务
@@ -41,7 +36,6 @@ public class ConsumerRegisterController extends BaseController implements Consum
     /**
      * 注册
      * consumer/register
-     * @param registerBO
      */
     @RequestMapping(value = "/consumer/register2",method = RequestMethod.POST)
     @ResponseBody
@@ -87,7 +81,13 @@ public class ConsumerRegisterController extends BaseController implements Consum
             //获取年龄
             String birthday = registerBO.getBirthday();
             if (!StringUtils.isEmpty(birthday)) {
-                consumerAge = DateUtils.getAge(birthday);
+                try {
+                    consumerAge = DateUtils.getAge(birthday);
+                }catch (Exception e){
+                    logger.warn("日期格式不对");
+                    responseResult.setCommonCode(ConsumerCode.CONSUMER_DATE_WRONG);
+                    return responseResult;
+                }
                 consumerDO.setConsumerBirthday(birthday);
                 consumerDO.setConsumerAge(consumerAge);
             }
@@ -100,39 +100,11 @@ public class ConsumerRegisterController extends BaseController implements Consum
             String nowDay = DateUtils.getNowDate(DateUtils.YYYYMMDDHHMMSS);
             consumerDO.setConsumerJoinDay(nowDay);
             logger.info("consumerid: " + consumerDO.getConsumerID() + "register注册参数：" + JSON.toJSONString(consumerDO));
-            ResponseResult responseResult1 = domesticConsumerSV.insertConsumer(consumerDO);
-            return responseResult1;
+            responseResult = domesticConsumerSV.insertConsumer(consumerDO);
         } catch (Exception e) {
             responseResult.setCommonCode(ConsumerCode.CONSUMER_REAL_NAME_WRONG);
         }
         return responseResult;
-    }
-
-    @Override
-    public void sendRegisterinfo() {
-
-    }
-
-    @Override
-    public void registersuccess() {
-
-    }
-
-    @GetMapping("/sendCheckEmail")
-    @Override
-    public Map<String, String> sendCheckEmail(String email) {
-        Map map = new HashMap<String, String>();
-        String code = "";
-        boolean authCode = EmailUtils.sendEmail(email, code);
-        return map;
-    }
-
-    @GetMapping("/sendCheckCellPhone")
-    @Override
-    public Map<String, String> sendCheckCellPhone(String cellPhone) {
-        Map map = new HashMap<String, String>();
-        String authCode = CellUtils.sendCheckCellPhone(cellPhone);
-        return map;
     }
 
 }

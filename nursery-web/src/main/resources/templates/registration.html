@@ -22,19 +22,12 @@
         <h2 class="form-signin-heading">现在注册</h2>
         <div class="login-wrap">
             <p>在下面输入您的个人详细信息</p>
-            <th:block th:if="${message != null}">
-                <div class="alert  alert-danger alert-dismissible " role="alert" id="loginWarn">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <strong>错误信息!</strong> <th:block th:text="${message}"></th:block>!!
-                </div>
-            </th:block>
             <input type="text" class="form-control" placeholder="用户名" name="nickname" id="nickname" required>
             <input type="text" class="form-control" placeholder="当前地址" name="address" id="address" required>
             <input type="email" class="form-control" placeholder="电子邮箱" name="email"
                    style="margin-bottom: 15px; font-size: 12px"
                    required>
-            <input type="text" class="form-control" placeholder="出生年月" name="birthday" id="birthday" required>
+            <input type="text" class="form-control" placeholder="出生年月 1997-07-03 00:00:00" name="birthday" id="birthday" required>
             <div class="radios">
                 <label class="label_radio col-lg-6 col-sm-6" for="radio-01">
                     <input name="gender" id="radio-01" value="1" type="radio" checked/> 男
@@ -48,11 +41,7 @@
             <input type="password" class="form-control" placeholder="密码由8-20位（数字和大小写、字符组成的）" name="password"
                    id="password" required>
             <input type="password" class="form-control" placeholder="重新输入密码" id="verifyPass" required>
-            <label class="checkbox">
-                <input type="checkbox" id="condition" required> 我同意服务条款和隐私政策
-            </label>
             <button class="btn btn-lg btn-login btn-block" id="btn_reg">提交</button>
-
             <div class="registration">
                 已经注册了。
                 <a class="" href="login.html">

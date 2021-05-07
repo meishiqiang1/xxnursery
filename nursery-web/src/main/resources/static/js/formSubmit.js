@@ -1,10 +1,4 @@
 var Script = function () {
-    /**
-     * 生成流水号
-     * 弃用
-     */
-    $("input[name='liushui']").val(getLiushui());
-
     //校验密码
     function checkPassword() {
         //1.获取密码值
@@ -41,44 +35,27 @@ var Script = function () {
     //注册
     $("#btn_reg").click(function () {
         if (checkPassword() && checkVerifyPass()) {
-            $.post("/consumer/register2", $("#registForm").serialize(), function (data) {
-                alert(data.message);
-                if (data.message == "操作成功！" || data.code == 10000 || data.success) {
-                    setTimeout(function(){//两秒后跳转
-                        window.location.href = '/login';
-                    },2000);
+            // $.post("/consumer/register2", $("#registForm").serialize(), function (data) {
+            //
+            // },async=false);
+            $.ajax({
+                type: "POST",
+                url: "/consumer/register2",
+                data: $("#registForm").serialize(),
+                async: false,
+                success: function(msg){
+                    alert(msg.message);
+                    if (msg.success || msg.code=="10000" || msg.message=="操作成功") {
+                        setTimeout(function(){//两秒后跳转
+                            window.location.href = '/login';
+                        },2000);
+                    }
                 }
             });
         }
     });
+
     $("#password").blur(checkPassword);
     $("#verifyPass").blur(checkVerifyPass);
 
-    function getLiushui() {
-        var todayDate = new Date();
-        var year = todayDate.getFullYear();
-        var date = todayDate.getDate() + "";
-        if (date.length == 1) {
-            date = "0" + date;
-        }
-        var month = todayDate.getMonth() + 1 + "";
-        if (month.length == 1) {
-            month = "0" + month;
-        }
-        var hour = todayDate.getHours() + "";
-        if (hour.length == 1) {
-            hour = "0" + hour;
-        }
-        var mininutes = todayDate.getMinutes() + "";
-        if (mininutes.length == 1) {
-            mininutes = "0" + mininutes;
-        }
-        var seconds = todayDate.getSeconds() + "";
-        if (seconds.length == 1) {
-            seconds = "0" + seconds;
-        }
-        var ran = Math.round((Math.random()) * 10000);
-        var liushui = "" + year + "" + month + "" + date + "" + hour + "" + mininutes + "" + seconds + "" + ran;
-        return liushui;
-    }
 }();

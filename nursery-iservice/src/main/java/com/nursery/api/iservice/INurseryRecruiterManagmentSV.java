@@ -17,4 +17,10 @@ public interface INurseryRecruiterManagmentSV {
      */
     String getRealName(RecruiterManagmentDO recruiterManagmentDO) throws SQLException;
 
+    /**
+     * 获取id值
+     * @param authorName
+     */
+    String getIdByName(String authorName) throws SQLException;
+
 }

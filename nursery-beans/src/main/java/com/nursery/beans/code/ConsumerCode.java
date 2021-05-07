@@ -27,6 +27,7 @@ public enum ConsumerCode implements ResultCode {
     CONSUMER_VERIFY_EMAIL_NOT(false,13013,"邮箱格式不正确！"),
     CONSUMER_FAIL_TO_REGISTER(false,13014,"注册失败！"),
     CONSUMER_REAL_NAME_WRONG(false,13015,"请输入正确的真实姓名！"),
+    CONSUMER_DATE_WRONG(false,13016,"请输入正确的日期格式"),
     CONSUMER_AND_RESUME_IS_EXIST(true,13026,"已经投递！");
 
     boolean success;

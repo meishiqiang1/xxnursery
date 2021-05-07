@@ -24,6 +24,8 @@ public class RecruitAndConsumerDO {
     private int consumerAge;//'应聘者(年龄)',
     private String consuemrResume;//'应聘者(个人简介)',
     private String toudiStatus;//'投递状态(0未通过 , 1通过)',
+    private String toudiResult;//'投递结果,
+    private String result;//'面试结果(0未通过 , 1通过)',
     private String recruitTitle;//'招聘标题',
     private String recruitClassify;//'招聘类型',
     private String recruitPay;//'薪资',

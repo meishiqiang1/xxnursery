@@ -3,7 +3,6 @@ package com.nursery.service.impl;
 import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.beans.*;
 import com.nursery.beans.bo.ConsumerBO;
-import com.nursery.beans.vo.MailVo;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.dao.DomesticConsumerMapper;
@@ -11,7 +10,6 @@ import com.nursery.dao.NurseryRecruitmentMapper;
 import com.nursery.dao.RecruitAndConsumerMapper;
 import com.nursery.utils.CommonUtil;
 import com.nursery.utils.DateUtils;
-import com.nursery.utils.EmailUtils;
 import com.nursery.utils.POIUtils;
 import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
@@ -116,30 +114,7 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
             roleDO.setName("USER");
             roleDO.setConsumerId(consumerDO.getConsumerID());
             mapper.insertRole(roleDO);
-            EmailUtils sendEmailUtils = null;
-            String consumerEmail = consumerDO.getConsumerEmail();
-            String consumerCellPhone = consumerDO.getConsumerCellPhone();
-
-            // 后期邮件功能
-            if (StringUtils.isNotBlank(consumerEmail) && EmailUtils.checkEmail(consumerEmail)) {
-                logger.info("发送邮件consumerEmail：" + consumerEmail);
-                sendEmailUtils = new EmailUtils();
-                MailVo mailVo = new MailVo();
-                mailVo.setTo(consumerEmail);
-                mailVo.setSubject("发送邮件标题");
-                mailVo.setText("发送邮件的正文内容。。。。。。。");
-                try {
-                    sendEmailUtils.sendSimpleEmail(mailVo);
-                } catch (Exception e) {
-                    logger.debug("注册用户：" + consumerDO.getConsumerID() + "发送邮件错误");
-                }
-            }
-            // 手机号短信
-            if (StringUtils.isNotBlank(consumerCellPhone) && checkCellphone(consumerCellPhone)) {
-            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getSQLState());
             logger.error("注册错误");
             success.setCommonCode(CommonCode.FAIL);
         }

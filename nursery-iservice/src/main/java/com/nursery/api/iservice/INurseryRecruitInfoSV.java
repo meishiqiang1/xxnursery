@@ -73,8 +73,8 @@ public interface INurseryRecruitInfoSV {
     //插入一行招聘信息
     void insertRecruitInfo(RecruitmentDO recruitmentDO) throws SQLException;
 
-    //根据erid删除招牌信息
-    int deleteRecruitById(String erId);
+    //根据recuritId删除招牌信息
+    int deleteRecruitById(String erId,String recuritId) throws SQLException;
 
     //搜索框
     List<RecruitmentDO> selectRecruitInfoByParams(DBDataParam dataParam) throws SQLException;
@@ -93,5 +93,7 @@ public interface INurseryRecruitInfoSV {
     ResponseResult updateRecruitSetAudit(String param);
 
     List<RecruitmentDO> selectRecruitDOs() throws SQLException;
+
+    boolean updateNum(String id);
 
 }

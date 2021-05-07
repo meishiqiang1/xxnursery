@@ -23,4 +23,11 @@ public class NurseryRecruiterManagmentImpl implements INurseryRecruiterManagment
     public String getRealName(RecruiterManagmentDO recruiterManagmentDO) throws SQLException {
         return mapper.selectRealName(recruiterManagmentDO);
     }
+
+    @Override
+    public String getIdByName(String authorName) throws SQLException {
+        return mapper.selectIdByName(authorName);
+    }
+
+
 }

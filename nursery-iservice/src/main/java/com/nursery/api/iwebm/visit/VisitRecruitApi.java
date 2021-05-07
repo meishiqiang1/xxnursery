@@ -12,10 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 public interface VisitRecruitApi {
 
     @ApiOperation("获取当前用户发布的招聘信息")
-    ModelAndView getRecruitManage(String param);
+    ModelAndView getRecruitManage();
 
     @ApiOperation("获取所有的招聘信息")
-    ModelAndView getRecruitManage();
+    ModelAndView getRecruitManages();
 
     @ApiOperation("获取单个详细招聘信息")
     ModelAndView getRecruitInfoByrecruitid(String recruitid);
@@ -24,6 +24,6 @@ public interface VisitRecruitApi {
     ModelAndView getRecruitInfoByid(String recruitid);
 
     @ApiOperation("访问-发布招聘")
-    ModelAndView visitPullRecruitPage(String paramID,ModelAndView modelAndView);
+    ModelAndView visitPullRecruitPage(ModelAndView modelAndView);
 
 }

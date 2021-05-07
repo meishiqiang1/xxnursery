@@ -17,4 +17,12 @@ public interface RecruiterMiddleInformentMapper {
      * @return
      */
     List<String> selectRecruitIdsByerid(String userId) throws SQLException;
+
+    /**
+     * 删除表记录
+     * @param erid 发布人id
+     * @param recruitId 招聘信息id
+     * @return 行数
+     */
+    int delete(String erid,String recruitId)throws SQLException;
 }

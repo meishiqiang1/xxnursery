@@ -9,6 +9,7 @@ import com.nursery.common.model.CommonAttrs;
 import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
 import com.nursery.dao.NurseryRecruitmentMapper;
+import com.nursery.dao.RecruiterMiddleInformentMapper;
 import com.nursery.utils.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,10 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
     @Autowired
     @SuppressWarnings("all")
     private NurseryRecruitmentMapper mapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private RecruiterMiddleInformentMapper middleInformentMapper;//中间表
 
     @Override
     public List<RecruitmentDO> recruitList(DBDataParam dbDataParam) throws NullPointerException, SQLException {
@@ -123,8 +128,11 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
     }
 
     @Override
-    public int deleteRecruitById(String erId) {
-        int num = mapper.deleteRecruitById(erId);
+    public int deleteRecruitById(String erId,String recuritId) throws SQLException {
+        int count = middleInformentMapper.delete(erId, recuritId);
+        if(count>0){
+            return mapper.deleteRecruitById(recuritId);
+        }
         return 0;
     }
 
@@ -237,10 +245,10 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
                 // 需求变更
                 // 招聘审核后状态改为yes‘全部’
                 audit = params[1];
-                recruitmentDO.setAuditState(audit);
-                recruitmentDO.setIsActivate("yes");
+                recruitmentDO.setAuditState(audit);//审核状态,是否通过    yes,no
+                recruitmentDO.setIsActivate("yes");//是否审核    yes,no
                 result = params[2];
-                recruitmentDO.setAuditResult(result);
+                recruitmentDO.setAuditResult(result);//审核结果
             }catch (ArrayIndexOutOfBoundsException e){
                 if (audit.equals("no")){
                     result = CommonAttrs.NOTAUDITSTR;
@@ -250,7 +258,6 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
                 }
                 recruitmentDO.setAuditResult(result);
             }
-
             try {
                 if (mapper.updateRecruitSetAudit(recruitmentDO)>0){
                     responseResult.setCommonCode(CommonCode.AUDIT_PASS_RESULT_YES);
@@ -265,5 +272,17 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
     @Override
     public List<RecruitmentDO> selectRecruitDOs() throws SQLException{
         return mapper.selectRecruitByAuditStateAndCutoffDOs();
+    }
+
+    @Override
+    public boolean updateNum(String id) {
+        int recruitnumbers = mapper.selectRecruitnumbersById(id);
+        int applynum = mapper.selectapplynumById(id);
+        if (applynum>=recruitnumbers){
+            return false;
+        }
+        applynum = applynum+1;
+        mapper.updateNumAdd(applynum+"",id);
+        return true;
     }
 }

@@ -235,6 +235,8 @@ public class ConsumerResumeController extends BaseController implements ResumeAp
             if (resultMap.get("code").equals("10000")){
                 responseResult.put("resumeUrl",resultMap.get("url"));
                 responseResult.put("message",CommonCode.SUCCESS.message());
+            }else {
+                responseResult.put("message","你还没上传，先上传简历！");
             }
         } catch (SQLException throwables) {
             logger.error("数据库错误"+throwables.getSQLState());

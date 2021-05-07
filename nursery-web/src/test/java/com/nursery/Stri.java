@@ -1,6 +1,7 @@
 package com.nursery;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * author:MeiShiQiang
@@ -10,9 +11,7 @@ public class Stri {
 
     @Test
     public void test01() {
-        String base64 = "data:image/jpeg;base64";
-        String suffix = base64.substring(11,15);
-        System.out.println(suffix);
-
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        System.out.println(bCryptPasswordEncoder.encode("admin"));
     }
 }

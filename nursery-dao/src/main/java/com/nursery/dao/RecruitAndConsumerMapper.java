@@ -29,4 +29,12 @@ public interface RecruitAndConsumerMapper {
     void insertRecruitAndConsumer(RecruitAndConsumerDO recruitAndConsumerDO);
 
     RecruitAndConsumerDO findResumeAndConsumerDO(String recruitId, String consumerId) throws SQLException;
+
+    int updateToudiStatusByConsumerIdAndRecruitId(String consumerId,String recruitid) throws SQLException;
+
+    int updatePassByConsumerIdAndRecruitId(String consumerId, String recruitId)throws SQLException;
+
+    int updateNoPassByConsumerIdAndRecruitId(String consumerId, String recruitId)throws SQLException;
+
+    void updateResult(String consumerId, String recruitId);
 }

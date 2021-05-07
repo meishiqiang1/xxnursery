@@ -308,7 +308,8 @@
                     </a>
                     <ul class="sub">
                         <li><a th:href="@{/manage/recruit/pull?erId=1}">发布招聘</a></li>
-                        <li class="active"><a href="#" th:href="@{/manage/recruit/getRecruitManage?param=1}">招聘管理</a></li>
+                        <li class="active"><a href="#" th:href="@{/manage/recruit/getRecruitManage?param=1}">招聘管理</a>
+                        </li>
                         <li><a href="" th:href="@{/manage/recruit/getRecruitManages}">所有招聘</a></li>
                     </ul>
                 </li>
@@ -358,7 +359,7 @@
                             <form action="" class="form-horizontal tasi-form"
                                   th:object="${data.queryResult.object}" id="recruitForm"
                                   method="post" accept-charset="utf-8">
-<!--                                <input type="hidden" name="_method" value="put"/>-->
+                                <!--                                <input type="hidden" name="_method" value="put"/>-->
                                 <input type="hidden" name="id" th:value="*{id}"/>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">职位名称 </label>
@@ -380,7 +381,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">地点 </label>
                                     <div class="col-sm-6">
-                                        <input class="form-control"  type="text"
+                                        <input class="form-control" type="text"
                                                id="workPlace" name="workPlace"
                                                th:value="*{place}">
                                     </div>
@@ -412,7 +413,7 @@
                                     <div class="col-md-4">
                                         <input type="text" class="form_datetime form-control"
                                                size="16" id="starttime"
-                                               th:value="*{#dates.format(startTime,'yyyy-MM-dd HH:mm')}"
+                                               th:value="*{starttime}"
                                                readonly disabled>
                                     </div>
                                 </div>
@@ -423,7 +424,7 @@
                                     <div class="col-md-4">
                                         <input type="text" size="16" class="form_datetime form-control"
                                                id="endTime" name="endTime"
-                                               th:value="*{#dates.format(endTime,'yyyy-MM-dd HH:mm')}"
+                                               th:value="*{endtime}"
                                                readonly required>
                                     </div>
                                 </div>
@@ -457,7 +458,8 @@
                                         <select class="form-control m-bot15"
                                                 id="requireExperience"
                                                 name="requireExperience">
-                                            <option th:selected="*{requireExperience == '0'}" value="0" selected>不限</option>
+                                            <option th:selected="*{requireExperience == '0'}" value="0" selected>不限
+                                            </option>
                                             <option th:selected="*{requireExperience == '1'}" value="1">在校生</option>
                                             <option th:selected="*{requireExperience == '2'}" value="2">应届生</option>
                                             <option th:selected="*{requireExperience == '3'}" value="3">1年以内</option>
@@ -475,7 +477,8 @@
                                         <section class="panel">
                                             <div class="panel-body">
                                                 <div class="panel-body">
-                                                    <textarea class="responsibility" id="responsibility" name="responsibility" th:utext="*{responsibility}">
+                                                    <textarea class="responsibility" id="responsibility"
+                                                              name="responsibility" th:utext="*{responsibility}">
                                                         职责描述。。。。。。
                                                     </textarea>
                                                 </div>
@@ -489,7 +492,8 @@
                                         <section class="panel">
                                             <div class="panel-body">
                                                 <div class="panel-body">
-                                                    <textarea class="require" id="require" name="require" th:utext="*{require}">职位要求。。。。。。</textarea>
+                                                    <textarea class="jobrequirement" id="jobrequirement" name="require"
+                                                              th:utext="*{jobrequirement}">职位要求。。。。。。</textarea>
                                                 </div>
                                             </div>
                                         </section>
@@ -501,7 +505,8 @@
                                         <section class="panel">
                                             <div class="panel-body">
                                                 <div class="panel-body">
-                                                    <textarea class="treatment" id="treatment" name="treatment" th:utext="*{treatment}">福利待遇。。。。。。</textarea>
+                                                    <textarea class="treatment" id="treatment" name="treatment"
+                                                              th:utext="*{treatment}">福利待遇。。。。。。</textarea>
                                                 </div>
                                             </div>
                                         </section>
@@ -526,15 +531,7 @@
     <!--文本内容-->
 
     <!--页脚-->
-    <footer class="site-footer">
-        <div class="text-center">
-            2021 &copy; FlatLab by VectorLab.
-            <a href="#" class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </a>
-        </div>
-    </footer>
-    <!--footer end-->
+    <footer th:replace="include/footer.html"></footer>
 </section>
 
 <!-- js placed at the end of the document so the pages load faster -->
@@ -601,7 +598,7 @@
                 ['para', ['ul', 'ol', 'paragraph']]
             ]
         });
-        $('.require').summernote({
+        $('.jobrequirement').summernote({
             disableDragAndDrop: true,//禁用拉动状态
             height: 200,
             minHeight: 200,
@@ -636,7 +633,7 @@
                 if (data.success) {
                     alert(data.message + "");
                     window.location.reload();
-                }else {
+                } else {
                     alert(data.message + "");
                 }
             });

@@ -18,7 +18,12 @@ public interface IConsumerResumeSV {
 
     DomesticConsumerResumeDO findResumeDOByConsuemrName(String name) throws SQLException;
 
+    DomesticConsumerResumeDO findResumeDOByConsuemrId(String consumerId)throws SQLException;
+
     Map<String,String> findResumeURLByConsumerName(String name) throws SQLException;
 
     boolean findResumeAndConsumerDO(String recruitId, String consumerId) throws SQLException;
+
+    Map<String, String> findResumeURLByConsumerId(String consumerId) throws SQLException;
+
 }

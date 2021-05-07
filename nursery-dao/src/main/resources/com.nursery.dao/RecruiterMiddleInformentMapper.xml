@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nursery.dao.RecruiterMiddleInformentMapper">
+    <delete id="delete">
+        DELETE
+        from tb_middle_recruiter_info
+        where RECRUITERID = #{param1} and INFOID = #{param2};
+    </delete>
 
     <select id="selectRecruitIdsByerid" parameterType="string" resultType="java.lang.String">
         select * from tb_middle_recruiter_info where RECRUITERID = #{userId}

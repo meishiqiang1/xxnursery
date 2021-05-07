@@ -10,12 +10,13 @@ function hotJob(hotId, hotname) {
         for (var i = 0; i < data.length; i++) {
             var RecruitmentDO = data[i];
             var requireEduDB = RecruitmentDO.requireEduDB;
+            var tablename = RecruitmentDO.recruittablename.substring(0,8);
             requireEduDB = requireEduDB == '0' ? '不限' : requireEduDB == '1' ? '大专' : requireEduDB == '2' ? '本科' : requireEduDB == '3' ? '硕士' : '博士';
             var li = '<div class="col-sm-6 col-md-4  job_block">\n' +
                 '\t<div class="position-thumbnail">\n' +
                 '\t\t<div class="row">\n' +
                 '\t\t\t<div class="col-md-5">\n' +
-                '\t\t\t\t<a class="title" href="/job_detail/' + RecruitmentDO.id + '.html"><p>' + RecruitmentDO.recruittablename + '</p>\n' +
+                '\t\t\t\t<a class="title" href="/job_detail/' + RecruitmentDO.id + '.html"><p>' + tablename + '...' + '</p>\n' +
                 '\t\t\t\t<span>' + requireEduDB + '</span>\n' +
                 '\t\t\t</div>\n' +
                 '\t\t\t<div class="col-md-4 col-md-offset-2">\n' +

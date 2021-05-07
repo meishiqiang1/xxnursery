@@ -21,4 +21,7 @@
     <select id="selectRolesByUsername" resultMap="role">
         SELECT * FROM `tb_role` WHERE ID IN (SELECT a.`ROLEID`  FROM  `tb_middle_recruiter_role` a WHERE `RECRUITERID` = #{recruitID});
     </select>
+    <select id="selectIdByName" resultType="java.lang.String">
+        SELECT id FROM  `tb_er_recruit` WHERE recruitName = #{value}
+    </select>
 </mapper>

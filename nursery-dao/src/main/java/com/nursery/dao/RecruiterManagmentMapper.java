@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface RecruiterManagmentMapper {
 
+    String selectIdByName(String name)throws SQLException;
 
     //根据id查询姓名
     String selectRealName(RecruiterManagmentDO recruiterManagmentDO) throws SQLException;
@@ -21,4 +22,6 @@ public interface RecruiterManagmentMapper {
 
     //根据
     List<RoleDO> selectRolesByUsername(String recruitId);
+
+    void updateNumAdd();
 }

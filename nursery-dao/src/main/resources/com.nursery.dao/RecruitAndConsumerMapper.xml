@@ -12,6 +12,8 @@
         <result column="CONSUEMR_AGE" property="consumerAge" jdbcType="INTEGER"/><!--应聘者(年龄)-->
         <result column="CONSUEMR_RESUME" property="consuemrResume" jdbcType="VARCHAR"/><!--应聘者(个人简介)-->
         <result column="TOUDI_STATUS" property="toudiStatus" jdbcType="VARCHAR"/><!--投递状态(0未通过 , 1通过)-->
+        <result column="TOUDI_RESULT" property="toudiResult" jdbcType="VARCHAR"/><!--审核结果-->
+        <result column="INTERVIEW_RESULT" property="result" jdbcType="VARCHAR"/><!--面试结果-->
         <result column="RECRUIT_TILTE" property="recruitTitle" jdbcType="VARCHAR"/><!--招聘标题-->
         <result column="RECRUIT_CLASSIFY" property="recruitClassify" jdbcType="VARCHAR"/><!--招聘类型-->
         <result column="RECRUIT_PAY" property="recruitPay" jdbcType="VARCHAR"/><!--薪资-->
@@ -25,6 +27,19 @@
         values (#{consumerId},#{recruitId},#{resumeId},#{consumerName},#{consuemrToudiDate},#{consumerAge},#{consuemrResume},
             #{toudiStatus},#{recruitTitle},#{recruitClassify},#{recruitPay},#{recruitPlace},#{resumePlace});
     </insert>
+    <update id="updateToudiStatusByConsumerIdAndRecruitId">
+        update tb_middle_consuemr_recruit set TOUDI_STATUS = '1' WHERE recruit_id = #{param1} and CONSUMER_ID = #{param2};
+    </update>
+    <update id="updatePassByConsumerIdAndRecruitId">
+        update tb_middle_consuemr_recruit set TOUDI_STATUS = '1',TOUDI_RESULT = '通过，请在看到消息一周内，到招聘地点来面试。' WHERE CONSUMER_ID =  #{param1} and RECRUIT_ID = #{param2};
+    </update>
+    <update id="updateNoPassByConsumerIdAndRecruitId">
+        update tb_middle_consuemr_recruit set TOUDI_STATUS = '1',TOUDI_RESULT = '不合适' WHERE CONSUMER_ID =  #{param1} and RECRUIT_ID = #{param2};
+    </update>
+    <update id="updateResult">
+        update tb_middle_consuemr_recruit set INTERVIEW_RESULT = '1'
+        WHERE CONSUMER_ID =  #{param1} and RECRUIT_ID = #{param2};
+    </update>
 
     <select id="selectDomeByRecruitId" resultMap="demo1">
         SELECT * FROM tb_middle_consuemr_recruit WHERE recruit_id = #{id};
@@ -33,6 +48,6 @@
         SELECT * FROM tb_middle_consuemr_recruit WHERE CONSUMER_ID = #{id};
     </select>
     <select id="findResumeAndConsumerDO" resultMap="demo1">
-        SELECT * FROM tb_middle_consuemr_recruit WHERE recruit_id = #{param1} and CONSUMER_ID = #{param2};
+        SELECT * FROM tb_middle_consuemr_recruit WHERE CONSUMER_ID =  #{param1} and RECRUIT_ID = #{param2};
     </select>
 </mapper>

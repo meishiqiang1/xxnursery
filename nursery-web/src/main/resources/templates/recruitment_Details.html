@@ -66,7 +66,7 @@
         <div class="container-fluid bg_zhiwei_box">
             <div class="row bg_zhiwei_detail text-left">
                 <div class="col-lg-8 col-lg-offset-2 zhiwei_box">
-                    <p th:text="*{cutoff=='yes'?'招聘进行时':'招聘已过期，请选择其他招聘信息'}">招聘进行时</p>
+                    <p th:text="*{cutoff=='no'?'招聘进行时':'招聘已过期，请选择其他招聘信息'}">招聘进行时</p>
                     <div class="flex">
                         <h2 style="margin: 0;">
                             <th:block th:text="*{recruittablename}">招聘标题！！！！</th:block>&nbsp;&nbsp;
@@ -93,7 +93,7 @@
                         <ol class="zhiwei_type">
                             <li th:each="type:*{types}" th:text="${type}"></li>
                         </ol>
-                        <div class="flex">
+                        <div class="flex" sec:authorize="isAuthenticated()">
                             <p class="zhiwei_type_p">
                                 <i class="fa fa-file"></i>&nbsp;&nbsp;&nbsp;<span><button
                                     class="resume_btn no">查看简历</button></span>
@@ -116,7 +116,7 @@
                             <p><strong>职责描述</strong></p>
                             <div th:utext="*{responsibility}"></div>
                             <p><strong>职位要求</strong></p>
-                            <div th:utext="*{require}"></div>
+                            <div th:utext="*{jobrequirement}"></div>
                             <p><strong>待遇.福利</strong></p>
                             <div th:utext="*{treatment}"></div>
                             <p><strong>工作地址</strong></p>
@@ -179,6 +179,12 @@
                                 <strong>错误信息!</strong> 用户名或者密码错误，请重新登录!!
                             </div>
                         </th:block>
+                        <div class="registration">
+                            还没有帐号？
+                            <a class="" th:href="'/register.html'">
+                                创建一个帐户
+                            </a>
+                        </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-success">登录</button>
@@ -213,31 +219,6 @@
 </div>
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<th:block th:if="${param.error != null}">
-    <!--如果有error的错误出现，判断后调用-->
-    <script>
-        $(function () {
-            var error = getQueryVariable("error");
-            if (error.search("用户名或者密码错误")) {
-                if (confirm("用户名或者密码错误,请重新登录!!")) {
-                    $('#loginModal').modal('show');
-                }
-            }
-        })
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split("&");
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                if (pair[0] == variable) {
-                    return pair[1];
-                }
-            }
-            return (false);
-        }
-    </script>
-</th:block>
 <script>
     //查看简历
     $("button[class='resume_btn no']:first-child").click(function (e) {
@@ -253,8 +234,11 @@
     //下载简历
     $("button[class='resume_btn no down']:last-child").click(function (e) {
         $.get("/consumer/resume/down/", function (data) {
-            // alert(data.code +"==》"+ data.resumeUrl);
-            window.location.href = data.resumeUrl;
+            if(data.code=='10000'){
+                window.location.href = data.resumeUrl;
+            }else {
+                alert(data.message);
+            }
         });
     });
 
