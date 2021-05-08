@@ -111,6 +111,13 @@ public class NurseryRecruitInfoImpl implements INurseryRecruitInfoSV {
     }
 
     @Override
+    public List<RecruitmentDO> getRecruitByDateDesc() throws SQLException {
+        List<RecruitmentDO> newDate = mapper.selectRecruitDOsByNewDateDesc();
+        logger.info("最新职位:" + JSONObject.toJSONString(newDate));
+        return newDate;
+    }
+
+    @Override
     public List<RecruitmentDO> getRecruitByTypeId(String typeId) throws SQLException {
         if (!StringUtils.isEmpty(typeId)) {
             typeId = "%" + typeId + "%";

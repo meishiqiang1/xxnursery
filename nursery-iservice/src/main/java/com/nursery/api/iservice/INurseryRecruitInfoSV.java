@@ -66,6 +66,7 @@ public interface INurseryRecruitInfoSV {
 
     //获取最新时间的职位
     List<RecruitmentDO> getRecruitByNewDate() throws SQLException;
+    List<RecruitmentDO> getRecruitByDateDesc() throws SQLException;
 
     //根据类型名称获取
     List<RecruitmentDO> getRecruitByTypeId(String typeId) throws SQLException;

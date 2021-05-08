@@ -105,6 +105,11 @@
         ORDER BY tb_nursery_recruitinfo.`recruitstarttime` DESC LIMIT 12
     </select>
 
+    <select id="selectRecruitDOsByNewDateDesc" resultMap="recruitment">
+        SELECT *
+        FROM tb_nursery_recruitinfo
+        ORDER BY tb_nursery_recruitinfo.`recruitstarttime` DESC
+    </select>
     <select id="selectRecruitInfoByParams" resultMap="recruitment" parameterType="com.nursery.beans.DBDataParam">
         select * from  tb_nursery_recruitinfo
         WHERE auditState = 'yes'

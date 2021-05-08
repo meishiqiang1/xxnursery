@@ -1,12 +1,16 @@
 package com.nursery.nurserymanage2.controller.visit;
 
 import com.nursery.api.iservice.INurseryAnnounceSV;
+import com.nursery.api.iservice.INurseryRecruiterManagmentSV;
 import com.nursery.api.iwebm.visit.VisitAnnunceApi;
 import com.nursery.beans.NurseryAnnounceDO;
 import com.nursery.common.web.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +33,12 @@ public class VisitAnnunceController extends BaseController implements VisitAnnun
     @Autowired
     private INurseryAnnounceSV annunceManageSV;
 
-    @RequestMapping(value = {"/manage/announcement/{erId}.html"},method = RequestMethod.GET)
+    @Autowired
+    private INurseryRecruiterManagmentSV recruiterManagmentSV;
+
+    @RequestMapping(value = {"/manage/announcement.html"},method = RequestMethod.GET)
     @Override
-    public ModelAndView visitAnnuncePage(@PathVariable(value = "erId") String id, ModelAndView modelAndView) {
+    public ModelAndView visitAnnuncePage(ModelAndView modelAndView) {
         modelAndView.setViewName("annuncePage");
         try {
             List<NurseryAnnounceDO> announceDOS = annunceManageSV.selectAnnunces();
@@ -43,14 +50,12 @@ public class VisitAnnunceController extends BaseController implements VisitAnnun
     }
 
     /**
-     *
-     * @param id  管理人员id
-     * @param modelAndView 返回餐宿
+     * @param modelAndView 返回参数
      * @return ModelandView
      */
-    @RequestMapping(value = {"/manage/pullAnnouncement/{erId}.html"},method = RequestMethod.GET)
+    @RequestMapping(value = {"/manage/pullAnnouncement.html"},method = RequestMethod.GET)
     @Override
-    public ModelAndView pullAnnuncePage(@PathVariable(value = "erId") String id, ModelAndView modelAndView) {
+    public ModelAndView pullAnnuncePage(ModelAndView modelAndView) {
         modelAndView.setViewName("annuncePullPage");
         return modelAndView;
     }
@@ -69,4 +74,15 @@ public class VisitAnnunceController extends BaseController implements VisitAnnun
         return modelAndView;
     }
 
+    private String getUserId() throws SQLException {
+        String authorId = "";
+        String authorName = "";
+        //获取用户信息 UserDetails
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            authorName = authentication.getName();
+            authorId = recruiterManagmentSV.getIdByName(authorName);
+        }
+        return authorId;
+    }
 }

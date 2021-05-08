@@ -27,67 +27,8 @@
 <section id="container" class="">
     <!--头部 start-->
     <header th:replace="include/header.html"></header>
-    <!--头部 end-->
-    <!--侧边栏 start-->
-    <aside>
-        <div id="sidebar" class="nav-collapse ">
-            <!-- 侧边栏菜单 start-->
-            <ul class="sidebar-menu" id="nav-accordion">
-                <li>
-                    <a href="index.html" th:href="'/index'">
-                        <i class="fa fa-university"></i>
-                        <span>新星</span>
-                    </a>
-                </li>
-
-                <li class="sub-menu">
-                    <a href="javascript:;" class="active">
-                        <i class="fa fa-laptop"></i>
-                        <span>招聘中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/recruit/pull?erId=1}">发布招聘</a></li>
-                        <li><a th:href="@{/manage/recruit/getRecruitManage?param=1}">招聘管理</a></li>
-                        <li><a th:href="@{/manage/recruit/getRecruitManages}">所有招聘</a></li>
-                        <li class="active"><a href="#">招聘详情</a></li>
-                    </ul>
-                </li>
-
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
-                        <span>用户中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/consumer/visit}">显示</a></li>
-                    </ul>
-                </li>
-
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
-                        <span>通告中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/pullAnnouncement/1.html}">发布通告</a></li>
-                        <li><a th:href="@{/manage/announcement/1.html}">通告管理</a></li>
-                    </ul>
-                </li>
-                <!--日志-->
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-glass"></i>
-                        <span>日志中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="'/manage/consumer/log.html'">用户日志</a></li>
-                        <li><a th:href="'/manage/admin/log.html'">管理人员日志</a>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </aside>
-    <!--侧边栏 -->
+    <!--侧边导航栏-->
+    <aside th:replace="include/aside.html"></aside>
     <!--主体内容-->
     <section id="main-content">
         <section class="wrapper site-min-height">
@@ -272,14 +213,11 @@
                     </section>
                 </div>
                 <!--中间主题内容 end-->
+
             </div>
         </section>
     </section>
-    <!--主体内容-->
-
-    <!--footer start-->
     <footer th:replace="include/footer.html"></footer>
-    <!--footer end-->
 </section>
 
 <!-- js placed at the end of the document so the pages load faster -->

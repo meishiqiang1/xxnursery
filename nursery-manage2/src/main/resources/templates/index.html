@@ -10,7 +10,8 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
-    <link href="/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css"
+          media="screen"/>
     <link rel="stylesheet" href="/css/owl.carousel.css" type="text/css">
     <link href="/css/slidebars.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
@@ -24,66 +25,8 @@
 <section id="container">
     <!--头部信息-->
     <header th:replace="include/header.html"></header>
-    <!-- 左侧边栏 -->
-    <aside>
-        <div id="sidebar" class="nav-collapse ">
-            <!-- 侧边栏菜单 start-->
-            <ul class="sidebar-menu" id="nav-accordion">
-                <li>
-                    <a class="active" href="index.html">
-                        <i class="fa fa-university"></i>
-                        <span>新星</span>
-                    </a>
-                </li>
-                <!--招聘-->
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-laptop"></i>
-                        <span>招聘中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/recruit/pull}">发布招聘</a></li>
-                        <li><a th:href="@{/manage/recruit/getRecruitManage}">招聘管理</a></li>
-                        <li><a th:href="@{/manage/recruit/getRecruitManages}">所有招聘</a></li>
-                    </ul>
-                </li>
-                <!--用户-->
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
-                        <span>用户中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/consumer/visit}">显示</a></li>
-                        <li><a href="buttons.html">Buttons</a></li>
-                        <li><a href="modal.html">Modal</a></li>
-                    </ul>
-                </li>
-                <!--通告-->
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
-                        <span>通告中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="@{/manage/pullAnnouncement/1.html}">发布通告</a></li>
-                        <li><a th:href="@{/manage/announcement/1.html}">通告管理</a></li>
-                    </ul>
-                </li>
-                <!--日志-->
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-glass"></i>
-                        <span>日志中心</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a th:href="'/manage/consumer/log.html'">用户日志</a></li>
-                        <li><a th:href="'/manage/admin/log.html'">管理人员日志</a>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </aside>
+    <!--侧边导航栏-->
+    <aside th:replace="include/aside.html"></aside>
     <!-- 正文 -->
     <section id="main-content">
         <section class="wrapper">
@@ -148,40 +91,7 @@
             </div>
             <!--state overview end-->
             <div class="row">
-                <div class="col-lg-4">
-                    <!--用户信息 start-->
-                    <section class="panel">
-                        <div class="panel-body">
-                            <a href="#" class="task-thumb">
-                                <img src="/img/avatar1.jpg" alt="头像">
-                            </a>
-                            <div class="task-thumb-details">
-                                <h1><a href="#">梅士强</a></h1>
-                                <p>java 开发工程师</p>
-                            </div>
-                        </div>
-                        <table class="table table-hover personal-task">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <i class=" fa fa-tasks"></i>
-                                </td>
-                                <td>任务</td>
-                                <td> 02</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <i class="fa fa-exclamation-triangle"></i>
-                                </td>
-                                <td>留言</td>
-                                <td> 14</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </section>
-                    <!--用户信息 end-->
-                </div>
-                <div class="col-lg-8">
+                <div class="col-lg-12">
                     <!--招聘进度 start-->
                     <section class="panel">
                         <div class="panel-body progress-panel">
@@ -191,41 +101,13 @@
                         </div>
                         <table class="table table-hover personal-task">
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    门卫（郑州-南三环）
-                                </td>
-                                <td>
-                                    <span class="badge bg-important">75%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    门卫（郑州南三环）
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">43%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    门卫（郑州南三环）
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">67%</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>
-                                    门卫（郑州南三环）
-                                </td>
-                                <td>
-                                    <span class="badge bg-warning">30%</span>
-                                </td>
+                            <tr th:each="recruit,stat:${recruits}" th:object="${recruit}">
+                                <td th:text="${stat.index}"></td>
+                                <td th:text="*{recruittablename}">招聘标题</td>
+                                <td th:text="*{classify}">招聘类型</td>
+                                <td th:text="'招聘人数：'+*{manNumbers}"></td>
+                                <td><span class="badge bg-important" th:text="'进度'+*{(applynum)/(manNumbers)}+'%'">75%</span></td>
+                                <td><a th:href="'/manage/recruit/getRecruitInfo/'+*{id}">点击详情</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -451,170 +333,6 @@
                     <!--features carousel end-->
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8">
-                    <!--latest product info start-->
-                    <section class="panel post-wrap pro-box">
-                        <aside>
-                            <div class="post-info">
-                                <span class="arrow-pro right"></span>
-                                <div class="panel-body">
-                                    <h1><strong>popular</strong> <br> Brand of this week</h1>
-                                    <div class="desk yellow">
-                                        <h3>Dimond Ring</h3>
-                                        <p>Lorem ipsum dolor set amet lorem ipsum dolor set amet ipsum dolor set
-                                            amet</p>
-                                    </div>
-                                    <div class="post-btn">
-                                        <a href="javascript:;">
-                                            <i class="fa fa-chevron-circle-left"></i>
-                                        </a>
-                                        <a href="javascript:;">
-                                            <i class="fa fa-chevron-circle-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
-                        <aside class="post-highlight yellow v-align">
-                            <div class="panel-body text-center">
-                                <div class="pro-thumb">
-                                    <img src="/img/ring.jpg" alt="">
-                                </div>
-                            </div>
-                        </aside>
-                    </section>
-                    <!--latest product info end-->
-                    <!--twitter feedback start-->
-                    <section class="panel post-wrap pro-box">
-                        <aside class="post-highlight terques v-align">
-                            <div class="panel-body">
-                                <h2>Flatlab is new model of admin dashboard <a href="javascript:;"> http://demo.com/</a>
-                                    4 days ago by jonathan smith</h2>
-                            </div>
-                        </aside>
-                        <aside>
-                            <div class="post-info">
-                                <span class="arrow-pro left"></span>
-                                <div class="panel-body">
-                                    <div class="text-center twite">
-                                        <h1>Twitter Feed</h1>
-                                    </div>
-
-                                    <footer class="social-footer">
-                                        <ul>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-facebook"></i>
-                                                </a>
-                                            </li>
-                                            <li class="active">
-                                                <a href="#">
-                                                    <i class="fa fa-twitter"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-google-plus"></i>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-pinterest"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </footer>
-                                </div>
-                            </div>
-                        </aside>
-                    </section>
-                    <!--twitter feedback end-->
-                </div>
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <!--pie chart start-->
-                            <section class="panel">
-                                <div class="panel-body">
-                                    <div class="chart">
-                                        <div id="pie-chart"></div>
-                                    </div>
-                                </div>
-                                <footer class="pie-foot">
-                                    Free: 260GB
-                                </footer>
-                            </section>
-                            <!--pie chart start-->
-                        </div>
-                        <div class="col-xs-6">
-                            <!--follower start-->
-                            <section class="panel">
-                                <div class="follower">
-                                    <div class="panel-body">
-                                        <h4>Jonathan Smith</h4>
-                                        <div class="follow-ava">
-                                            <img src="/img/follower-avatar.jpg" alt="">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <footer class="follower-foot">
-                                    <ul>
-                                        <li>
-                                            <h5>2789</h5>
-                                            <p>Follower</p>
-                                        </li>
-                                        <li>
-                                            <h5>270</h5>
-                                            <p>Following</p>
-                                        </li>
-                                    </ul>
-                                </footer>
-                            </section>
-                            <!--follower end-->
-                        </div>
-                    </div>
-                    <!--weather statement start-->
-                    <section class="panel">
-                        <div class="weather-bg">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        <i class="fa fa-cloud"></i>
-                                        California
-                                    </div>
-                                    <div class="col-xs-6">
-                                        <div class="degree">
-                                            24°
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <footer class="weather-category">
-                            <ul>
-                                <li class="active">
-                                    <h5>humidity</h5>
-                                    56%
-                                </li>
-                                <li>
-                                    <h5>precip</h5>
-                                    1.50 in
-                                </li>
-                                <li>
-                                    <h5>winds</h5>
-                                    10 mph
-                                </li>
-                            </ul>
-                        </footer>
-
-                    </section>
-                    <!--weather statement end-->
-                </div>
-            </div>
-
         </section>
     </section>
     <!-- 页脚 -->
@@ -640,7 +358,6 @@
 <script>
 
     //owl carousel
-
     $(document).ready(function () {
         $("#owl-demo").owlCarousel({
             navigation: true,
@@ -651,13 +368,11 @@
 
         });
     });
-
     //custom select box
 
     $(function () {
         $('select.styled').customSelect();
     });
-
     $(window).on("resize", function () {
         var owl = $("#owl-demo").data("owlCarousel");
         owl.reinit();

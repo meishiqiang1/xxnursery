@@ -20,10 +20,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        //super.addViewControllers(registry);
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/index.html").setViewName("index");
+//        //super.addViewControllers(registry);
+//        registry.addViewController("/").setViewName("index");
+//        registry.addViewController("/index").setViewName("index");
+//        registry.addViewController("/index.html").setViewName("index");
+
+        System.out.println("12355555");
     }
 
     //将磁盘文件路径映射为项目访问路径

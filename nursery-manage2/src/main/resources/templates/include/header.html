@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,22 +11,20 @@
         <!--隐藏和显示左边栏-->
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
     </div>
-    <a href="/" class="logo">NEW<span>STAR</span></a>
+    <a href="/index" class="logo">NEW<span>STAR</span></a>
     <div class="top-nav ">
         <ul class="nav pull-right top-menu">
             <!--用户板块-->
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img alt="" src="/img/avatar1_small.jpg">
-                    <span class="username">Jhon Doue</span>
+                    <img alt="" src="/img/sm-img-1.jpg">
+                    <span class="username" sec:authentication="name"></span>
                     <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu extended logout">
+                <ul class="dropdown-menu extended">
                     <div class="log-arrow-up"></div>
-                    <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>
-                    <li><a href="login.html"><i class="fa fa-key"></i> Log Out</a></li>
+                    <li><p class="text-info">欢迎回来</p></li>
+                    <li><a href="/logout">安全退出</a></li>
                 </ul>
             </li>
             <!--用户板块-->

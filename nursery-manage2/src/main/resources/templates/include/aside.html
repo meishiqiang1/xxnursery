@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>侧边栏</title>
+</head>
+<body>
+<aside>
+    <div id="sidebar" class="nav-collapse ">
+        <!-- 侧边栏菜单 start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+            <li>
+                <a href="index.html" class=" "
+                   th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/index')} ? 'active' : ''"
+                   th:href="'/index'">
+                    <i class="fa fa-university"></i>
+                    <span>新星</span>
+                </a>
+            </li>
+            <li class="sub-menu">
+                <a href="javascript:;" class=" "
+                   th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'recruit')} ? 'active' : ''">
+                    <i class="fa fa-laptop"></i>
+                    <span>招聘中心</span>
+                </a>
+                <ul class="sub">
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/pull')} ? 'active' : ''">
+                        <a th:href="@{/manage/recruit/pull}">发布招聘</a></li>
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/audit')} ? 'active' : ''">
+                        <a href="#" th:href="@{/manage/recruit/audit}">招聘审核</a></li>
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/getRecruitManage')} ? 'active' : ''">
+                        <a href="#" th:href="@{/manage/recruit/getRecruitManage}">招聘管理</a>
+                    </li>
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/getRecruitManages')} ? 'active' : ''">
+                        <a href="" th:href="@{/manage/recruit/getRecruitManages}">所有招聘</a></li>
+                </ul>
+            </li>
+            <li class="sub-menu">
+                <a href="javascript:;" class=" "
+                   th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'consumer/visit')} ? 'active' : ''">
+                    <i class="fa fa-book"></i>
+                    <span>用户中心</span>
+                </a>
+                <ul class="sub">
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/consumer/visit')} ? 'active' : ''">
+                        <a th:href="@{/manage/consumer/visit}">显示</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sub-menu">
+                <a href="javascript:;" class=" "
+                   th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'nnouncement')} ? 'active' : ''">
+                    <i class="fa fa-book"></i>
+                    <span>通告中心</span>
+                </a>
+                <ul class="sub">
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/pullAnnouncement/')} ? 'active' : ''">
+                        <a th:href="@{/manage/pullAnnouncement.html}">发布通告</a>
+                    </li>
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/announcement')} ? 'active' : ''">
+                        <a th:href="@{/manage/announcement.html}">通告管理</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sub-menu">
+                <a href="javascript:;" class=" " th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'log')} ? 'active' : ''">
+                    <i class="fa fa-glass"></i>
+                    <span>日志中心</span>
+                </a>
+                <ul class="sub">
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/consumer/log.html')} ? 'active' : ''">
+                        <a th:href="'/manage/consumer/log.html'">用户日志</a></li>
+                    <li class=" "
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/admin/log.html')} ? 'active' : ''">
+                        <a th:href="'/manage/admin/log.html'">管理人员日志</a>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</aside>
+</body>
+</html>
