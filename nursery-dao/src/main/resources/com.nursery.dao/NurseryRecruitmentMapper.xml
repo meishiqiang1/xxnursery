@@ -89,7 +89,7 @@
                        ) AS id
         ) AS t2
         WHERE auditState = 'yes' and t1.id >= t2.id
-        ORDER BY t1.id LIMIT 12;
+        ORDER BY t1.id LIMIT 9;
     </select>
 
     <select id="selectRecruitinfoByType" resultMap="recruitment">
@@ -102,7 +102,7 @@
         SELECT *
         FROM tb_nursery_recruitinfo
         where auditState = 'yes'
-        ORDER BY tb_nursery_recruitinfo.`recruitstarttime` DESC LIMIT 12
+        ORDER BY tb_nursery_recruitinfo.`recruitstarttime` DESC LIMIT 9
     </select>
 
     <select id="selectRecruitDOsByNewDateDesc" resultMap="recruitment">

@@ -32,23 +32,26 @@ var Script = function () {
         return flag;
     }
 
+    function nickname(){
+        var nickname = $("#nickname").val();
+        if (nickname.length<6){
+            alert("请输入长度大于6！！")
+            $("#nickname").css("border", "1px solid red");
+        }
+    }
+
     //注册
-    $("#btn_reg").click(function () {
-        if (checkPassword() && checkVerifyPass()) {
-            // $.post("/consumer/register2", $("#registForm").serialize(), function (data) {
-            //
-            // },async=false);
+    $("#btn_reg").click(function (e) {
+        if (checkPassword() && checkVerifyPass() && nickname()) {
+            e.preventDefault()
             $.ajax({
                 type: "POST",
                 url: "/consumer/register2",
                 data: $("#registForm").serialize(),
-                async: false,
                 success: function(msg){
                     alert(msg.message);
                     if (msg.success || msg.code=="10000" || msg.message=="操作成功") {
-                        setTimeout(function(){//两秒后跳转
-                            window.location.href = '/login';
-                        },2000);
+                        window.location.href = '/login';
                     }
                 }
             });
@@ -57,5 +60,6 @@ var Script = function () {
 
     $("#password").blur(checkPassword);
     $("#verifyPass").blur(checkVerifyPass);
+    $("#nickname").blur(nickname);
 
 }();

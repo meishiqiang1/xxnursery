@@ -26,7 +26,7 @@ public interface HotTopicMapper {
             @Result(column = "t_introduce", property = "introduce", jdbcType = JdbcType.VARCHAR),
             @Result(column = "startdate", property = "startDate", jdbcType = JdbcType.VARCHAR)
     })
-    @Select("SELECT *  FROM `tb_topic` AS t1 JOIN ( SELECT ROUND( RAND() * ( (SELECT MAX(id) FROM `tb_topic`) - (SELECT MIN(id) FROM `tb_topic`)  ) + (SELECT MIN(id) FROM `tb_topic`) ) AS id ) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id  LIMIT 12;")
+    @Select("SELECT *  FROM `tb_topic`")
     List<HotTopicDO> selectTopicRandom() throws SQLException;
 
     @Results({

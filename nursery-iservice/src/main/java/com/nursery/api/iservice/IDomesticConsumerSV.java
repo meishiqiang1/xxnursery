@@ -55,4 +55,8 @@ public interface IDomesticConsumerSV {
     String selectConsumerIdByConsumerNickName(String name);
     //添加中间表
     boolean insertConsumerAndRercuitDO(String recruitId, String consumerName) throws SQLException;
+    //后台首页展示
+    List<DomesticConsumerDO> getRecruitByDateDesc();
+
+    int deleteConsumer(String consumerId) throws Exception;
 }

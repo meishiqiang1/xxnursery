@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="meishiqiang">
+    <title>个人资料</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap-reset.css" rel="stylesheet">
+    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/style-responsive.css" rel="stylesheet"/>
+</head>
+<body>
+<section id="container" class="">
+    <!--头部-->
+    <header th:replace="header.html"></header>
+    <!--正文-->
+    <section>
+        <section style="margin-top: 100px">
+            <div class="container">
+                <div class="row position">
+                    <div>
+                        <!--个人 侧标栏-->
+                        <aside class="profile-nav col-lg-3">
+                            <section class="panel" th:object="${data.queryResult.object}">
+                                <div class="user-heading round">
+                                    <a href="#">
+                                        <th:block th:if="*{consumerURL== null}">
+                                            <img src="/img/profile-avatar.jpg" alt="头像">
+                                        </th:block>
+                                        <th:block th:if="*{consumerURL!= null}">
+                                            <img th:src="*{consumerURL}" alt="头像">
+                                        </th:block>
+                                    </a>
+                                    <h1 th:text="*{consumerName}">meishiqiang</h1>
+                                    <p th:text="*{consumerEmail}== null?'':*{consumerEmail}">13243038531@163.com</p>
+                                    <p th:text="*{consumerCellPhone}== null?'':*{consumerCellPhone}">13243038531</p>
+                                </div>
+
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active"><a th:href="'/consumer/personal/'"> <i class="fa fa-user"></i>
+                                        个人资料</a></li>
+                                    <li><a th:href="'/consumer/personalEdit/'"> <i class="fa fa-edit"></i> 编辑个人资料</a>
+                                    </li>
+                                    <li><a th:href="'/consumer/pullWenZhang/'"> <i class="fa fa-edit"></i> 发表文章</a>
+                                    </li>
+                                </ul>
+                            </section>
+                        </aside>
+                        <!--个人 侧标栏-->
+                        <!--个人资料-->
+                        <aside class="profile-info col-lg-9">
+                            <section class="panel" th:object="${data.queryResult.object}">
+                                <div class="bio-graph-heading">
+                                    <span>发表文章</span>
+                                </div>
+                                <div class="panel-body bio-graph-info">
+                                    <!--发表栏-->
+                                    <div class="row">
+                                        <div class="col-lg-8 col-md-8 col-sm-12">
+                                            <textarea id="editor" name="editor" rows="5" style="display: none;"></textarea>
+                                            <button class="btn btn-success col-lg-12 col-md-12 col-sm-12"
+                                                    onclick="pullComment()">发表
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="pull_wenzhang">发表</button>
+                            </section>
+                        </aside>
+                        <!--个人资料-->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </section>
+    <!--正文-->
+</section>
+<footer th:replace="footer.html"></footer>
+<!--js文件-->
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="/js/jquery.dcjqaccordion.2.7.js"></script>
+<script src="/js/jquery.scrollTo.min.js"></script>
+<script src="/js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="/assets/jquery-knob/js/jquery.knob.js"></script>
+<script src="/js/respond.min.js"></script>
+<script src="/js/common-scripts.js"></script>
+<script>
+    var he = HE.getEditor('editor', {
+        height: '200px',
+        autoHeight: true,
+        uploadPhoto: true,
+        uploadPhotoSize: 1024,
+        uploadPhotoType: 'gif,png,jpg,jpeg',
+        uploadPhotoSizeError: '不能上传大于1024KB的图片',
+        uploadPhotoTypeError: '只能上传gif,png,jpg,jpeg格式的图片',
+        item: ['bold', 'italic', 'color', 'expression', 'undo', 'redo']
+    });
+</script>
+</body>
+</html>

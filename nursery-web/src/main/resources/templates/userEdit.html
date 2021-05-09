@@ -18,53 +18,10 @@
 <body>
 <section id="container" class="">
     <!--头部-->
-    <header class="">
-        <!--导航栏-->
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand hidden-sm" href="http://www.bootcss.com">新星幼儿园</a>
-                </div>
-                <div class="navbar-collapse collapse" role="navigation">
-                    <ul class="nav navbar-nav">
-                        <li><a th:href="'/index'" target="_blank">首页</a></li>
-                        <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
-                        <li><a href="/discover" th:href="'/discover'">发现</a></li>
-                        <li><a href="/information" th:href="'/information'">咨询</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
-                        <li><a th:href="'/login.html'">用户！请登录</a></li>
-                        <li><a th:href="'/register.html'">快捷注册</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
-                        <span th:text="${param.number}" hidden></span>
-                        <li><a th:href="'/consumer/resume/'">简历</a></li>
-                        <li>
-                            <a th:href="'/consumer/personal/'">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
-                                <th:block sec:authentication="name"></th:block>
-                            </a>
-                        </li>
-                        <li><a th:href="'/logout'">退出</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--搜索框-->
-        <div class="row inner search-inner"></div>
-    </header>
-    <!--头部-->
-
+    <header th:replace="header.html"></header>
     <!--正文-->
     <section>
-        <section>
+        <section style="margin-top: 100px">
             <div class="container">
                 <div class="row position">
                     <!--个人 侧标栏-->
@@ -294,12 +251,10 @@
                 </div>
             </div>
         </section>
-
     </section>
     <!--正文-->
 </section>
 <footer th:replace="footer.html"></footer>
-
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script class="include" type="text/javascript" src="/js/jquery.dcjqaccordion.2.7.js"></script>

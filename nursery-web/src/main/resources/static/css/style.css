@@ -923,6 +923,9 @@ a.logo span {
     box-shadow: 10px 0 28px #c1c1c1;
     border-radius: 2px;
 }
+section{
+    margin-bottom: 100px;
+}
 
 .side-section {
     padding: 16px;
@@ -991,7 +994,7 @@ a.logo span {
     background-color: rgb(50, 51, 57);
     color: white;
     font-size: 12px;
-    margin-top: 60px;
+    margin-top: 51px;
     padding: 20px;
 }
 

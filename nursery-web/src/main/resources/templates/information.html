@@ -19,49 +19,7 @@
 <body>
 <section id="container" class="">
     <!--头部-->
-    <header class="">
-        <!--导航栏-->
-        <div class="navbar navbar-inverse navbar-fixed-top">
-
-            <div class="container">
-                <div class="navbar-header">
-                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand hidden-sm" th:href="'/index'">新星幼儿园</a>
-                </div>
-                <div class="navbar-collapse collapse" role="navigation">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/index" th:href="'/index'">首页</a></li>
-                        <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
-                        <li><a href="/discover" th:href="'/discover'">发现</a></li>
-                        <li class="active"><a href="/information" th:href="'/information'">咨询</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
-                        <li><a th:href="'/login.html'">用户！请登录</a></li>
-                        <li><a th:href="'/register.html'">快捷注册</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
-                        <span th:text="${param.number}" hidden></span>
-                        <li><a th:href="'/consumer/resume/'">简历</a></li>
-                        <li>
-                            <a th:href="'/consumer/personal/'">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
-                                <th:block sec:authentication="name"></th:block>
-                            </a>
-                        </li>
-                        <li><a th:href="'/logout'">退出</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!--头部-->
-
+    <header th:replace="header.html"></header>
     <!--正文-->
     <section>
         <section>
@@ -70,8 +28,8 @@
                 <div class="bg-success">
                     <div class="bs-detail-header" id="content">
                         <div class="container text-center">
-                            <h3>新星幼儿园-新闻发现和跟踪</h3>
-                            <p>New Star Kindergarten - News Discovery and Tracking</p>
+                            <h3>新星幼儿园-通知公告和新闻</h3>
+                            <p>New Star Kindergarten - Notices Announcements and News</p>
                         </div>
                     </div>
                 </div>

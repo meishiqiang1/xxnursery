@@ -1,7 +1,9 @@
 package com.nursery.nurserymanage2.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.nursery.api.iservice.IDomesticConsumerSV;
 import com.nursery.api.iservice.INurseryRecruitInfoSV;
+import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.RecruitmentDO;
 import com.nursery.common.web.BaseController;
 import org.slf4j.Logger;
@@ -24,14 +26,20 @@ public class ManageIndexControler extends BaseController {
     @Autowired
     private INurseryRecruitInfoSV recruitInfoSV;
 
+    @Autowired
+    private IDomesticConsumerSV domesticConsumerSV;
+
     @GetMapping(value = {"/index","/index.html","/"})
     public String index(){
-        PageHelper.startPage(1, 4);
+        PageHelper.startPage(1, 6);
         List<RecruitmentDO> recruitmentDOList = null;
+        List<DomesticConsumerDO> consumerDOList = null;
         try {
             recruitmentDOList = recruitInfoSV.getRecruitByDateDesc();
+            PageHelper.startPage(1, 6);
+            consumerDOList = domesticConsumerSV.getRecruitByDateDesc();
             request.setAttribute("recruits",recruitmentDOList);
-//            PageInfo<RecruitmentDO> pageInfo = new PageInfo<>(recruitmentDOList);
+            request.setAttribute("consumers",consumerDOList);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

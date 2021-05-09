@@ -27,10 +27,4 @@ public interface UserCenterApi {
     @ApiOperation("查询个人的大概信息,,,")
     ResponseResult generalContent(String consumerID);
 
-    @ApiOperation("查询密码")
-    ResponseResult selectPassword(String consumerID,String password);
-
-    @ApiOperation("修改密码")
-    ResponseResult updatePassword(String consumerID,String password);
-
 }

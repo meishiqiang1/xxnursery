@@ -3,9 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="meishiqiang">
-    <link rel="shortcut icon" href="/img/ico/favicon32.png">
-    <title>发布招聘</title>
+    <link rel="shortcut icon" href="/img/ico/favicon32.ico" th:href="@{/img/ico/favicon32.ico}">
+    <title>发布通告</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -141,28 +140,36 @@
              */
         });
         /*点击提交 from表单*/
-        $("#btn_form").bind('click', function () {
+        $("#btn_form").bind('click', function (e) {
+            e.preventDefault()
             var edHtml = testEditor.getHTML();
             var mdText = testEditor.getMarkdown();
             var anntable = $('#annTable').val();
             var pathArr = window.location.pathname.split("/");
             var pathArr1 = pathArr[pathArr.length - 1].split(".");
             var authoreid = pathArr1[0];
-            $.post("/manage/announce/pull/", {
-                    table: anntable,
-                    bigContent: edHtml,
-                    content: mdText,
-                    imgPath: converPic,
-                    author: authoreid
-                },
-                function (data) {
-                    alert(data.message)
-                    if (!data.success) {
-                        $("#btn_form").reset();
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: '/manage/announce/pull/',
+                    data: {
+                        table: anntable,
+                        bigContent: edHtml,
+                        content: mdText,
+                        imgPath: converPic,
+                        author: authoreid
+                    },
+                    success: function (res) {
+                        alert(res.message)
+                        if(res.success){
+                            window.location.href="/manage/pullAnnouncement.html";
+                        }
                     }
-                });
+                }
+            )
         });
-    });
+    })
+    ;
 </script>
 </body>
 </html>

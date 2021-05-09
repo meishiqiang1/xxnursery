@@ -18,61 +18,9 @@
 <body>
 
 <section id="container" class="">
-    <th:block th:if="${param.error != null}">
-        <script>
-            var loca_path = window.location.href;
-            var pathArr = loca_path.split('?')[0];
-            var pathLen = pathArr.length;
-            var tableId = pathArr.substring((pathLen - 1), (pathLen));
-            if (confirm("参数信息不正确,请先登录!!")) {
-                window.location.href = '/login';
-            } else {
-                window.location.href = '/discover/wenti/' + tableId;
-            }
-        </script>
-    </th:block>
+
     <!--头部-->
-    <header class="">
-        <!--导航栏-->
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
-                            data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand hidden-sm" th:href="'/index'">新星幼儿园</a>
-                </div>
-                <div class="navbar-collapse collapse" role="navigation">
-                    <ul class="nav navbar-nav">
-                        <li><a href="/index" th:href="'/index'">首页</a></li>
-                        <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
-                        <li class="active"><a href="/discover" th:href="'/discover'">发现</a></li>
-                        <li><a href="/information" th:href="'/information'">咨询</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
-                        <li><a th:href="'/login.html'">用户！请登录</a></li>
-                        <li><a th:href="'/register.html'">快捷注册</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAuthenticated()">
-                        <span th:text="${param.number}" hidden></span>
-                        <li><a th:href="'/consumer/resume/'">简历</a></li>
-                        <li>
-                            <a th:href="'/consumer/personal/'">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> :
-                                <th:block sec:authentication="name"></th:block>
-                            </a>
-                        </li>
-                        <li><a th:href="'/logout'">退出</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!--头部-->
+    <header th:replace="header.html"></header>
 
     <!--正文-->
     <section>

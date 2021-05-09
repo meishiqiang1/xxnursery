@@ -10,7 +10,6 @@
     <meta name="keyword" content="幼儿园，招聘，招聘网，新星，首页">
     <link rel="shortcut icon" href="/img/favicon.png">
     <title>新星幼儿园-招聘网</title>
-
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -30,6 +29,7 @@
 
     #container {
         font-family: "楷体", "楷体_GB2312";
+        font-size: 16px;
     }
 
     .navbar-inverse {
@@ -56,8 +56,9 @@
         margin-bottom: 10px;
     }
 
-    .btn-default {
-        background-color: #596167;
+    .announceImg {
+        width: 300px;
+        height: 228px;
     }
 
     .btn-success {
@@ -104,7 +105,7 @@
                         <li class="active"><a href="/index" th:href="'/index'">首页</a></li>
                         <li><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
                         <li><a href="/discover" th:href="'/discover'">发现</a></li>
-                        <li><a href="/information" th:href="'/information'">咨询</a></li>
+                        <li><a href="/information" th:href="'/information'">新闻/通告</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
                         <li><a th:href="'/login.html'">用户！请登录</a></li>
@@ -147,13 +148,13 @@
 
                     <li><a href="/search?type=班主任">班主任</a></li>
 
-                    <li><a href="/search?type=美术">美术</a></li>
+                    <li><a href="/search?type=甜点">甜点</a></li>
 
-                    <li><a href="/search?type=音乐">音乐</a></li>
+                    <li><a href="/search?type=教师">教师</a></li>
 
-                    <li><a href="/search?type=后台管理员">后台管理员</a></li>
+                    <li><a href="/search?type=园长">园长</a></li>
 
-                    <li><a href="/search?type=数学">数学</a></li>
+                    <li><a href="/search?type=厨师">厨师</a></li>
 
                 </ol>
             </div>
@@ -165,13 +166,20 @@
                 <!-- 轮播（Carousel）项目 -->
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img src="https://static.runoob.com/images/mix/img_fjords_wide.jpg">
+                        <img src="/img/banner1.jpg">
                     </div>
                     <div class="item">
-                        <img src="https://static.runoob.com/images/mix/img_nature_wide.jpg">
+                        <img src="/img/banner2.jpg">
                     </div>
                     <div class="item">
-                        <img src="https://static.runoob.com/images/mix/img_mountains_wide.jpg">
+                        <img src="/img/banner3.jpg">
+                    </div>
+                    <div class="item">
+                        <img src="/img/banner4.jpg">
+                    </div>
+                    <div class="carousel-caption">
+                        <h1>“新星”幼儿园教师在线招聘网</h1>
+                        <p style="font-size: 20px">“新星”幼儿园坐落于新乡市，教育遵循“三维教育，高维成就”的教育理念，是一家高起点、高品质、综合型教育集团。</p>
                     </div>
                 </div>
                 <!-- 轮播（Carousel）导航 -->
@@ -194,7 +202,7 @@
             <!--职位推荐-->
             <div class="row position">
                 <div class="col-md-8 col-md-offset-2">
-                    <div class="text-center bold"><h3 class="box-title">职位推荐</h3></div>
+                    <div class="text-center bold"><h2 class="box-title">职位推荐</h2></div>
 
                     <div class="position-block">
                         <div class="jumbotron position-body">
@@ -217,7 +225,8 @@
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <a class="title" th:href="'/job_detail/'+*{id}+'.html'"><p
-                                                                    th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
+                                                                    th:text="*{#strings.abbreviate(recruittablename,10)}">
+                                                                数学老师</p></a>
                                                             <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                         </div>
                                                         <div class="col-md-4 col-md-offset-2">
@@ -245,7 +254,8 @@
                                                     <div class="row">
                                                         <div class="col-md-5">
                                                             <a class="title" th:href="*{'/job_detail/'+id+'.html'}">
-                                                                <p th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
+                                                                <p th:text="*{#strings.abbreviate(recruittablename,10)}">
+                                                                    数学老师</p></a>
                                                             <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                         </div>
                                                         <div class="col-md-4 col-md-offset-2">
@@ -275,7 +285,7 @@
             <!--热招职位-->
             <div class="row position">
                 <div class="col-md-8 col-md-offset-2">
-                    <div class="text-center bold"><h3 class="box-title">热招职位</h3></div>
+                    <div class="text-center bold"><h2 class="box-title">热招职位</h2></div>
                     <div class="position-block">
                         <div class="jumbotron position-body">
                             <ul id="hotjob" class="nav nav-tabs">
@@ -306,7 +316,8 @@
                                                         <div class="row">
                                                             <div class="col-md-5">
                                                                 <a class="title" th:href="'/job_detail/'+*{id}+'.html'">
-                                                                    <p th:text="*{#strings.abbreviate(recruittablename,10)}">数学老师</p></a>
+                                                                    <p th:text="*{#strings.abbreviate(recruittablename,10)}">
+                                                                        数学老师</p></a>
                                                                 <span th:text="*{requireEduDB=='0' ? '不限':requireEduDB=='1' ?'大专':requireEduDB=='2'?'本科':requireEduDB=='3'?'硕士':'博士'}"></span>
                                                             </div>
                                                             <div class="col-md-4 col-md-offset-2">
@@ -337,20 +348,33 @@
                     </div>
                 </div>
             </div>
+            <!--通告信息-->
+            <div class="row position">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="text-center bold"><h2 class="box-title">新闻、通告</h2></div>
+                    <div class="row">
+                        <th:block th:each="announce,stat:${announces}" th:if="${stat.index<6}">
+                            <div class="col-md-4">
+                                <div class="panel panel-default text-center">
+                                    <a th:href="${announce.path}">
+                                        <img class="announceImg" th:src="${announce.imgPath}"
+                                             data-toggle="tooltip" data-placement="top"
+                                             th:title="${announce.table}">
+                                    </a>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
         </section>
     </section>
     <!--正文-->
     <footer th:replace="footer.html"></footer>
 </section>
 
-<!-- js placed at the end of the document so the pages load faster -->
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/index.js"></script>
-<script>
-    $(document).on('click', '.yamm .dropdown-menu', function (e) {
-        e.stopPropagation()
-    })
-</script>
 </body>
 </html>

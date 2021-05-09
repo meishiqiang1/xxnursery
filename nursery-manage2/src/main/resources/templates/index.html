@@ -7,6 +7,12 @@
     <meta name="author" content="meishiqiang">
     <link rel="shortcut icon" href="/img/ico/favicon32.ico" th:href="@{/img/ico/favicon32.ico}">
     <title>后台-新星幼儿园</title>
+    <style>
+        #foot{
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
@@ -30,66 +36,6 @@
     <!-- 正文 -->
     <section id="main-content">
         <section class="wrapper">
-            <!--gai start-->
-            <div class="row state-overview">
-                <!--新增用户-->
-                <div class="col-lg-3 col-sm-6">
-                    <section class="panel">
-                        <div class="symbol terques">
-                            <i class="fa fa-user"></i>
-                        </div>
-                        <div class="value">
-                            <h1 class="count">
-                                0
-                            </h1>
-                            <p>新增 用户</p>
-                        </div>
-                    </section>
-                </div>
-                <!--新增招聘信息-->
-                <div class="col-lg-3 col-sm-6">
-                    <section class="panel">
-                        <div class="symbol red">
-                            <i class="fa fa-tags"></i>
-                        </div>
-                        <div class="value">
-                            <h1 class=" count2">
-                                0
-                            </h1>
-                            <p>新增 招聘</p>
-                        </div>
-                    </section>
-                </div>
-                <!--简历投递信息-->
-                <div class="col-lg-3 col-sm-6">
-                    <section class="panel">
-                        <div class="symbol yellow">
-                            <i class="fa fa-shopping-cart"></i>
-                        </div>
-                        <div class="value">
-                            <h1 class=" count3">
-                                0
-                            </h1>
-                            <p>简历 投递</p>
-                        </div>
-                    </section>
-                </div>
-                <!--空白-待补-->
-                <div class="col-lg-3 col-sm-6">
-                    <section class="panel">
-                        <div class="symbol blue">
-                            <i class="fa fa-bar-chart-o"></i>
-                        </div>
-                        <div class="value">
-                            <h1 class=" count4">
-                                0
-                            </h1>
-                            <p>Blank Leave</p>
-                        </div>
-                    </section>
-                </div>
-            </div>
-            <!--state overview end-->
             <div class="row">
                 <div class="col-lg-12">
                     <!--招聘进度 start-->
@@ -106,237 +52,43 @@
                                 <td th:text="*{recruittablename}">招聘标题</td>
                                 <td th:text="*{classify}">招聘类型</td>
                                 <td th:text="'招聘人数：'+*{manNumbers}"></td>
-                                <td><span class="badge bg-important" th:text="'进度'+*{(applynum)/(manNumbers)}+'%'">75%</span></td>
+                                <td th:text="'已有人数：'+*{applynum}"></td>
                                 <td><a th:href="'/manage/recruit/getRecruitInfo/'+*{id}">点击详情</a></td>
                             </tr>
                             </tbody>
                         </table>
                     </section>
                     <!--招聘进度 end-->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8">
-                    <!--timeline start-->
-                    <section class="panel">
-                        <div class="panel-body">
-                            <div class="text-center mbot30">
-                                <h3 class="timeline-title">Timeline</h3>
-                                <p class="t-info">This is a project timeline</p>
-                            </div>
 
-                            <div class="timeline">
-                                <article class="timeline-item">
-                                    <div class="timeline-desk">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <span class="arrow"></span>
-                                                <span class="timeline-icon red"></span>
-                                                <span class="timeline-date">08:25 am</span>
-                                                <h1 class="red">12 July | Sunday</h1>
-                                                <p>Lorem ipsum dolor sit amet consiquest dio</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                                <article class="timeline-item alt">
-                                    <div class="timeline-desk">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <span class="arrow-alt"></span>
-                                                <span class="timeline-icon green"></span>
-                                                <span class="timeline-date">10:00 am</span>
-                                                <h1 class="green">10 July | Wednesday</h1>
-                                                <p><a href="#">Jonathan Smith</a> added new milestone <span><a href="#"
-                                                                                                               class="green">ERP</a></span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-desk">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <span class="arrow"></span>
-                                                <span class="timeline-icon blue"></span>
-                                                <span class="timeline-date">11:35 am</span>
-                                                <h1 class="blue">05 July | Monday</h1>
-                                                <p><a href="#">Anjelina Joli</a> added new album <span><a href="#"
-                                                                                                          class="blue">PARTY TIME</a></span>
-                                                </p>
-                                                <div class="album">
-                                                    <a href="#">
-                                                        <img alt="" src="/img/sm-img-1.jpg">
-                                                    </a>
-                                                    <a href="#">
-                                                        <img alt="" src="/img/sm-img-2.jpg">
-                                                    </a>
-                                                    <a href="#">
-                                                        <img alt="" src="/img/sm-img-3.jpg">
-                                                    </a>
-                                                    <a href="#">
-                                                        <img alt="" src="/img/sm-img-1.jpg">
-                                                    </a>
-                                                    <a href="#">
-                                                        <img alt="" src="/img/sm-img-2.jpg">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                                <article class="timeline-item alt">
-                                    <div class="timeline-desk">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <span class="arrow-alt"></span>
-                                                <span class="timeline-icon purple"></span>
-                                                <span class="timeline-date">3:20 pm</span>
-                                                <h1 class="purple">29 June | Saturday</h1>
-                                                <p>Lorem ipsum dolor sit amet consiquest dio</p>
-                                                <div class="notification">
-                                                    <i class=" fa fa-exclamation-sign"></i> New task added for <a
-                                                        href="#">Denial Collins</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
-                                <article class="timeline-item">
-                                    <div class="timeline-desk">
-                                        <div class="panel">
-                                            <div class="panel-body">
-                                                <span class="arrow"></span>
-                                                <span class="timeline-icon light-green"></span>
-                                                <span class="timeline-date">07:49 pm</span>
-                                                <h1 class="light-green">10 June | Friday</h1>
-                                                <p><a href="#">Jonatha Smith</a> added new milestone <span><a href="#"
-                                                                                                              class="light-green">prank</a></span>
-                                                    Lorem ipsum dolor sit amet consiquest dio</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </article>
+                    <!--新增用户 start-->
+                    <section class="panel">
+                        <div class="panel-body progress-panel">
+                            <div class="task-progress">
+                                <h1>新增用户</h1>
                             </div>
+                        </div>
+                        <table class="table table-hover personal-task">
+                            <tbody>
+                            <tr th:each="consumer,stat:${consumers}" th:object="${consumer}">
+                                <td th:text="${stat.index}"></td>
+                                <td th:text="'用户名'+*{consumerNickname}">用户名</td>
+                                <td th:text="'真实姓名'+*{consumerName}">真实姓名</td>
+                                <td th:text="*{consumerAddress}">用户地址</td>
+                                <td th:text="*{consumerEmail}">用户邮箱</td>
+                                <td th:href="*{consumerJoinDay}">用户加入时间</td>
+                                <td><a th:href="'/manage/consumer/visitConsumerInfo/'+*{consumerID}">点击详情</a></td>
 
-                            <div class="clearfix">&nbsp;</div>
-                        </div>
+                            </tr>
+                            </tbody>
+                        </table>
                     </section>
-                    <!--timeline end-->
-                </div>
-                <div class="col-lg-4">
-                    <!--revenue start-->
-                    <section class="panel">
-                        <div class="revenue-head">
-                              <span>
-                                  <i class="fa fa-bar-chart-o"></i>
-                              </span>
-                            <h3>Revenue</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-6 text-center">
-                                    <div class="easy-pie-chart">
-                                        <div class="percentage" data-percent="35"><span>35</span>%</div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-6">
-                                    <div class="chart-info chart-position">
-                                        <span class="increase"></span>
-                                        <span>Revenue Increase</span>
-                                    </div>
-                                    <div class="chart-info">
-                                        <span class="decrease"></span>
-                                        <span>Revenue Decrease</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-footer revenue-foot">
-                            <ul>
-                                <li class="first active">
-                                    <a href="javascript:;">
-                                        <i class="fa fa-bullseye"></i>
-                                        Graphical
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class=" fa fa-th-large"></i>
-                                        Tabular
-                                    </a>
-                                </li>
-                                <li class="last">
-                                    <a href="javascript:;">
-                                        <i class=" fa fa-align-justify"></i>
-                                        Listing
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                    <!--revenue end-->
-                    <!--features carousel start-->
-                    <section class="panel">
-                        <div class="flat-carousal">
-                            <div id="owl-demo" class="owl-carousel owl-theme">
-                                <div class="item">
-                                    <h1>Flatlab is new model of admin dashboard for happy use</h1>
-                                    <div class="text-center">
-                                        <a href="javascript:;" class="view-all">View All</a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <h1>Fully responsive and build with Bootstrap 3.0</h1>
-                                    <div class="text-center">
-                                        <a href="javascript:;" class="view-all">View All</a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <h1>Responsive Frontend is free if you get this.</h1>
-                                    <div class="text-center">
-                                        <a href="javascript:;" class="view-all">View All</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <ul class="ft-link">
-                                <li class="active">
-                                    <a href="javascript:;">
-                                        <i class="fa fa-bars"></i>
-                                        Sales
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class=" fa fa-calendar-o"></i>
-                                        promo
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class=" fa fa-camera"></i>
-                                        photo
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;">
-                                        <i class=" fa fa-circle"></i>
-                                        other
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                    <!--features carousel end-->
+                    <!--新增用户 end-->
                 </div>
             </div>
         </section>
     </section>
     <!-- 页脚 -->
-    <footer th:replace="include/footer.html"></footer>
+    <footer th:replace="include/footer.html" id="foot"></footer>
 </section>
 
 <script src="/js/jquery.js"></script>

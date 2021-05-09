@@ -1,8 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>侧边栏</title>
+    <style>
+        #sidebar {
+            z-index: 999;
+        }
+    </style>
 </head>
 <body>
 <aside>
@@ -27,9 +33,13 @@
                     <li class=" "
                         th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/pull')} ? 'active' : ''">
                         <a th:href="@{/manage/recruit/pull}">发布招聘</a></li>
-                    <li class=" "
+                    <p id="authorities" sec:authentication="authorities"></p>
+                    <li id="zhaopinshenhe" class=" "
                         th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/audit')} ? 'active' : ''">
-                        <a href="#" th:href="@{/manage/recruit/audit}">招聘审核</a></li>
+                        <a href="#" th:href="@{/manage/recruit/audit}">
+                            招聘审核
+                        </a>
+                    </li>
                     <li class=" "
                         th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/recruit/getRecruitManage')} ? 'active' : ''">
                         <a href="#" th:href="@{/manage/recruit/getRecruitManage}">招聘管理</a>
@@ -60,7 +70,7 @@
                 </a>
                 <ul class="sub">
                     <li class=" "
-                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/pullAnnouncement/')} ? 'active' : ''">
+                        th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/pullAnnouncement.html')} ? 'active' : ''">
                         <a th:href="@{/manage/pullAnnouncement.html}">发布通告</a>
                     </li>
                     <li class=" "
@@ -70,14 +80,15 @@
                 </ul>
             </li>
             <li class="sub-menu">
-                <a href="javascript:;" class=" " th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'log')} ? 'active' : ''">
+                <a href="javascript:;" class=" "
+                   th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'log')} ? 'active' : ''">
                     <i class="fa fa-glass"></i>
                     <span>日志中心</span>
                 </a>
                 <ul class="sub">
-                    <li class=" "
+                    <!--<li class=" "
                         th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/consumer/log.html')} ? 'active' : ''">
-                        <a th:href="'/manage/consumer/log.html'">用户日志</a></li>
+                        <a th:href="'/manage/consumer/log.html'">用户日志</a></li>-->
                     <li class=" "
                         th:classappend="${#strings.contains((#httpServletRequest.getRequestURL()),'/manage/admin/log.html')} ? 'active' : ''">
                         <a th:href="'/manage/admin/log.html'">管理人员日志</a>
@@ -87,4 +98,17 @@
     </div>
 </aside>
 </body>
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    $(function (){
+       var text = $("#authorities").text();
+       if(text=="[ROAD]"){
+           $("#authorities").text("")
+       }else {
+           $("#authorities").text("")
+           $("#zhaopinshenhe").attr("hidden","hidden");
+       }
+    });
+</script>
 </html>

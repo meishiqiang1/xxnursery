@@ -174,7 +174,7 @@ public class VisitRecruitController extends BaseController implements VisitRecru
                     NumberFormat numberFormat = NumberFormat.getInstance();
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
-                    degreeCompletion = numberFormat.format((float) recruitnumbers / (float) applynum * 100);
+                    degreeCompletion = numberFormat.format((float) applynum / (float) recruitnumbers * 100);
                     returnMap.put("degreeCompletion", degreeCompletion);//完成程度
                 } else {
                     returnMap.put("degreeCompletion", 0);//完成程度

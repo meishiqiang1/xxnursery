@@ -29,7 +29,7 @@ public interface DomesticConsumerMapper {
 
     //删除
     @Delete("delete from tb_consumer where consumer_id = #{consumerID}")
-    public  void delete(String consumerID)throws Exception;
+    public  int delete(String consumerID)throws Exception;
 
     //根据姓名查询
     @Select("select * from tb_consumer where consumer_name = #{name}")
@@ -193,4 +193,13 @@ public interface DomesticConsumerMapper {
     //根据用户id查询简历id
     @Select("select resume_waijian_id from tb_consumer where consumer_nickname = #{name}")
     String selectResumeIdByConsumerName(String name) throws SQLException;
+
+    //后台首页展示
+    @Select("SELECT * FROM tb_consumer ORDER BY tb_consumer.`consumer_joinDay` DESC")
+    @ResultMap("domesticConsumer")
+    List<DomesticConsumerDO> selectConsumersByNewDateDesc();
+
+    @Delete("delete  from tb_middle_consumer_role where CONSUMER = #{value}")
+    int deleteMiddleRole(String consumerId);
+
 }

@@ -306,6 +306,18 @@ public class DomesticConsumerImpl implements IDomesticConsumerSV {
         }
     }
 
+    @Override
+    public List<DomesticConsumerDO> getRecruitByDateDesc() {
+        List<DomesticConsumerDO> newDate = mapper.selectConsumersByNewDateDesc();
+        return newDate;
+    }
+
+    @Transactional
+    public int deleteConsumer(String consumerId) throws Exception {
+        int i = mapper.deleteMiddleRole(consumerId);
+        return mapper.delete(consumerId);
+    }
+
     //校验手机号
     private boolean checkCellphone(String consumerCellPhone) {
         boolean flag = false;

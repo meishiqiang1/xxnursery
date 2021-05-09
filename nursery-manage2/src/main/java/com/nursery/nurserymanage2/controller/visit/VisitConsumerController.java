@@ -72,8 +72,6 @@ public class VisitConsumerController implements VisitConsumerApi {
                QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
                queryResult.setObject(consumerDO);
                data.setQueryResult(queryResult);
-           }else {
-
            }
         }catch (Exception e){
             String localizedMessage = e.getLocalizedMessage();
@@ -97,8 +95,6 @@ public class VisitConsumerController implements VisitConsumerApi {
                 QueryResult<DomesticConsumerDO> queryResult = new QueryResult<>();
                 queryResult.setObject(consumerDO);
                 data.setQueryResult(queryResult);
-            }else {
-
             }
         }catch (Exception e){
             String localizedMessage = e.getLocalizedMessage();

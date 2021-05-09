@@ -3,19 +3,21 @@ package com.nursery.nurserymanage2.controller;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.nursery.api.iservice.IDomesticConsumerSV;
+import com.nursery.api.iservice.IUserCenterSV;
 import com.nursery.api.iwebm.ManageConsumerApi;
 import com.nursery.beans.DomesticConsumerDO;
 import com.nursery.beans.code.ConsumerCode;
+import com.nursery.common.model.response.CommonCode;
 import com.nursery.common.model.response.ResponseResult;
+import com.nursery.common.web.BaseController;
 import com.nursery.utils.CellUtils;
 import com.nursery.utils.DateUtils;
 import com.nursery.utils.EmailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -25,20 +27,25 @@ import java.text.ParseException;
  * Date:2021/2/8 | Time:14:19
  * 个人中心 controller
  */
-@RestController
+@Controller
 @RequestMapping("/manage/consumer")
-public class ManageConsumerController implements ManageConsumerApi {
+public class ManageConsumerController extends BaseController implements ManageConsumerApi {
 
     private Logger logger = LoggerFactory.getLogger(ManageConsumerController.class);
 
     @Autowired
     private IDomesticConsumerSV domesticConsumerSV;
 
+    @Autowired
+    private IUserCenterSV userCenterSV;
+
     /**
      * 更新用户
+     *
      * @param consumerDO 参数
      */
     @RequestMapping(value = "/putConsumer", method = RequestMethod.POST)
+    @ResponseBody
     @Override
     public ResponseResult putConsumer(DomesticConsumerDO consumerDO) {
         //初始化返回值
@@ -81,7 +88,7 @@ public class ManageConsumerController implements ManageConsumerApi {
             logger.error("error:计算年龄错误");
         }
         //姓名校验
-        if (!validateName(name)){
+        if (!validateName(name)) {
             logger.info("姓名校验不合格");
         }
         //判断是否参数有误
@@ -107,32 +114,45 @@ public class ManageConsumerController implements ManageConsumerApi {
         return responseResult;
     }
 
-
-    /**
-     * 更新用户的密码和照片
-     * @param consumerDO
-     * @return
-     */
-    @RequestMapping(value = "/putConsumerPassAndImg", method = RequestMethod.POST)
-    @Override
-    public ResponseResult putConsumerPassAndImg(DomesticConsumerDO consumerDO) {
-        //初始化返回值
+    //更新数据
+    @RequestMapping(value = "/pullUser", method = RequestMethod.POST)
+    public String pullUser(DomesticConsumerDO consumerDO) {
+        String consumerId = consumerDO.getConsumerID();
         ResponseResult responseResult = ResponseResult.FAIL();
-        String consumerPass = consumerDO.getConsumerPass();
-        String consumerID = consumerDO.getConsumerID();
-        if (StringUtils.isEmpty(consumerPass)){
-            try {
-                domesticConsumerSV.addPassword(consumerID,consumerPass);
-                responseResult.setCommonCode(ConsumerCode.CONSUMER_SQL_SELECT_FAIL);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        consumerDO.setConsumerID(consumerId);
+        responseResult = userCenterSV.pullUser(consumerDO);
+        if (responseResult.getCode() == 10000) {
+            return "redirect:/manage/consumer/visitConsumerEdit/" + consumerId;
         }
-        return responseResult;
+        return "500";
+    }
+
+    //更新头像
+    @RequestMapping(value = "/pullImage",method = RequestMethod.POST)
+    public void pullImage(@RequestParam(name = "base") String base64) {
+        //获取用户信息 UserDetails
+        String consumerName = "";
+        userCenterSV.pullImage(request.getContextPath(),consumerName,base64);
+    }
+
+    @RequestMapping(value = "/delete/{consumerId}",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseResult deleteConsumer(@PathVariable(name = "consumerId")String consumerId){
+        ResponseResult fail = ResponseResult.FAIL();
+        int i = 0;
+        try {
+            i = domesticConsumerSV.deleteConsumer(consumerId);
+        } catch (Exception e) {
+            return fail;
+        }
+        if (i>0){
+            fail.setCommonCode(CommonCode.SUCCESS);
+        }
+        return fail;
     }
 
 
-    public  Boolean validateName(String name) {
+    public Boolean validateName(String name) {
         return name.matches("^([\\u4e00-\\u9fa5]{1,20}|[a-zA-Z\\.\\s]{1,20})$");
     }
 }

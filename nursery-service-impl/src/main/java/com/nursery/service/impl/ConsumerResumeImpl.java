@@ -118,7 +118,7 @@ public class ConsumerResumeImpl implements IConsumerResumeSV {
 
     @Override
     public boolean findResumeAndConsumerDO(String recruitId, String consumerId) throws SQLException {
-        RecruitAndConsumerDO recruitAndConsumerDO = recruitAndConsumerMapper.findResumeAndConsumerDO(recruitId,consumerId);
+        RecruitAndConsumerDO recruitAndConsumerDO = recruitAndConsumerMapper.findResumeAndConsumerDO(consumerId,recruitId);
         if (!ObjectUtils.isEmpty(recruitAndConsumerDO)){
             return true;
         }

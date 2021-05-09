@@ -193,43 +193,13 @@ public class UserCenterController extends BaseController implements UserCenterAp
         return responseResult;
     }
 
-    /**
-     * 比对密码正确
-     *
-     * @param consumerID 用户id
-     * @param password   密码
-     */
-    @PostMapping("/consultingcode")
-    @Override
-    public ResponseResult selectPassword(String consumerID, String password) {
-        if ((password != null && !"".equals(password)) && (consumerID != null && !"".equals(consumerID))) {
-            if (domesticConsumerSV.selectPassword(consumerID, password)) {
-                //存入标识  PASSWORDSUCCESS
-
-                //返回
-                return ResponseResult.SUCCESS();
-            }
-        }
-        return ResponseResult.FAIL();
-    }
-
-    //更改用户密码
-    @PostMapping("/changecode")
-    @Override
-    public ResponseResult updatePassword(String consumerID, String password) {
-        ResponseResult responseResult = new ResponseResult(CommonCode.FAIL);
-        //获取标识 PASSWORDSUCCESS从redis中获取
-
-        //如果存在则进行密码修改
-        if (domesticConsumerSV.updatePassword(consumerID, password)) {
-            //1.更新redis和jvm缓存,
-
-            //2.返回前端提示信息
-            responseResult.setCode(CommonCode.SUCCESS.code());
-            responseResult.setMessage(CommonCode.SUCCESS.message());
-            responseResult.setSuccess(CommonCode.SUCCESS.success());
-        }
-        return responseResult;
-    }
+   /* @RequestMapping(value = "/pullWenZhang",method = RequestMethod.GET)
+    public String pullWenZhang(){
+        //获取用户名称
+        String consumerName = getConsumerName();
+        QueryResponseResult queryResponseResult = userCenterSV.getUserCenter(consumerName);
+        request.setAttribute("data",queryResponseResult);
+        return "userPullWenZhang";
+    }*/
 
 }

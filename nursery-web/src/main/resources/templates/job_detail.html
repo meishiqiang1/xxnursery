@@ -120,7 +120,7 @@
                         <li><a href="/index" th:href="'/index'">首页</a></li>
                         <li class="active"><a href="/job_detail" th:href="'/job_detail'">职位</a></li>
                         <li><a href="/discover" th:href="'/discover'">发现</a></li>
-                        <li><a href="/information" th:href="'/information'">咨询</a></li>
+                        <li><a href="/information" th:href="'/information'">新闻/通告</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right hidden-sm" sec:authorize="isAnonymous()">
                         <li><a th:href="'/login.html'">用户！请登录</a></li>
@@ -204,37 +204,13 @@
                 </dd>
             </dl>
         </div>
-        <!--地区筛选-->
-        <div class="row inner filter_area text-left">
-            <dl class='condition-district  show-condition-district '>
-                <dd>
-                    <span class="h5 bold">地区筛选：</span>
-                    <a class="place active" id="sel-business-12">不限</a>
-                    <a class="place" id="sel-business-0">金水区</a>
-                    <a class="place" id="sel-business-1">管城回族区</a>
-                    <a class="place" id="sel-business-2">中原区</a>
-                    <a class="place" id="sel-business-3">二七区</a>
-                    <a class="place" id="sel-business-4">新郑市</a>
-                    <a class="place" id="sel-business-5">惠济区</a>
-                    <a class="place" id="sel-business-6">中牟县</a>
-                    <a class="place" id="sel-business-7">荥阳市</a>
-                    <a class="place" id="sel-business-8">新密市</a>
-                    <a class="place" id="sel-business-9">巩义市</a>
-                    <a class="place" id="sel-business-10">上街区</a>
-                    <a class="place" id="sel-business-11">登封市</a>
-                </dd>
-            </dl>
-        </div>
-
     </header>
     <!--头部-->
-
     <!--正文-->
     <section>
         <section class="container">
             <div class="row">
                 <div class="job_detail_m">
-
                 </div>
                 <div class="col-md-8">
                     <div class="row">
@@ -297,16 +273,13 @@
                         <div class="new-out-s">
                             <div class="new-out">
                                 <div>
-                                    <img src="./img/404_icon.png" alt="服务器错误"/>
-                                    <h2><span>新闻标题</span></h2>
-                                    <p>&nbsp;&nbsp;&nbsp;&nbsp;基本内容,内容显示河南省郑州市管城河南省郑州市管城回...
-                                        基本内容,内容显示河南省郑州市管城河南省郑州市管城回...
-                                        基本内容,内容显示河南省郑州市管城河南省郑州市管城回...
-                                        基本内容,内容显示河南省郑州市管城河南省郑州市管城回...。</p>
+                                    <h2><a th:href="'/information/djxq/e14954c7c89b4b4488b06ffeba64ec19.html'">
+                                        <span>“新星”幼儿园各岗位招聘信息</span>
+                                    </a></h2>
+                                    <p>&nbsp;&nbsp;&nbsp;&nbsp;幼儿园现为新乡示范幼儿园市一级一类幼儿园市早期教育示范基地市食品卫生级三星单位近年来赢得诸多市区级荣誉幼儿园以崇尚师德踏实勤奋传承文化求真拓新的办园理念稳中求进不断创新形成踏实肯干积极向上团结奋进的团队氛围成为市级示范园的排头兵从新乡市向全国一流学前教育迈进为进一步提高幼儿园核心竞争力提升师资力量和服务水平现面向全国公开诚聘优秀教职工无论您是硕士及以上研究生还是经验丰富的骨干人才应届或非应届我们都诚邀您的加入发展平台好薪资待遇</p>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

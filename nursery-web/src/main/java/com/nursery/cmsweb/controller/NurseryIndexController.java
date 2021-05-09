@@ -2,8 +2,10 @@ package com.nursery.cmsweb.controller;
 
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.nursery.api.iservice.*;
 import com.nursery.api.iweb.NurseryIndexApi;
+import com.nursery.beans.NurseryAnnounceDO;
 import com.nursery.beans.RecruitmentDO;
 import com.nursery.beans.RecruitmentTypesDO;
 import com.nursery.beans.SlideshowDO;
@@ -72,6 +74,9 @@ public class NurseryIndexController extends BaseController implements NurseryInd
             modelAndView.addObject("hotData",recruitmentDOList1);
             modelAndView.addObject("sordStr", sordStr);
             modelAndView.addObject("classStr",recruitmentTypesDOList);
+            //5.8
+            List<NurseryAnnounceDO> announceDOList = nurseryAnnounceSV.selectAnnunces();
+            modelAndView.addObject("announces",announceDOList);
             if (!StringUtils.isEmpty(param)){
                 ConsumerBO attribute = (ConsumerBO) session.getAttribute(param);
 //                if (attribute)
@@ -104,6 +109,7 @@ public class NurseryIndexController extends BaseController implements NurseryInd
     @ResponseBody
     public List<RecruitmentDO> getHotJob(@PathVariable("typeId") String typeId,@PathVariable("typename") String typename){
         //. 获取最新职位
+        PageHelper.startPage(1, 9);
         List<RecruitmentDO> recruitmentDOList = null;
         try {
             recruitmentDOList = nurseryRecruitInfoSV.getRecruitByTypeId(typename);

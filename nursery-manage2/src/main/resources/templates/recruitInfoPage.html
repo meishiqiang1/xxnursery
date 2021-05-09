@@ -4,19 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="meishiqiang">
-    <link rel="shortcut icon" href="/img/favicon.png">
+    <link rel="shortcut icon" href="/img/ico/favicon32.ico" th:href="@{/img/ico/favicon32.ico}">
     <title>招聘详情页面</title>
-    <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-reset.css" rel="stylesheet">
-    <!--external css-->
     <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet"/>
-    <!--right slidebar-->
     <link href="/css/slidebars.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
     <link href="/css/style.css" rel="stylesheet">
     <link href="/css/style-responsive.css" rel="stylesheet"/>
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
     <!--[if lt IE 9]>
     <script src="/js/html5shiv.js"></script>
     <script src="/js/respond.min.js"></script>
@@ -213,7 +208,41 @@
                     </section>
                 </div>
                 <!--中间主题内容 end-->
+                <!--右侧边栏内容 start-->
+                <div class="col-md-4">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <h3><strong>招聘详细要求</strong></h3>
+                        </header>
+                        <div class="panel-body">
+                            <a href="#"><img src="/img/XINXING.png" alt="新星幼儿园"/></a>
 
+                            <h4><b>职责描述</b></h4>
+                            <p th:utext="${data.responsibility}"></p>
+                            <br/>
+                            <h4><b>职位要求</b></h4>
+                            <p th:utext="${data.require}"></p>
+                            <br/>
+                            <br/>
+
+                            <h5 class="bold">标签</h5>
+                            <ul class="p-tag-list">
+                                <th:block th:if="${data.types !=null}">
+                                    <li th:each="type:${data.types}"><a href=""><i class="fa fa-tag"></i>
+                                        <th:block th:text="${type}"></th:block>
+                                    </a></li>
+                                </th:block>
+                            </ul>
+
+                            <div class="text-center mtop20">
+                                <a th:href="'/manage/recruit/pull?erId=1'" class="btn btn-sm btn-primary">发布招聘</a>
+                                <a th:href="'/manage/recruit/modify/page/'+ ${data.id}" class="btn btn-sm btn-warning">更改招聘</a>
+                            </div>
+                        </div>
+
+                    </section>
+                </div>
+                <!--右侧边栏内容 end-->
             </div>
         </section>
     </section>

@@ -17,7 +17,4 @@ public interface ManageConsumerApi {
     @ApiOperation("更新 个人资料")
     ResponseResult putConsumer(DomesticConsumerDO consumerDO);
 
-    //访问个人中心页面
-    @ApiOperation("更新 密码和头像")
-    ResponseResult putConsumerPassAndImg(DomesticConsumerDO consumerDO);
 }

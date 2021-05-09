@@ -15,17 +15,11 @@
     <div class="top-nav ">
         <ul class="nav pull-right top-menu">
             <!--用户板块-->
-            <li class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                    <img alt="" src="/img/sm-img-1.jpg">
-                    <span class="username" sec:authentication="name"></span>
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu extended">
-                    <div class="log-arrow-up"></div>
-                    <li><p class="text-info">欢迎回来</p></li>
-                    <li><a href="/logout">安全退出</a></li>
-                </ul>
+            <li>
+                <img alt="" src="/img/sm-img-1.jpg">
+                <span class="text-info">欢迎回来</span>
+                <span class="username" sec:authentication="name"></span>
+                <span><a href="/logout">安全退出</a></span>
             </li>
             <!--用户板块-->
         </ul>
