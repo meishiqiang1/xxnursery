@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 异常捕获类
- *
  * @ControllerAdvice
  * @ExceptionHandler 注解来捕获指定类型的异常
  * Create with IDEA
  * author:MeiShiQiang
- * Date:2020/9/3
- * Time:9:24
  */
 @ControllerAdvice
 public class ExceptionCatch {

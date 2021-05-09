@@ -70,6 +70,7 @@
                                                 <div class="" th:if="${demo.applynum == demo.manNumbers}">
                                                     <span class="text-danger">已通过</span>
                                                     <a th:href="'/manage/recruit/getRecruitInfo/' + ${demo.id}" class="btn btn-success btn-xs"><i class=" fa fa-check"></i></a>
+                                                    <a th:href="'/manage/recruit/delete/'+${demo.id}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i></a>
                                                 </div>
                                                 <div class="pull-left hidden-phone" th:if="${demo.applynum != demo.manNumbers}">
                                                     <th:block  th:if="${demo.auditState} == 'yes'">
