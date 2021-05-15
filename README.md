@@ -37,8 +37,13 @@
 ######## mysql数据库配置信息
     数据库文件 nursery.sql
     datasource.driver-class-name=com.mysql.jdbc.Driver
+<<<<<<< HEAD
     datasource.password=root
     datasource.username=root
+=======
+    datasource.password=账号
+    datasource.username=密码
+>>>>>>> origin/master
     datasource.url=jdbc:mysql://localhost:3306/nursery?characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
 
 ######## 日志文件
