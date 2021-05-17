@@ -26,8 +26,8 @@ public class swaggerconfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("springboot利用swagger构建api文档")
-                .description("项目描述，代码地址 https://github.com/ljinlin41")
-                .termsOfServiceUrl("https://github.com/ljinlin41")
+                .description("项目描述，代码地址 https://github.com/meishiqiang1/xxnursery.git")
+                .termsOfServiceUrl("https://github.com/meishiqiang1/xxnursery.git")
                 .version("1.0")
                 .build();
     }
